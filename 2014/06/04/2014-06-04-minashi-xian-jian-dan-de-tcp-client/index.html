@@ -1,0 +1,758 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tony" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="现在我们对应MinaTimeServer写一个客户端程序。同样开始创建工作目录，在mina目录下创建minaTimeClient目录：mkdir minaTimeClient。首先还是创建build.gradle文件如下：
+apply plugin: &amp;apos;java&amp;apos;
+apply plugin: &amp;apos;application&amp;apos;
+
+task createJavaPro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mina实现简单的TCP Client">
+<meta property="og:url" content="http://yoursite.com/2014/06/04/2014-06-04-minashi-xian-jian-dan-de-tcp-client/index.html">
+<meta property="og:site_name" content="tony's blog">
+<meta property="og:description" content="现在我们对应MinaTimeServer写一个客户端程序。同样开始创建工作目录，在mina目录下创建minaTimeClient目录：mkdir minaTimeClient。首先还是创建build.gradle文件如下：
+apply plugin: &amp;apos;java&amp;apos;
+apply plugin: &amp;apos;application&amp;apos;
+
+task createJavaPro">
+<meta property="og:updated_time" content="2014-06-05T05:26:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mina实现简单的TCP Client">
+<meta name="twitter:description" content="现在我们对应MinaTimeServer写一个客户端程序。同样开始创建工作目录，在mina目录下创建minaTimeClient目录：mkdir minaTimeClient。首先还是创建build.gradle文件如下：
+apply plugin: &amp;apos;java&amp;apos;
+apply plugin: &amp;apos;application&amp;apos;
+
+task createJavaPro">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/06/04/2014-06-04-minashi-xian-jian-dan-de-tcp-client/"/>
+
+  <title> Mina实现简单的TCP Client | tony's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">tony's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mina实现简单的TCP Client
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-06-04T21:52:11+08:00" content="2014-06-04">
+              2014-06-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/mina/" itemprop="url" rel="index">
+                    <span itemprop="name">mina</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/mina/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/mina/java/Nio/" itemprop="url" rel="index">
+                    <span itemprop="name">Nio</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>现在我们对应MinaTimeServer写一个客户端程序。同样开始创建工作目录，在mina目录下创建minaTimeClient目录：mkdir minaTimeClient。<br>首先还是创建build.gradle文件如下：</p>
+<pre><code>apply plugin: &apos;java&apos;
+apply plugin: &apos;application&apos;
+
+task createJavaProject &lt;&lt;{
+   sourceSets*.java.srcDirs*.each {it.mkdirs()}
+   sourceSets*.resources.srcDirs*.each {it.mkdirs()}
+}
+
+repositories{
+   mavenCentral();
+}
+</code></pre><p>执行gradle createJavaProject初始化目录</p>
+<p>接下来我们来创建MinaTimeClient.java文件，初始代码如下：</p>
+<pre><code>public class MinaTimeClient{
+
+  public static void main(String[] args){
+
+  }
+
+}
+</code></pre><a id="more"></a>    
+<p>接下来我们来创建一个Connector</p>
+<pre><code>import org.apache.mina.transport.socket.nio.NioSocketConnector;
+
+public class MinaTimeClient{
+
+   public static void main(String[] args){
+
+      NioSocketConnector connector = new NioSocketConnector();
+
+   }
+}  
+</code></pre><p> 因为引用了org.apache.mina.transport.socket.nio.NioSocketConnector，那我们就要修改build.gradle，添加mina core的依赖，如下：</p>
+<pre><code>  apply plugin: &apos;java&apos;
+apply plugin: &apos;application&apos;
+
+task createJavaProject &lt;&lt;{
+   sourceSets*.java.srcDirs*.each {it.mkdirs()}
+   sourceSets*.resources.srcDirs*.each {it.mkdirs()}
+}
+
+repositories{
+   mavenCentral();
+}
+
+dependencies{
+   compile &quot;org.apache.mina:mina-core:2.0.7&quot;
+}
+</code></pre><p>接下来创建过滤器链</p>
+<pre><code>import org.apache.mina.transport.socket.nio.NioSocketConnector;
+
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
+import org.apache.main.filter.logger.LoggingFilter;
+
+public class MinaTimeClient{
+
+   public static void main(String[] args){
+     NioSocketConnector connector = new NioSocketConnector();
+     connector.getFilterChain().addLast(new ProtocolCodecFilter(new ObjectSerializationCodecFactory()));
+     connector.getFilterChain().addLast(&quot;logger&quot;, new LoggingFilter());
+   }
+
+}
+</code></pre><p>这里我们又要添加对mina-filter-compression包的依赖了：</p>
+<pre><code>apply plugin: &apos;java&apos;
+apply plugin: &apos;application&apos;
+
+task createJavaProject &lt;&lt;{
+   sourceSets*.java.srcDirs*.each {it.mkdirs()}
+   sourceSets*.resources.srcDirs*.each {it.mkdirs()}
+
+}
+
+repositories{
+   mavenCentral();
+}
+
+dependencies{
+   compile &quot;org.apache.mina:mina-core:2.0.7&quot;,
+           &quot;org.apache.mina:mina-filter-compression:2.0.7&quot;
+}
+</code></pre><p>接下来，我们来写处理类</p>
+<pre><code>public class clientTimeHandler{
+
+   public void seesionOpened(IoSession session)throws Exception{
+
+      session.write(&quot;开始建立连接......&quot;);
+      session.write(&quot;quit&quot;);
+
+   }
+
+   public void messageReceived(IoSession session, Object message)throws Exception{
+      String str = message.toString();
+      System.out.println(str);
+   }
+
+   public void messageSent(IoSession arg0, Object arg1) throws Exception
+  {
+          System.out.println(&quot;客户端已经向服务器发送了：&quot;+(String)arg1);
+   }
+
+} 
+</code></pre><p>我们将clientTimeHandler传入，并且建立IO通道  </p>
+<pre><code> import org.apache.mina.transport.socket.nio.NioSocketConnector;
+
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
+import org.apache.main.filter.logger.LoggingFilter;
+
+import com.tw.mina.time.client.ClientTimeHandelr;
+
+public class MinaTimeClient{
+
+   public static void main(String[] args){
+     NioSocketConnector connector = new NioSocketConnector();
+     connector.getFilterChain().addLast(new ProtocolCodecFilter(new ObjectSerializationCodecFactory()));
+     connector.getFilterChain().addLast(&quot;logger&quot;, new LoggingFilter());
+     connector.setHandler(new ClientTimeHandler());
+     ConnectFuture future = connector.connect(new InetSocketAddress(&quot;127.0.0.1&quot;,9123));
+   }
+
+}   
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/06/04/2014-06-04-minashi-xian-jian-dan-de-tcp-server/" rel="next" title="Mina实现简单的TCP Server">
+                <i class="fa fa-chevron-left"></i> Mina实现简单的TCP Server
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/06/06/2014-06-06-minashi-xian-jian-dan-de-udp-server/" rel="prev" title="Mina实现简单的UDP server">
+                Mina实现简单的UDP server <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tony" />
+          <p class="site-author-name" itemprop="name">tony</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tony</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

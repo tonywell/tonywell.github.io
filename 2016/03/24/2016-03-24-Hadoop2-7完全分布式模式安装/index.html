@@ -1,0 +1,674 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="hadoop," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="环境
+系统：centos6.5 64位 内存4G x3
+
+一、环境准备1、网络配置先分别修改三台设备的hostname：
+1vim /etc/sysconfig/network
+123.......HOSTNAME=master.......
+123........HOSTNAME=slave1........
+123........HOSTNAME=slave2........
+然后通过下面命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop2.7完全分布式模式安装">
+<meta property="og:url" content="http://yoursite.com/2016/03/24/2016-03-24-Hadoop2-7完全分布式模式安装/index.html">
+<meta property="og:site_name" content="tony's blog">
+<meta property="og:description" content="环境
+系统：centos6.5 64位 内存4G x3
+
+一、环境准备1、网络配置先分别修改三台设备的hostname：
+1vim /etc/sysconfig/network
+123.......HOSTNAME=master.......
+123........HOSTNAME=slave1........
+123........HOSTNAME=slave2........
+然后通过下面命令">
+<meta property="og:updated_time" content="2016-03-24T15:10:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop2.7完全分布式模式安装">
+<meta name="twitter:description" content="环境
+系统：centos6.5 64位 内存4G x3
+
+一、环境准备1、网络配置先分别修改三台设备的hostname：
+1vim /etc/sysconfig/network
+123.......HOSTNAME=master.......
+123........HOSTNAME=slave1........
+123........HOSTNAME=slave2........
+然后通过下面命令">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/03/24/2016-03-24-Hadoop2-7完全分布式模式安装/"/>
+
+  <title> Hadoop2.7完全分布式模式安装 | tony's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">tony's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Hadoop2.7完全分布式模式安装
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-24T21:55:30+08:00" content="2016-03-24">
+              2016-03-24
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
+<li>系统：centos6.5 64位 内存4G x3</li>
+</ul>
+<h3 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h3><h4 id="1、网络配置"><a href="#1、网络配置" class="headerlink" title="1、网络配置"></a>1、网络配置</h4><p>先分别修改三台设备的hostname：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/sysconfig/network</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.......</div><div class="line">HOSTNAME=master</div><div class="line">.......</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">........</div><div class="line">HOSTNAME=slave1</div><div class="line">........</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">........</div><div class="line">HOSTNAME=slave2</div><div class="line">........</div></pre></td></tr></table></figure>
+<p>然后通过下面命令重启网卡</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service network restart</div></pre></td></tr></table></figure>
+<p>修改/etc/hosts文件，写入ip与主机名的对应关系，三台设备都要写入，注意本机也必须写入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">192.168.1.80   master</div><div class="line">192.168.1.81   slave1</div><div class="line">192.168.1.82   slave2</div></pre></td></tr></table></figure>
+<p>关闭防火墙，并关闭开机启动防火墙</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ service iptables stop</div><div class="line">$ chkconfig iptables off</div></pre></td></tr></table></figure>
+<p>关闭selinux：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/sysconfig/selinux</div><div class="line"></div><div class="line">SELINUX=disabled</div></pre></td></tr></table></figure>
+<h4 id="2、打通SSH"><a href="#2、打通SSH" class="headerlink" title="2、打通SSH"></a>2、打通SSH</h4><p>在master节点执行下面命令，让master节点能够免验证登录自身</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t dsa -P &apos;&apos; -f ~/.ssh/id_dsa</div><div class="line">$ cat ~/.ssh/id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys</div><div class="line">$ chmod 0600 ~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
+<p>尝试下面命令，如果无需输入密码，则表示设置成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ssh localhost</div><div class="line">Last login: Thu Mar 24 22:14:10 2016 from 172.30.29.202</div></pre></td></tr></table></figure>
+<p>然后通过执行下面命令，让master免密登录slave1和slave2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp .ssh/id_dsa.pub root@slave1://~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp .ssh/id_dsa.pub root@slave2://~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
+<p> 尝试下来命令，如果无需输入密码登录，则表示设置成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh slave1</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh slave2</div></pre></td></tr></table></figure>
+<h3 id="二、下载解压hadoop"><a href="#二、下载解压hadoop" class="headerlink" title="二、下载解压hadoop"></a>二、下载解压hadoop</h3><p>在master节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ cd /opt</div><div class="line">$ mdkir software</div><div class="line">$ cd software</div><div class="line">$ wget http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-2.7.2/hadoop-2.7.2.tar.gz</div><div class="line">$ tar zxvf hadoop-2.7.2.tar.gz -C ../</div><div class="line">$ cd ../hadoop-2.7.2</div></pre></td></tr></table></figure>
+<h3 id="三、配置hadoop"><a href="#三、配置hadoop" class="headerlink" title="三、配置hadoop"></a>三、配置hadoop</h3><h4 id="1、配置namenode，修改各种site文件"><a href="#1、配置namenode，修改各种site文件" class="headerlink" title="1、配置namenode，修改各种site文件"></a>1、配置namenode，修改各种site文件</h4><p>主要是配置下面四个文件</p>
+<ul>
+<li>core-site.xml</li>
+<li>hdfs-site.xml</li>
+<li>mapred-site.xml</li>
+<li>yarn-site.xml</li>
+</ul>
+<p>以上文件，位于hadoop的etc/hadoop/文件夹下，我的配置如下：</p>
+<p>core-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;fs.defaultFS&lt;/name&gt;</div><div class="line">  &lt;value&gt;hdfs://master:9000&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line">&lt;/configuration</div></pre></td></tr></table></figure>
+<p>hdfs-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;dfs.replication&lt;/name&gt;</div><div class="line">  &lt;value&gt;1&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:9001&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<p>mapred-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">   &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</div><div class="line">   &lt;value&gt;yarn&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">   &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;</div><div class="line">   &lt;value&gt;master:10020&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">   &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</div><div class="line">   &lt;value&gt;master:19888&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<p>yarn-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line"></div><div class="line">&lt;!-- Site specific YARN configuration properties --&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</div><div class="line">  &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.nodemanager.aux-services.mapreduce.shuffle.class&lt;/name&gt;</div><div class="line">  &lt;value&gt;org.apache.hadoop.mapred.ShuffleHandler&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:8032&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:8030&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:8031&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.resourcemanager.admin.address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:8033&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:8088&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h4 id="2、修改环境变量文件"><a href="#2、修改环境变量文件" class="headerlink" title="2、修改环境变量文件"></a>2、修改环境变量文件</h4><p>配置之前，确认已经安装jdk，我这里安装的jdk8，三个节点的jdk home目录均是/opt/jdk1.8.0_77</p>
+<p>主要修改下面三个文件</p>
+<ul>
+<li>hadoop-env.sh</li>
+<li>mapred-env.sh</li>
+<li>yarn-env.sh</li>
+</ul>
+<p>将上面三个文件中的JAVA_HOME全部改为/opt/jdk1.8.0_77</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/opt/jdk1.8.0_77</div></pre></td></tr></table></figure>
+<h4 id="3、修改slaves文件"><a href="#3、修改slaves文件" class="headerlink" title="3、修改slaves文件"></a>3、修改slaves文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">localhost</div><div class="line">slave1</div><div class="line">slave2</div></pre></td></tr></table></figure>
+<h4 id="4、向slave节点同步hadoop"><a href="#4、向slave节点同步hadoop" class="headerlink" title="4、向slave节点同步hadoop"></a>4、向slave节点同步hadoop</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp -r hadoop-2.7.2 root@slave1://opt/</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp -r hadoop-2.7.2 root@slave2://opt/</div></pre></td></tr></table></figure>
+<p>向环境变量设置hadoop的安装路径（master、slave1、slave2都要执行）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ export HADOOP_PREFIX=/opt/hadoop-2.7.2</div></pre></td></tr></table></figure>
+<h3 id="四、格式化namenode"><a href="#四、格式化namenode" class="headerlink" title="四、格式化namenode"></a>四、格式化namenode</h3><p>在master节点执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /opt/hadoop2.7.2/</div><div class="line">$ bin/hdfs namenode -format</div></pre></td></tr></table></figure>
+<p>出现“successfully formatted”，表示格式化成功。</p>
+<h3 id="五、启动hadoop"><a href="#五、启动hadoop" class="headerlink" title="五、启动hadoop"></a>五、启动hadoop</h3><p>在master节点执行下面命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sbin/start-all.sh</div></pre></td></tr></table></figure>
+<h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><p>因为我这里不是本地编译安装，centos6.5的glibc版本低于要求的2.14所以会出现下面的报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</div></pre></td></tr></table></figure>
+<p>可以通过下来方式解决：</p>
+<p>1.临时方法：修改etc/hadoop下的log4j.properties，最后加上下面代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">log4j.logger.org.apache.hadoop.util.NativeCodeLoader=ERROR</div></pre></td></tr></table></figure>
+<p>2.升级GLIBC至2.14，网上还是有不少方法介绍升级的。<br>3.本地编译。<br>4.用CENTOS7以上安装hadoop.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hadoop/" rel="tag">#hadoop</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/16/2016-03-16-搭建cdh5-5-6-0环境/" rel="next" title="搭建cdh5 5.6.0环境">
+                <i class="fa fa-chevron-left"></i> 搭建cdh5 5.6.0环境
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tony" />
+          <p class="site-author-name" itemprop="name">tony</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、环境准备"><span class="nav-number">2.</span> <span class="nav-text">一、环境准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、网络配置"><span class="nav-number">2.1.</span> <span class="nav-text">1、网络配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、打通SSH"><span class="nav-number">2.2.</span> <span class="nav-text">2、打通SSH</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、下载解压hadoop"><span class="nav-number">3.</span> <span class="nav-text">二、下载解压hadoop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、配置hadoop"><span class="nav-number">4.</span> <span class="nav-text">三、配置hadoop</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、配置namenode，修改各种site文件"><span class="nav-number">4.1.</span> <span class="nav-text">1、配置namenode，修改各种site文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、修改环境变量文件"><span class="nav-number">4.2.</span> <span class="nav-text">2、修改环境变量文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、修改slaves文件"><span class="nav-number">4.3.</span> <span class="nav-text">3、修改slaves文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、向slave节点同步hadoop"><span class="nav-number">4.4.</span> <span class="nav-text">4、向slave节点同步hadoop</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、格式化namenode"><span class="nav-number">5.</span> <span class="nav-text">四、格式化namenode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、启动hadoop"><span class="nav-number">6.</span> <span class="nav-text">五、启动hadoop</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注意事项"><span class="nav-number">6.0.1.</span> <span class="nav-text">注意事项</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tony</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
