@@ -104,7 +104,7 @@ IP资源管理：管理IP使用状态、领用人、应用于什么应用等
 外部节点管理：管理外部节点，节点IP、用户名、密码、端口、协议等
 
 技术选型：">
-<meta property="og:updated_time" content="2016-03-08T15:06:45.000Z">
+<meta property="og:updated_time" content="2016-09-27T08:54:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="angular2+python项目实践1">
 <meta name="twitter:description" content="题记​    最近运维提出在产品中增加一个资源管理的功能，我刚好也在看angular2和tornado，而这个需求也比较 简单，刚好拿来练练手，并在此记录下来，当然这里也不会使用真实项目代码。
@@ -356,6 +356,7 @@ IP资源管理：管理IP使用状态、领用人、应用于什么应用等
 <h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>开始创建项目目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir rmg</div><div class="line">$ cd rmg</div></pre></td></tr></table></figure>
 <p>这里就省略了node环境的安装</p>
+<a id="more"></a>
 <p>Angular2使用npm来管理依赖，先通过npm init来引导创建package.json文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">$ npm init</div><div class="line">This utility will walk you through creating a package.json file.</div><div class="line">It only covers the most common items, and tries to guess sensible defaults.</div><div class="line"></div><div class="line">See `npm help json` for definitive documentation on these fields</div><div class="line">and exactly what they do.</div><div class="line"></div><div class="line">Use `npm install &lt;pkg&gt; --save` afterwards to install a package and</div><div class="line">save it as a dependency in the package.json file.</div><div class="line"></div><div class="line">Press ^C at any time to quit.</div><div class="line">name: (rmg) rmg-tw</div><div class="line">version: (1.0.0) 1.0.0</div><div class="line">description: webpack+angular2</div><div class="line">entry point: (index.js) main.js</div><div class="line">test command:</div><div class="line">git repository:</div><div class="line">keywords: angular2</div><div class="line">author: tonywill</div><div class="line">license: (ISC) MIT</div><div class="line">About to write to /Users/willtony/workspace/rmg/package.json:</div><div class="line"></div><div class="line">&#123;</div><div class="line">  &quot;name&quot;: &quot;rmg-tw&quot;,</div><div class="line">  &quot;version&quot;: &quot;1.0.0&quot;,</div><div class="line">  &quot;description&quot;: &quot;webpack+angular2&quot;,</div><div class="line">  &quot;main&quot;: &quot;main.js&quot;,</div><div class="line">  &quot;scripts&quot;: &#123;</div><div class="line">    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</div><div class="line">  &#125;,</div><div class="line">  &quot;keywords&quot;: [</div><div class="line">    &quot;angular2&quot;</div><div class="line">  ],</div><div class="line">  &quot;author&quot;: &quot;tonywill&quot;,</div><div class="line">  &quot;license&quot;: &quot;MIT&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Is this ok? (yes) yes</div></pre></td></tr></table></figure>
 <p>以上主要是输入一些名称、作者、版本等等信息。</p>
@@ -499,7 +500,7 @@ IP资源管理：管理IP使用状态、领用人、应用于什么应用等
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

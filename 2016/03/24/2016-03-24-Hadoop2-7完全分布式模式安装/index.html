@@ -106,7 +106,7 @@
 123........HOSTNAME=slave1........
 123........HOSTNAME=slave2........
 然后通过下面命令">
-<meta property="og:updated_time" content="2016-03-24T15:10:46.000Z">
+<meta property="og:updated_time" content="2016-09-27T08:53:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop2.7完全分布式模式安装">
 <meta name="twitter:description" content="环境
@@ -336,6 +336,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ service iptables stop</div><div class="line">$ chkconfig iptables off</div></pre></td></tr></table></figure>
 <p>关闭selinux：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/sysconfig/selinux</div><div class="line"></div><div class="line">SELINUX=disabled</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <h4 id="2、打通SSH"><a href="#2、打通SSH" class="headerlink" title="2、打通SSH"></a>2、打通SSH</h4><p>在master节点执行下面命令，让master节点能够免验证登录自身</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t dsa -P &apos;&apos; -f ~/.ssh/id_dsa</div><div class="line">$ cat ~/.ssh/id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys</div><div class="line">$ chmod 0600 ~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
 <p>尝试下面命令，如果无需输入密码，则表示设置成功</p>
@@ -515,7 +516,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

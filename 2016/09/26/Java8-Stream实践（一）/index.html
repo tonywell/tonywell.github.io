@@ -85,18 +85,18 @@
 
 
 <meta name="description" content="最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。
-1、获取数据通过Collectors.toMap(cell -&amp;gt; Bytes.toString(Cell">
+获取数据通过Collectors.toMap(cell -&amp;gt; Bytes.toString(CellUt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java8 Stream实践（一）">
 <meta property="og:url" content="http://yoursite.com/2016/09/26/Java8-Stream实践（一）/index.html">
 <meta property="og:site_name" content="tony's blog">
 <meta property="og:description" content="最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。
-1、获取数据通过Collectors.toMap(cell -&amp;gt; Bytes.toString(Cell">
-<meta property="og:updated_time" content="2016-09-27T08:26:16.000Z">
+获取数据通过Collectors.toMap(cell -&amp;gt; Bytes.toString(CellUt">
+<meta property="og:updated_time" content="2016-09-27T08:53:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java8 Stream实践（一）">
 <meta name="twitter:description" content="最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。
-1、获取数据通过Collectors.toMap(cell -&amp;gt; Bytes.toString(Cell">
+获取数据通过Collectors.toMap(cell -&amp;gt; Bytes.toString(CellUt">
 
 
 
@@ -300,20 +300,21 @@
 
       
         <p>最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。</p>
-<h3 id="1、获取数据"><a href="#1、获取数据" class="headerlink" title="1、获取数据"></a>1、获取数据</h3><p>通过Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell)))把结果收集到一个Map，并将所有Map收集到一个List中。</p>
+<h3 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h3><p>通过Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell)))把结果收集到一个Map，并将所有Map收集到一个List中。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ResultScanner rs = table.getScanner(scan);</div><div class="line">List&lt;Map&lt;String, String&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">rs.forEach((r) -&gt; &#123;</div><div class="line">      Map&lt;String, String&gt; map = r.listCells().stream().collect(Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell))));</div><div class="line">      list.add(map);</div><div class="line">     &#125;);</div></pre></td></tr></table></figure>
 <p>1）通过forEach方法接收一个 Lambda 表达式，其实就是遍历ResultScanner结果</p>
 <p>2）r.listCells将Result转成list</p>
 <p>3）调用stream将List转成流</p>
 <p>3）Collectors.toMap把结果收集到Map</p>
 <p>4）collect将结果收集到List</p>
-<h3 id="2、数据分类"><a href="#2、数据分类" class="headerlink" title="2、数据分类"></a>2、数据分类</h3><p>因为需求是要不同的股票要写入不同的文件，所以我们需要对数据再进行分组。</p>
+<a id="more"></a>
+<h3 id="数据分类"><a href="#数据分类" class="headerlink" title="数据分类"></a>数据分类</h3><p>因为需求是要不同的股票要写入不同的文件，所以我们需要对数据再进行分组。</p>
 <p>我们是根据SCode和MarketType来区分数据，所有我们就要将SCode和MarketType相同的数据归集到一个新的List，并将SCode_MarketType作为Key收集到Map中</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Map&lt;String, List&lt;Map&lt;String,String&gt;&gt;&gt; datas =  list.stream().collect(Collectors.groupingBy(m -&gt; m.get(&quot;SCode&quot;) + &quot;-&quot; + m.get(&quot;MarketType&quot;)));</div></pre></td></tr></table></figure>
 <p>1）调用stream将List转成流</p>
 <p>2）通过收集器方法groupingBy来分组数据</p>
 <p>3）最终将数据归集成Map</p>
-<h3 id="3、写文件"><a href="#3、写文件" class="headerlink" title="3、写文件"></a>3、写文件</h3><p>foreach遍历结果集，通过Stream  map将Map的所有值按照keys的顺序拼成一个字符串，再通过collect将结果收集到List中。</p>
+<h3 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h3><p>foreach遍历结果集，通过Stream  map将Map的所有值按照keys的顺序拼成一个字符串，再通过collect将结果收集到List中。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; keys = Arrays.asList(job.getKeys().split(&quot;,&quot;));   //有序的列名</div><div class="line"></div><div class="line">//Map&lt;String, List&lt;Map&lt;String,String&gt;&gt;&gt; datas</div><div class="line">datas.forEach((k,v) -&gt; &#123;</div><div class="line">    List&lt;String&gt; texts = v.stream().map(m -&gt;</div><div class="line">          String.join(&quot;|&quot;, keys.parallelStream().map(s -&gt; m.get(s)).collect(Collectors.toList()))</div><div class="line">      ).collect(Collectors.toList());</div><div class="line">          this.writeFile(texts, job, k);</div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
 <p>1）通过forEach方法接收一个 Lambda 表达式，其实就是遍历结果集</p>
 <p>2）通过stream将list转成流</p>
@@ -457,7 +458,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -486,7 +487,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、获取数据"><span class="nav-number">1.</span> <span class="nav-text">1、获取数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、数据分类"><span class="nav-number">2.</span> <span class="nav-text">2、数据分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、写文件"><span class="nav-number">3.</span> <span class="nav-text">3、写文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取数据"><span class="nav-number">1.</span> <span class="nav-text">获取数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据分类"><span class="nav-number">2.</span> <span class="nav-text">数据分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写文件"><span class="nav-number">3.</span> <span class="nav-text">写文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
         </section>

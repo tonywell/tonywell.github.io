@@ -298,43 +298,19 @@
 
       
         
-          
-            <p>最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。</p>
-<h3 id="1、获取数据"><a href="#1、获取数据" class="headerlink" title="1、获取数据"></a>1、获取数据</h3><p>通过Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell)))把结果收集到一个Map，并将所有Map收集到一个List中。</p>
+          <p>最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。</p>
+<h3 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h3><p>通过Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell)))把结果收集到一个Map，并将所有Map收集到一个List中。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ResultScanner rs = table.getScanner(scan);</div><div class="line">List&lt;Map&lt;String, String&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">rs.forEach((r) -&gt; &#123;</div><div class="line">      Map&lt;String, String&gt; map = r.listCells().stream().collect(Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell))));</div><div class="line">      list.add(map);</div><div class="line">     &#125;);</div></pre></td></tr></table></figure>
 <p>1）通过forEach方法接收一个 Lambda 表达式，其实就是遍历ResultScanner结果</p>
 <p>2）r.listCells将Result转成list</p>
 <p>3）调用stream将List转成流</p>
 <p>3）Collectors.toMap把结果收集到Map</p>
 <p>4）collect将结果收集到List</p>
-<h3 id="2、数据分类"><a href="#2、数据分类" class="headerlink" title="2、数据分类"></a>2、数据分类</h3><p>因为需求是要不同的股票要写入不同的文件，所以我们需要对数据再进行分组。</p>
-<p>我们是根据SCode和MarketType来区分数据，所有我们就要将SCode和MarketType相同的数据归集到一个新的List，并将SCode_MarketType作为Key收集到Map中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Map&lt;String, List&lt;Map&lt;String,String&gt;&gt;&gt; datas =  list.stream().collect(Collectors.groupingBy(m -&gt; m.get(&quot;SCode&quot;) + &quot;-&quot; + m.get(&quot;MarketType&quot;)));</div></pre></td></tr></table></figure>
-<p>1）调用stream将List转成流</p>
-<p>2）通过收集器方法groupingBy来分组数据</p>
-<p>3）最终将数据归集成Map</p>
-<h3 id="3、写文件"><a href="#3、写文件" class="headerlink" title="3、写文件"></a>3、写文件</h3><p>foreach遍历结果集，通过Stream  map将Map的所有值按照keys的顺序拼成一个字符串，再通过collect将结果收集到List中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; keys = Arrays.asList(job.getKeys().split(&quot;,&quot;));   //有序的列名</div><div class="line"></div><div class="line">//Map&lt;String, List&lt;Map&lt;String,String&gt;&gt;&gt; datas</div><div class="line">datas.forEach((k,v) -&gt; &#123;</div><div class="line">    List&lt;String&gt; texts = v.stream().map(m -&gt;</div><div class="line">          String.join(&quot;|&quot;, keys.parallelStream().map(s -&gt; m.get(s)).collect(Collectors.toList()))</div><div class="line">      ).collect(Collectors.toList());</div><div class="line">          this.writeFile(texts, job, k);</div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
-<p>1）通过forEach方法接收一个 Lambda 表达式，其实就是遍历结果集</p>
-<p>2）通过stream将list转成流</p>
-<p>3）调用流的map</p>
-<p>  3.1) 通过parallelStream将keys转成流</p>
-<p>  3.2）调用流的map，通过每个元素到结果集的map中获取value</p>
-<p>  3.4）调用collect将结果归集为list</p>
-<p>4）调用writeFile写文件</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Stream 的特性可以归纳为：</p>
-<ul>
-<li>不是新的集合类</li>
-<li>没有内存存储，不会修改数据结构，只会产生新的流程</li>
-<li>所有 Stream 的操作必须以 lambda 表达式为参数</li>
-<li>非常容易生产数组或者集合</li>
-</ul>
-<p>还没有应用到的特性</p>
-<ul>
-<li>并行能力</li>
-</ul>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/09/26/Java8-Stream实践（一）/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -425,8 +401,7 @@
 
       
         
-          
-            <h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
+          <h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
 <li>系统：centos6.5 64位 内存4G x3</li>
 </ul>
 <h3 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h3><h4 id="1、网络配置"><a href="#1、网络配置" class="headerlink" title="1、网络配置"></a>1、网络配置</h4><p>先分别修改三台设备的hostname：</p>
@@ -442,61 +417,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ service iptables stop</div><div class="line">$ chkconfig iptables off</div></pre></td></tr></table></figure>
 <p>关闭selinux：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/sysconfig/selinux</div><div class="line"></div><div class="line">SELINUX=disabled</div></pre></td></tr></table></figure>
-<h4 id="2、打通SSH"><a href="#2、打通SSH" class="headerlink" title="2、打通SSH"></a>2、打通SSH</h4><p>在master节点执行下面命令，让master节点能够免验证登录自身</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t dsa -P &apos;&apos; -f ~/.ssh/id_dsa</div><div class="line">$ cat ~/.ssh/id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys</div><div class="line">$ chmod 0600 ~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
-<p>尝试下面命令，如果无需输入密码，则表示设置成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ssh localhost</div><div class="line">Last login: Thu Mar 24 22:14:10 2016 from 172.30.29.202</div></pre></td></tr></table></figure>
-<p>然后通过执行下面命令，让master免密登录slave1和slave2</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp .ssh/id_dsa.pub root@slave1://~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp .ssh/id_dsa.pub root@slave2://~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
-<p> 尝试下来命令，如果无需输入密码登录，则表示设置成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh slave1</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh slave2</div></pre></td></tr></table></figure>
-<h3 id="二、下载解压hadoop"><a href="#二、下载解压hadoop" class="headerlink" title="二、下载解压hadoop"></a>二、下载解压hadoop</h3><p>在master节点</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ cd /opt</div><div class="line">$ mdkir software</div><div class="line">$ cd software</div><div class="line">$ wget http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-2.7.2/hadoop-2.7.2.tar.gz</div><div class="line">$ tar zxvf hadoop-2.7.2.tar.gz -C ../</div><div class="line">$ cd ../hadoop-2.7.2</div></pre></td></tr></table></figure>
-<h3 id="三、配置hadoop"><a href="#三、配置hadoop" class="headerlink" title="三、配置hadoop"></a>三、配置hadoop</h3><h4 id="1、配置namenode，修改各种site文件"><a href="#1、配置namenode，修改各种site文件" class="headerlink" title="1、配置namenode，修改各种site文件"></a>1、配置namenode，修改各种site文件</h4><p>主要是配置下面四个文件</p>
-<ul>
-<li>core-site.xml</li>
-<li>hdfs-site.xml</li>
-<li>mapred-site.xml</li>
-<li>yarn-site.xml</li>
-</ul>
-<p>以上文件，位于hadoop的etc/hadoop/文件夹下，我的配置如下：</p>
-<p>core-site.xml</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;fs.defaultFS&lt;/name&gt;</div><div class="line">  &lt;value&gt;hdfs://master:9000&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line">&lt;/configuration</div></pre></td></tr></table></figure>
-<p>hdfs-site.xml</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;dfs.replication&lt;/name&gt;</div><div class="line">  &lt;value&gt;1&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:9001&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
-<p>mapred-site.xml</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">   &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</div><div class="line">   &lt;value&gt;yarn&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">   &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;</div><div class="line">   &lt;value&gt;master:10020&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">   &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</div><div class="line">   &lt;value&gt;master:19888&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
-<p>yarn-site.xml</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line"></div><div class="line">&lt;!-- Site specific YARN configuration properties --&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</div><div class="line">  &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.nodemanager.aux-services.mapreduce.shuffle.class&lt;/name&gt;</div><div class="line">  &lt;value&gt;org.apache.hadoop.mapred.ShuffleHandler&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:8032&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:8030&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:8031&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.resourcemanager.admin.address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:8033&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;</div><div class="line">  &lt;value&gt;master:8088&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
-<h4 id="2、修改环境变量文件"><a href="#2、修改环境变量文件" class="headerlink" title="2、修改环境变量文件"></a>2、修改环境变量文件</h4><p>配置之前，确认已经安装jdk，我这里安装的jdk8，三个节点的jdk home目录均是/opt/jdk1.8.0_77</p>
-<p>主要修改下面三个文件</p>
-<ul>
-<li>hadoop-env.sh</li>
-<li>mapred-env.sh</li>
-<li>yarn-env.sh</li>
-</ul>
-<p>将上面三个文件中的JAVA_HOME全部改为/opt/jdk1.8.0_77</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/opt/jdk1.8.0_77</div></pre></td></tr></table></figure>
-<h4 id="3、修改slaves文件"><a href="#3、修改slaves文件" class="headerlink" title="3、修改slaves文件"></a>3、修改slaves文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">localhost</div><div class="line">slave1</div><div class="line">slave2</div></pre></td></tr></table></figure>
-<h4 id="4、向slave节点同步hadoop"><a href="#4、向slave节点同步hadoop" class="headerlink" title="4、向slave节点同步hadoop"></a>4、向slave节点同步hadoop</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp -r hadoop-2.7.2 root@slave1://opt/</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp -r hadoop-2.7.2 root@slave2://opt/</div></pre></td></tr></table></figure>
-<p>向环境变量设置hadoop的安装路径（master、slave1、slave2都要执行）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ export HADOOP_PREFIX=/opt/hadoop-2.7.2</div></pre></td></tr></table></figure>
-<h3 id="四、格式化namenode"><a href="#四、格式化namenode" class="headerlink" title="四、格式化namenode"></a>四、格式化namenode</h3><p>在master节点执行如下命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /opt/hadoop2.7.2/</div><div class="line">$ bin/hdfs namenode -format</div></pre></td></tr></table></figure>
-<p>出现“successfully formatted”，表示格式化成功。</p>
-<h3 id="五、启动hadoop"><a href="#五、启动hadoop" class="headerlink" title="五、启动hadoop"></a>五、启动hadoop</h3><p>在master节点执行下面命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sbin/start-all.sh</div></pre></td></tr></table></figure>
-<h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><p>因为我这里不是本地编译安装，centos6.5的glibc版本低于要求的2.14所以会出现下面的报错</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</div></pre></td></tr></table></figure>
-<p>可以通过下来方式解决：</p>
-<p>1.临时方法：修改etc/hadoop下的log4j.properties，最后加上下面代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">log4j.logger.org.apache.hadoop.util.NativeCodeLoader=ERROR</div></pre></td></tr></table></figure>
-<p>2.升级GLIBC至2.14，网上还是有不少方法介绍升级的。<br>3.本地编译。<br>4.用CENTOS7以上安装hadoop.</p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/24/2016-03-24-Hadoop2-7完全分布式模式安装/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -588,26 +513,21 @@
       
         
           
-            <h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
-<li>系统：Centos 6.5   内存4G  总共3台</li>
-<li>Cloduera Manager：5.6.0</li>
-<li>CDH5: 5.6.0</li>
-</ul>
-<h3 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h3><h4 id="1、网络配置"><a href="#1、网络配置" class="headerlink" title="1、网络配置"></a>1、网络配置</h4><p>先分别修改三台设备的hostname：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/sysconfig/network</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.......</div><div class="line">HOSTNAME=master</div><div class="line">.......</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">........</div><div class="line">HOSTNAME=slave1</div><div class="line">........</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">........</div><div class="line">HOSTNAME=slave2</div><div class="line">........</div></pre></td></tr></table></figure>
-<p>然后通过下面命令重启网卡</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service network restart</div></pre></td></tr></table></figure>
-<p>修改/etc/hosts文件，写入ip与主机名的对应关系，三台设备都要写入，注意本机也必须写入。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">192.168.1.80   master</div><div class="line">192.168.1.81   slave1</div><div class="line">192.168.1.82   slave2</div></pre></td></tr></table></figure>
-<p>关闭防火墙，并关闭开机启动防火墙</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ service iptables stop</div><div class="line">$ chkconfig iptables off</div></pre></td></tr></table></figure>
-<p>关闭selinux：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/sysconfig/selinux</div><div class="line"></div><div class="line">SELINUX=disabled</div></pre></td></tr></table></figure>
-<h4 id="2、打通SSH"><a href="#2、打通SSH" class="headerlink" title="2、打通SSH"></a>2、打通SSH</h4>
-          
+          环境
+系统：Centos 6.5   内存4G  总共3台
+Cloduera Manager：5.6.0
+CDH5: 5.6.0
+
+一、环境准备1、网络配置先分别修改三台设备的hostname：
+1vim /etc/sysconfig/network
+123.......HOSTNAME=maste
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/16/2016-03-16-搭建cdh5-5-6-0环境/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -718,10 +638,16 @@
       
         
           
-            <p>上文中，已经创建好项目目录</p>
-<p>接下来tachyon</p>
+          上文中，已经创建好项目目录
+接下来tachyon
 
           
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/10/2016-03-10-angular2-python项目实践2/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -831,8 +757,7 @@
 
       
         
-          
-            <h3 id="题记"><a href="#题记" class="headerlink" title="题记"></a>题记</h3><p>​    最近运维提出在产品中增加一个资源管理的功能，我刚好也在看angular2和tornado，而这个需求也比较 简单，刚好拿来练练手，并在此记录下来，当然这里也不会使用真实项目代码。</p>
+          <h3 id="题记"><a href="#题记" class="headerlink" title="题记"></a>题记</h3><p>​    最近运维提出在产品中增加一个资源管理的功能，我刚好也在看angular2和tornado，而这个需求也比较 简单，刚好拿来练练手，并在此记录下来，当然这里也不会使用真实项目代码。</p>
 <p> 功能列表：</p>
 <ul>
 <li>机房信息管理 ：管理机房IP、联系人、供应商等信息</li>
@@ -852,19 +777,11 @@
 <h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>开始创建项目目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir rmg</div><div class="line">$ cd rmg</div></pre></td></tr></table></figure>
 <p>这里就省略了node环境的安装</p>
-<p>Angular2使用npm来管理依赖，先通过npm init来引导创建package.json文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">$ npm init</div><div class="line">This utility will walk you through creating a package.json file.</div><div class="line">It only covers the most common items, and tries to guess sensible defaults.</div><div class="line"></div><div class="line">See `npm help json` for definitive documentation on these fields</div><div class="line">and exactly what they do.</div><div class="line"></div><div class="line">Use `npm install &lt;pkg&gt; --save` afterwards to install a package and</div><div class="line">save it as a dependency in the package.json file.</div><div class="line"></div><div class="line">Press ^C at any time to quit.</div><div class="line">name: (rmg) rmg-tw</div><div class="line">version: (1.0.0) 1.0.0</div><div class="line">description: webpack+angular2</div><div class="line">entry point: (index.js) main.js</div><div class="line">test command:</div><div class="line">git repository:</div><div class="line">keywords: angular2</div><div class="line">author: tonywill</div><div class="line">license: (ISC) MIT</div><div class="line">About to write to /Users/willtony/workspace/rmg/package.json:</div><div class="line"></div><div class="line">&#123;</div><div class="line">  &quot;name&quot;: &quot;rmg-tw&quot;,</div><div class="line">  &quot;version&quot;: &quot;1.0.0&quot;,</div><div class="line">  &quot;description&quot;: &quot;webpack+angular2&quot;,</div><div class="line">  &quot;main&quot;: &quot;main.js&quot;,</div><div class="line">  &quot;scripts&quot;: &#123;</div><div class="line">    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</div><div class="line">  &#125;,</div><div class="line">  &quot;keywords&quot;: [</div><div class="line">    &quot;angular2&quot;</div><div class="line">  ],</div><div class="line">  &quot;author&quot;: &quot;tonywill&quot;,</div><div class="line">  &quot;license&quot;: &quot;MIT&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Is this ok? (yes) yes</div></pre></td></tr></table></figure>
-<p>以上主要是输入一些名称、作者、版本等等信息。</p>
-<h4 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h4><p>首先安装angular2以及angular2的依赖到本地</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$ npm install --save angular2</div><div class="line">es6-promise@3.1.2 node_modules/es6-promise</div><div class="line"></div><div class="line">es6-shim@0.33.13 node_modules/es6-shim</div><div class="line"></div><div class="line">reflect-metadata@0.1.2 node_modules/reflect-metadata</div><div class="line"></div><div class="line">zone.js@0.5.15 node_modules/zone.js</div><div class="line"></div><div class="line">rxjs@5.0.0-beta.2 node_modules/rxjs</div><div class="line"></div><div class="line">angular2@2.0.0-beta.8 node_modules/angular2</div></pre></td></tr></table></figure>
-<p>因为Angular2是基于TypeScript的，那么我这里将基于TypeScript，所以需要安装TypeScript</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ npm install -g typescript typings</div><div class="line">$ npm install --save-dev typescript typings</div></pre></td></tr></table></figure>
-<p>安装webpack</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ npm install -g webpack webpack-dev-server webpack-md5-hash webpack-merge</div><div class="line">$ npm install --save-dev webpack webpack-dev-server webpack-md5-hash webpack-merge</div></pre></td></tr></table></figure>
-<p>至此package.json文件如下：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"rmg-tw"</span>,</div><div class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</div><div class="line">  <span class="attr">"description"</span>: <span class="string">"webpack+angular2"</span>,</div><div class="line">  <span class="attr">"main"</span>: <span class="string">"main.js"</span>,</div><div class="line">  <span class="attr">"scripts"</span>: &#123;</div><div class="line">    <span class="attr">"test"</span>: <span class="string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"keywords"</span>: [</div><div class="line">    <span class="string">"angular2"</span></div><div class="line">  ],</div><div class="line">  <span class="attr">"author"</span>: <span class="string">"tonywill"</span>,</div><div class="line">  <span class="attr">"license"</span>: <span class="string">"MIT"</span>,</div><div class="line">  <span class="attr">"dependencies"</span>: &#123;</div><div class="line">    <span class="attr">"angular2"</span>: <span class="string">"^2.0.0-beta.8"</span>,</div><div class="line">    <span class="attr">"es6-promise"</span>: <span class="string">"^3.1.2"</span>,</div><div class="line">    <span class="attr">"es6-shim"</span>: <span class="string">"^0.33.13"</span>,</div><div class="line">    <span class="attr">"reflect-metadata"</span>: <span class="string">"^0.1.2"</span>,</div><div class="line">    <span class="attr">"rxjs"</span>: <span class="string">"^5.0.0-beta.2"</span>,</div><div class="line">    <span class="attr">"zone.js"</span>: <span class="string">"^0.5.15"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"devDependencies"</span>: &#123;</div><div class="line">    <span class="attr">"typescript"</span>: <span class="string">"^1.8.7"</span>,</div><div class="line">    <span class="attr">"typings"</span>: <span class="string">"^0.7.3"</span>,</div><div class="line">    <span class="attr">"webpack"</span>: <span class="string">"^1.12.14"</span>,</div><div class="line">    <span class="attr">"webpack-dev-server"</span>: <span class="string">"^1.14.1"</span>,</div><div class="line">    <span class="attr">"webpack-md5-hash"</span>: <span class="string">"0.0.5"</span>,</div><div class="line">    <span class="attr">"webpack-merge"</span>: <span class="string">"^0.8.3"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/08/2016-03-08-angular2-python项目实践1/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -955,8 +872,7 @@
 
       
         
-          
-            <h2 id="配置virtualenv-supervisor-tornado项目总结"><a href="#配置virtualenv-supervisor-tornado项目总结" class="headerlink" title="配置virtualenv+supervisor+tornado项目总结"></a>配置virtualenv+supervisor+tornado项目总结</h2><p>virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。  </p>
+          <h2 id="配置virtualenv-supervisor-tornado项目总结"><a href="#配置virtualenv-supervisor-tornado项目总结" class="headerlink" title="配置virtualenv+supervisor+tornado项目总结"></a>配置virtualenv+supervisor+tornado项目总结</h2><p>virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。  </p>
 <p>如果系统没有安装virtualenv，先安装，我是通过pip来安装的</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install virtualenv</div></pre></td></tr></table></figure>
 <p>在我的项目rmg目录下通过命令创建python2.7的虚拟环境</p>
@@ -972,19 +888,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -r pip_requirements.txt</div></pre></td></tr></table></figure>
 <p>以下省略项目代码</p>
 <p>……</p>
-<p>通过一下命令可以生成supervisord.conf文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo_supervisord_conf &gt; etc/supervisord.conf</div></pre></td></tr></table></figure>
-<p>修改supervisord.conf文件如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">[unix_http_server]</div><div class="line">file=/tmp/supervisor.sock ; path to your socket file</div><div class="line"></div><div class="line">[supervisord]</div><div class="line">logfile=/tmp/supervisord.log ;</div><div class="line">supervisord log file logfile_maxbytes=50MB ; maximum size of logfile before rotation</div><div class="line">logfile_backups=10 ; number of backed up logfiles</div><div class="line">loglevel=warn ; info, debug, warn, trace</div><div class="line">pidfile=/tmp/supervisord.pid ; pidfile location</div><div class="line">nodaemon=false ; run supervisord as a daemon</div><div class="line">minfds=1024 ; number of startup file descriptors</div><div class="line">minprocs=200 ; number of process descriptors</div><div class="line">user=root ; default user</div><div class="line">childlogdir=/home/hawkeye/rmg/log</div><div class="line"></div><div class="line">[rpcinterface:supervisor]</div><div class="line">supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface</div><div class="line"></div><div class="line">[supervisorctl]</div><div class="line">serverurl=unix:///tmp/supervisor.sock ; use a unix:// URL for a unix socket</div><div class="line"></div><div class="line">[program:tor8009]</div><div class="line">command=python /home/hawkeye/rmg/server/server.py --port=8009 autostart=true</div><div class="line">stderr_logfile = /home/hawkeye/rmg/log/rmg-8009-stderr.log</div><div class="line">stdout_logfile = /home/hawkeye/rmg/log/rmg-8009-stdout.log</div><div class="line">loglevel=info</div></pre></td></tr></table></figure>
-<p>意思是使用supervisor维护一个进程，运行在8009端口上</p>
-<p>在rmg目录创建control文件，作为启动脚本，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"></div><div class="line">PID=&quot;/tmp/supervisord.pid&quot;</div><div class="line">CONF=&quot;etc/supervisord.conf&quot;</div><div class="line"></div><div class="line">stop() &#123;</div><div class="line">    if [ -f $PID ]; then</div><div class="line">        kill `cat -- $PID`</div><div class="line">        rm -f -- $PID</div><div class="line">        echo &quot;stopped&quot;</div><div class="line">    fi</div><div class="line">&#125;</div><div class="line"></div><div class="line">start() &#123;</div><div class="line">    echo &quot;starting&quot;</div><div class="line">    if [ ! -f $PID ]; then</div><div class="line">        source rmg_env/bin/activate</div><div class="line">        supervisord -c $CONF</div><div class="line">        echo &quot;started&quot;</div><div class="line">    fi</div><div class="line">&#125;</div><div class="line"></div><div class="line">case &quot;$1&quot; in</div><div class="line">    start)</div><div class="line">        start</div><div class="line">        ;;</div><div class="line">    stop)</div><div class="line">        stop</div><div class="line">        ;;</div><div class="line">    restart)</div><div class="line">        stop</div><div class="line">        start</div><div class="line">        ;;</div><div class="line">    *)</div><div class="line">        echo &quot;Usage: $0 &#123;start|stop|restart&#125;&quot;</div><div class="line">esac</div></pre></td></tr></table></figure>
-<p>给control文件添加执行权限</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chmod +x control</div></pre></td></tr></table></figure>
-<p>然后执行control就可以启动应用了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./control start</div></pre></td></tr></table></figure>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/06/2016-03-06-virtualenv-supervisor-plus-tornado/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -1107,60 +1015,17 @@
       
         
           
-            <p>HashMap的实例有两个参数影响其性能：初始容量和加载因子。初始容量只是哈希表在创建时的容量。加载因子是哈希表再其容量自动增加之前可以达到多满的一种尺度。当哈希表中的条目数超出了加载因子与当前容量的乘积时，则要对该哈希表进行rehash操作（扩容操作）。</p>
-<p>属性：  </p>
-<pre><code> /**
- * The default initial capacity - MUST be a power of two.
- * 默认初始容量 - 必须是2的幂
- */
-static final int DEFAULT_INITIAL_CAPACITY = 16;
+          HashMap的实例有两个参数影响其性能：初始容量和加载因子。初始容量只是哈希表在创建时的容量。加载因子是哈希表再其容量自动增加之前可以达到多满的一种尺度。当哈希表中的条目数超出了加载因子与当前容量的乘积时，则要对该哈希表进行rehash操作（扩容操作）。
+属性：  
+ /**
+ * The def
+          ...
 
-/**
- * The maximum capacity, used if a higher value is implicitly specified
- * by either of the constructors with arguments.
- * MUST be a power of two &lt;= 1&lt;&lt;30.
- * 最大容量
- */
-static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;
-
-/**
- * The load factor used when none specified in constructor.
- * 默认的装载因子
- */
-static final float DEFAULT_LOAD_FACTOR = 0.75f;
-
-/**
- * The table, resized as necessary. Length MUST Always be a power of two.
- * 存储数据的Entity数组，长度为2的幂
- */
-transient Entry&lt;K,V&gt;[] table;
-
-/**
- * The number of key-value mappings contained in this map.
- * map中key-value的数量
- */
-transient int size;
-
-/**
- * The next size value at which to resize (capacity * load factor).
- * @serial
- *HashMap的阀值当实际数据大小超过threshold时，HashMap会将容量扩容，threshold＝容量*加载因子
- */
-int threshold;
-
-/**
- * The load factor for the hash table.
- * @serial
- * 装载因子,当HashMap的数据大小&gt;=容量*加载因子时，HashMap会将容量扩容
- */
-final float loadFactor;
-
-/**
- * HashMap的修改次数
- */
-transient int modCount;
-</code></pre>
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/07/17/2014-07-17-hashmapyuan-ma-jie-xi/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -1742,7 +1607,7 @@ repositories{
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
