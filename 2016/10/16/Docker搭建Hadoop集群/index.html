@@ -1,0 +1,697 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Docker,Hadoop,大数据," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="最近为了学习大数据，所以需要在本地搭建Hadoop的分布式集群环境，整虚拟机的话开销太大，所以就想用Docker来做虚拟化。步骤如下：
+
+通过dockerfile文件方式构建Hadoop的基础镜像
+
+一、构建Hadoop基础镜像1、首先构建一个centos7的基础镜像首先创建目录,并创建Dockerfile：
+123$ mkdir docker-centos$ cd docker-centos$">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker搭建Hadoop集群">
+<meta property="og:url" content="http://yoursite.com/2016/10/16/Docker搭建Hadoop集群/index.html">
+<meta property="og:site_name" content="tony's blog">
+<meta property="og:description" content="最近为了学习大数据，所以需要在本地搭建Hadoop的分布式集群环境，整虚拟机的话开销太大，所以就想用Docker来做虚拟化。步骤如下：
+
+通过dockerfile文件方式构建Hadoop的基础镜像
+
+一、构建Hadoop基础镜像1、首先构建一个centos7的基础镜像首先创建目录,并创建Dockerfile：
+123$ mkdir docker-centos$ cd docker-centos$">
+<meta property="og:updated_time" content="2016-11-01T03:46:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker搭建Hadoop集群">
+<meta name="twitter:description" content="最近为了学习大数据，所以需要在本地搭建Hadoop的分布式集群环境，整虚拟机的话开销太大，所以就想用Docker来做虚拟化。步骤如下：
+
+通过dockerfile文件方式构建Hadoop的基础镜像
+
+一、构建Hadoop基础镜像1、首先构建一个centos7的基础镜像首先创建目录,并创建Dockerfile：
+123$ mkdir docker-centos$ cd docker-centos$">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/16/Docker搭建Hadoop集群/"/>
+
+  <title> Docker搭建Hadoop集群 | tony's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">tony's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Docker搭建Hadoop集群
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-16T22:15:15+08:00" content="2016-10-16">
+              2016-10-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Docker搭建大数据平台/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker搭建大数据平台</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近为了学习大数据，所以需要在本地搭建Hadoop的分布式集群环境，整虚拟机的话开销太大，所以就想用Docker来做虚拟化。步骤如下：</p>
+<ul>
+<li>通过dockerfile文件方式构建Hadoop的基础镜像</li>
+</ul>
+<h3 id="一、构建Hadoop基础镜像"><a href="#一、构建Hadoop基础镜像" class="headerlink" title="一、构建Hadoop基础镜像"></a>一、构建Hadoop基础镜像</h3><h4 id="1、首先构建一个centos7的基础镜像"><a href="#1、首先构建一个centos7的基础镜像" class="headerlink" title="1、首先构建一个centos7的基础镜像"></a>1、首先构建一个centos7的基础镜像</h4><p>首先创建目录,并创建Dockerfile：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir docker-centos</div><div class="line">$ cd docker-centos</div><div class="line">$ vim Docker</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">FROM centos</div><div class="line">MAINTAINER tonywell &lt;tongwei1985@gmail.com&gt;</div><div class="line"></div><div class="line"># root password</div><div class="line">RUN echo &apos;root:!23$QweR&apos; | chpasswd</div><div class="line"></div><div class="line"># 为解决Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY问题</div><div class="line">RUN rpm --import /etc/pki/rpm-gpg/RPM*</div><div class="line"></div><div class="line">RUN \</div><div class="line">    yum -y install \</div><div class="line">        openssh openssh-server openssh-clients \</div><div class="line">        sudo passwd wget &amp;&amp;\</div><div class="line">        yum clean all</div><div class="line"></div><div class="line"># 设置sshd</div><div class="line">RUN sshd-keygen</div><div class="line">RUN sed -i &quot;s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g&quot; /etc/ssh/sshd_config</div><div class="line">RUN sed -i &quot;s/UsePAM.*/UsePAM no/g&quot; /etc/ssh/sshd_config</div><div class="line"></div><div class="line">RUN mkdir /var/run/sshd</div><div class="line">EXPOSE 22</div><div class="line">CMD [&quot;/usr/sbin/sshd&quot;, &quot;-D&quot;]</div></pre></td></tr></table></figure>
+<p>然后执行构建命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker build -t tonywell/docker-contos .   //一定不能漏了&quot;.&quot;</div></pre></td></tr></table></figure>
+<h4 id="2、根据centos7镜像来构建jdk7的镜像"><a href="#2、根据centos7镜像来构建jdk7的镜像" class="headerlink" title="2、根据centos7镜像来构建jdk7的镜像"></a>2、根据centos7镜像来构建jdk7的镜像</h4><p>创建目录，并进入目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir centos-jdk</div><div class="line">$ cd centos-jdk</div></pre></td></tr></table></figure>
+<p>下载jdk安装包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ wget http://XXXXXX/jdk1.7.0_60.tar.gz</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim Dockerfile</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">FROM tonywell/docker-centos</div><div class="line">MAINTAINER tonywell &lt;tongwei1985@gmail.com&gt;</div><div class="line"></div><div class="line">ADD jdk1.7.0_60.tar.gz /usr/local/</div><div class="line"></div><div class="line">RUN mv /usr/local/jdk1.7.0_60 /usr/local/jdk1.7</div><div class="line"></div><div class="line">ENV JAVA_HOME /usr/local/jdk1.7</div><div class="line">ENV PATH $JAVA_HOME/bin:$PATH</div></pre></td></tr></table></figure>
+<p>执行构建命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker build -t tonywell/centos-jdk .</div></pre></td></tr></table></figure>
+<h4 id="3、构建zookeeper基础镜像"><a href="#3、构建zookeeper基础镜像" class="headerlink" title="3、构建zookeeper基础镜像"></a>3、构建zookeeper基础镜像</h4><p>创建目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir docker-zookeeper</div><div class="line">$ cd docker-zookeeper</div></pre></td></tr></table></figure>
+<p>下载zookeeper安装包到当前目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ wget http://apache.fayea.com/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz</div><div class="line">$ vim Dockerfile</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">FROM tonywell/centos-jdk</div><div class="line"></div><div class="line">ADD zookeeper-3.4.6.tar.gz /opt/</div><div class="line"></div><div class="line">RUN mkdir -p /opt/data</div><div class="line">RUN mkdir -p /opt/log</div><div class="line"></div><div class="line">RUN mv /opt/zookeeper-3.4.6 /opt/zookeeper</div><div class="line"></div><div class="line">ENV ZOO_HOME /opt/zookeeper</div><div class="line">ENV PATH $PATH:$ZOO_HOME/bin</div><div class="line"></div><div class="line">ENV TZ &quot;Asia/Shanghai&quot;</div><div class="line">EXPOSE 2181 2888 3888</div><div class="line">CMD [&quot;zkServer.sh&quot;, &quot;start-foreground&quot;]</div></pre></td></tr></table></figure>
+<p>执行构建命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker build -t tonywell/docker-zk .</div></pre></td></tr></table></figure>
+<h4 id="4、构建带Hadoop的基础镜像"><a href="#4、构建带Hadoop的基础镜像" class="headerlink" title="4、构建带Hadoop的基础镜像"></a>4、构建带Hadoop的基础镜像</h4><p>创建目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir hadoop-docker</div><div class="line">$ cd hadoop-docker</div><div class="line">$ vim Dockerfile</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">FROM tonywell/centos-jdk</div><div class="line">MAINTAINER tonywell</div><div class="line"></div><div class="line">RUN yum -y install which &amp;&amp; yum clean all</div><div class="line"></div><div class="line">#下载Hadoop</div><div class="line">RUN curl -s http://www.eu.apache.org/dist/hadoop/common/hadoop-2.7.1/hadoop-2.7.1.tar.gz | tar -xz -C /usr/local/</div><div class="line">RUN cd /usr/local &amp;&amp; ln -s ./hadoop-2.7.1 hadoop</div><div class="line"></div><div class="line">ENV HADOOP_HOME /usr/local/hadoop</div><div class="line">ENV HADOOP_PREFIX /usr/local/hadoop</div><div class="line">ENV HADOOP_COMMON_HOME /usr/local/hadoop</div><div class="line">ENV HADOOP_HDFS_HOME /usr/local/hadoop</div><div class="line">ENV HADOOP_MAPRED_HOME /usr/local/hadoop</div><div class="line">ENV HADOOP_YARN_HOME /usr/local/hadoop</div><div class="line">ENV HADOOP_CONF_DIR /usr/local/hadoop/etc/hadoop</div><div class="line">ENV YARN_CONF_DIR $HADOOP_PREFIX/etc/hadoop</div><div class="line"></div><div class="line">ENV PATH $HADOOP_HOME/bin:$PATH</div><div class="line"></div><div class="line">RUN ssh-keygen -t rsa -f ~/.ssh/id_rsa -P &apos;&apos; &amp;&amp; \</div><div class="line">    cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
+<p>执行构建命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker build -t tonywell/docker-hadoop .</div></pre></td></tr></table></figure>
+<h4 id="5、构建mysql的基础镜像"><a href="#5、构建mysql的基础镜像" class="headerlink" title="5、构建mysql的基础镜像"></a>5、构建mysql的基础镜像</h4><p>创建目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir docker-mysql</div><div class="line">$ cd docker-mysql</div><div class="line">$ vim Dockerfile</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">FROM centos</div><div class="line"></div><div class="line">MAINTAINER tonywell &lt;tongwei1985@gmail.com&gt;</div><div class="line"></div><div class="line"># root password</div><div class="line">RUN echo &apos;root:!23$QweR&apos; | chpasswd</div><div class="line"></div><div class="line"># 为解决Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY问题</div><div class="line">RUN rpm --import /etc/pki/rpm-gpg/RPM*</div><div class="line"></div><div class="line">RUN yum -y install \</div><div class="line">      openssh openssh-server openssh-clients gcc gcc-c++ make autoconf bison ncurses-devel which \</div><div class="line">      sudo passwd wget &amp;&amp;\</div><div class="line">      yum clean all</div><div class="line"></div><div class="line"># 设置sshd</div><div class="line">RUN sshd-keygen</div><div class="line">RUN sed -i &quot;s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g&quot; /etc/ssh/sshd_config</div><div class="line">RUN sed -i &quot;s/UsePAM.*/UsePAM no/g&quot; /etc/ssh/sshd_config</div><div class="line"></div><div class="line">RUN mkdir /var/run/sshd</div><div class="line"></div><div class="line">RUN mkdir /opt/software</div><div class="line"></div><div class="line">RUN wget http://www.cmake.org/files/v3.0/cmake-3.0.1.tar.gz &amp;&amp; \</div><div class="line">    tar zxvf cmake-3.0.1.tar.gz &amp;&amp; \</div><div class="line">    cd cmake-3.0.1 &amp;&amp; ./configure --prefix=/usr/local/cmake &amp;&amp; gmake &amp;&amp; \</div><div class="line">    make &amp;&amp; make install &amp;&amp; \</div><div class="line">    cd ../ &amp;&amp; rm -rf cmake-3.0.1*</div><div class="line"></div><div class="line">#源码安装mysql</div><div class="line">RUN wget ftp://temp:temp@192.168.50.104/centos7/mysql-5.6.29.tar.gz &amp;&amp; \</div><div class="line">     tar -zxvf mysql-5.6.29.tar.gz -C /opt/software/ &amp;&amp; \</div><div class="line">     rm mysql-5.6.29.tar.gz &amp;&amp; \</div><div class="line">     cd /opt/software/mysql-5.6.29 &amp;&amp; \</div><div class="line">     /usr/local/cmake/bin/cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6.29 -DMYSQL_DATADIR=/usr/local/mysql-5.6.29/data -DSYSCONFDIR=/etc -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITH_BLACKHOLE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_PERFSCHEMA_STORAGE_ENGINE=1 -DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 -DWITHOUT_FEDERATED_STORAGE_ENGINE=1 -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_EXTRA_CHARSETS=all -DENABLED_LOCAL_INFILE=1 -DWITH_READLINE=1 -DMYSQL_UNIX_ADDR=/usr/local/mysql-5.6.29/mysql.sock -DMYSQL_TCP_PORT=3306 -DMYSQL_USER=mysql -DCOMPILATION_COMMENT=&quot;lq-edition&quot; -DENABLE_DTRACE=0 -DOPTIMIZER_TRACE=1 -DWITH_DEBUG=1 &amp;&amp; \</div><div class="line">     make &amp;&amp; make install</div><div class="line"></div><div class="line"># 添加测试用户mysql，密码mysql，并且将此用户添加到sudoers里</div><div class="line">RUN useradd mysql</div><div class="line">RUN echo &quot;mysql:mysql&quot; | chpasswd</div><div class="line">RUN echo &quot;mysql   ALL=(ALL)       ALL&quot; &gt;&gt; /etc/sudoers</div><div class="line"></div><div class="line">RUN cd /usr/local/mysql-5.6.29 &amp;&amp; chown -R mysql:mysql ./</div><div class="line"></div><div class="line">COPY my.cnf /etc/my.cnf</div><div class="line">RUN chown mysql:mysql /etc/my.cnf</div><div class="line"></div><div class="line">RUN cd /usr/local/mysql-5.6.29 &amp;&amp; ./scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql-5.6.29 --datadir=/usr/local/mysql-5.6.29/data/</div><div class="line"></div><div class="line">ENV MYSQL_HOME /usr/local/mysql-5.6.29</div><div class="line"></div><div class="line"># 容器需要开放MySQL 3306端口</div><div class="line">EXPOSE 3306</div><div class="line"></div><div class="line">CMD [&quot;/usr/sbin/sshd&quot;, &quot;-D&quot;]</div></pre></td></tr></table></figure>
+<p>创建my.cnf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim my.cnf</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">[client]</div><div class="line">port = 3306</div><div class="line">socket = /usr/local/mysql-5.6.29/data/mysql.sock</div><div class="line"></div><div class="line">[mysqld]</div><div class="line"></div><div class="line"># Remove leading # and set to the amount of RAM for the most important data</div><div class="line"># cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.</div><div class="line"># innodb_buffer_pool_size = 128M</div><div class="line"></div><div class="line"># Remove leading # to turn on a very important data integrity option: logging</div><div class="line"># changes to the binary log between backups.</div><div class="line"># log_bin</div><div class="line"></div><div class="line"># These are commonly set, remove the # and set as required.</div><div class="line">basedir = /usr/local/mysql-5.6.29</div><div class="line">datadir = /usr/local/mysql-5.6.29/data</div><div class="line">port = 3306</div><div class="line">socket = /usr/local/mysql-5.6.29/data/mysql.sock</div><div class="line"></div><div class="line"># Remove leading # to set options mainly useful for reporting servers.</div><div class="line"># The server defaults are faster for transactions and fast SELECTs.</div><div class="line"># Adjust sizes as needed, experiment to find the optimal values.</div><div class="line"># join_buffer_size = 128M</div><div class="line"># sort_buffer_size = 2M</div><div class="line"># read_rnd_buffer_size = 2M</div><div class="line"></div><div class="line">sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES</div></pre></td></tr></table></figure>
+<p>执行构建命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker build -t tonywell/docker-mysql .</div></pre></td></tr></table></figure>
+<h4 id="6、构建hive的基础镜像"><a href="#6、构建hive的基础镜像" class="headerlink" title="6、构建hive的基础镜像"></a>6、构建hive的基础镜像</h4><p>hive必须要依赖hadoop，那我就在前面hadoop基础镜像的基础上来创建hive基础镜像</p>
+<p>创建目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir docker-hive</div><div class="line">$ cd docker-hive</div><div class="line">$ vim Dockerfile</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">FROM tonywell/docker-hadoop</div><div class="line"></div><div class="line">MAINTAINER tonywell &lt;tongwei1985@gmail.com&gt;</div><div class="line"></div><div class="line">ENV HIVE_HOME=/usr/local/hive</div><div class="line"></div><div class="line">#下载安装hive</div><div class="line">RUN wget http://mirror.bit.edu.cn/apache/hive/hive-1.2.1/apache-hive-1.2.1-bin.tar.gz &amp;&amp; \</div><div class="line">     tar -zvxf apache-hive-1.2.1-bin.tar.gz -C /usr/local/ &amp;&amp; \</div><div class="line">     mv /usr/local/apache-hive-1.2.1-bin /usr/local/hive &amp;&amp; \</div><div class="line">     rm apache-hive-1.2.1-bin.tar.gz</div><div class="line"></div><div class="line">#下载mysql依赖包</div><div class="line">RUN wget http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.39.tar.gz &amp;&amp; \</div><div class="line">    tar -zvxf mysql-connector-java-5.1.39.tar.gz -C /usr/local/ &amp;&amp; \</div><div class="line">    mv /usr/local/mysql-connector-java-5.1.39/mysql-connector-java-5.1.39-bin.jar $HIVE_HOME/lib/ &amp;&amp; \</div><div class="line">    rm -rf /usr/local/mysql-connector-java-5.1.39</div><div class="line"></div><div class="line">RUN mkdir -p /usr/hive/warehouse &amp;&amp; mkdir -p /usr/hive/log</div><div class="line"></div><div class="line">ENV PATH=$PATH:$HIVE_HOME/bin:.</div></pre></td></tr></table></figure>
+<p>执行构建命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker build -t tonywell/docker-hive .</div></pre></td></tr></table></figure>
+<p>#### </p>
+<h3 id="二、构建Hadoop集群"><a href="#二、构建Hadoop集群" class="headerlink" title="二、构建Hadoop集群"></a>二、构建Hadoop集群</h3><h4 id="1、构建zookeeper集群"><a href="#1、构建zookeeper集群" class="headerlink" title="1、构建zookeeper集群"></a>1、构建zookeeper集群</h4><p>配置集群的公共配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir conf</div><div class="line">$ cd conf</div><div class="line">$ vim zoo.cfg</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">clientPort=2181</div><div class="line">tickTime=2000</div><div class="line">syncLimit=5</div><div class="line">initLimit=10</div><div class="line">dataDir=/opt/data</div><div class="line">dataLogDir=/opt/log</div><div class="line">server.1=zk1:2888:3888</div><div class="line">server.2=zk2:2888:3888</div><div class="line">server.3=zk3:2888:3888</div><div class="line">server.4=zk4:2888:3888</div><div class="line">server.5=zk5:2888:3888</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim log4j.properties</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">略</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim configuration.xsl</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">略</div></pre></td></tr></table></figure>
+<p>配置集群网络</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker network create zoo</div></pre></td></tr></table></figure>
+<p>通过docker-compose模版构建zookeeper集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">zoo1:</div><div class="line">   image: tonywell/docker-zk</div><div class="line">   restart: always</div><div class="line">   net: zoo</div><div class="line">   container_name: zk1</div><div class="line">   volumes:</div><div class="line">      - ./zoo1:/opt/data</div><div class="line">      - ./conf:/opt/zookeeper/conf</div><div class="line">   ports:</div><div class="line">      - &quot;2181:2181&quot;</div><div class="line">   expose:</div><div class="line">      - &quot;2888&quot;</div><div class="line">      - &quot;3888&quot;</div><div class="line">zoo2:</div><div class="line">   image: tonywell/docker-zk</div><div class="line">   restart: always</div><div class="line">   net: zoo</div><div class="line">   container_name: zk2</div><div class="line">   volumes:</div><div class="line">      - ./zoo2:/opt/data</div><div class="line">      - ./conf:/opt/zookeeper/conf</div><div class="line">   ports:</div><div class="line">      - &quot;2182:2181&quot;</div><div class="line">   expose:</div><div class="line">      - &quot;2888&quot;</div><div class="line">      - &quot;3888&quot;</div><div class="line">zoo3:</div><div class="line">   image: tonywell/docker-zk</div><div class="line">   restart: always</div><div class="line">   container_name: zk3</div><div class="line">   net: zoo</div><div class="line">   volumes:</div><div class="line">      - ./zoo3:/opt/data</div><div class="line">      - ./conf:/opt/zookeeper/conf</div><div class="line">   ports:</div><div class="line">      - &quot;2183:2181&quot;</div><div class="line">   expose:</div><div class="line">      - &quot;2888&quot;</div><div class="line">      - &quot;3888&quot;</div><div class="line">zoo4:</div><div class="line">   image: tonywell/docker-zk</div><div class="line">   restart: always</div><div class="line">   container_name: zk4</div><div class="line">   net: zoo</div><div class="line">   volumes:</div><div class="line">      - ./zoo4:/opt/data</div><div class="line">      - ./conf:/opt/zookeeper/conf</div><div class="line">   ports:</div><div class="line">      - &quot;2184:2181&quot;</div><div class="line">   expose:</div><div class="line">      - &quot;2888&quot;</div><div class="line">      - &quot;3888&quot;</div><div class="line">zoo5:</div><div class="line">   image: tonywell/docker-zk</div><div class="line">   restart: always</div><div class="line">   container_name: zk5</div><div class="line">   net: zoo</div><div class="line">   volumes:</div><div class="line">      - ./zoo5:/opt/data</div><div class="line">      - ./conf:/opt/zookeeper/conf</div><div class="line">   ports:</div><div class="line">      - &quot;2185:2181&quot;</div><div class="line">   expose:</div><div class="line">      - &quot;2888&quot;</div><div class="line">      - &quot;3888&quot;</div></pre></td></tr></table></figure>
+<p>在zoo*目录下创建myid文件，该文件的内容根据server定义的不同而不同，如server.1 该文件的内容是1，server.2 该文件内容是 2，以此类推.</p>
+<p>启动zookeeper集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker-compose up -d</div></pre></td></tr></table></figure>
+<p>登陆上去测试是否通了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ docker exec -it zk1 bash</div><div class="line">$ /opt/zookeeper/bin/zkCli.sh -server zk1:2181</div><div class="line">$ [zk: zk1:2181(CONNECTED) 1] ls /</div><div class="line">[zookeeper]</div></pre></td></tr></table></figure>
+<h4 id="2、构建hadoop集群"><a href="#2、构建hadoop集群" class="headerlink" title="2、构建hadoop集群"></a>2、构建hadoop集群</h4><p>hadoop集群配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir conf</div><div class="line">$ cd conf</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">-rw-rw-r-- 1 tony tony  667 10月 20 16:45 core-site.xml</div><div class="line">-rw-rw-r-- 1 tony tony 3388 10月 20 17:55 hadoop-env.sh</div><div class="line">-rw-rw-r-- 1 tony tony  586 10月 20 16:56 hdfs-site.xml</div><div class="line">-rw-rw-r-- 1 tony tony 9065 10月 20 16:58 log4j.properteis</div><div class="line">-rw-rw-r-- 1 tony tony 1379 10月 20 16:59 mapred-env.sh</div><div class="line">-rw-rw-r-- 1 tony tony 2138 10月 20 17:02 mapred-site.xml</div><div class="line">-rw-rw-r-- 1 tony tony   12 10月 20 17:19 masters</div><div class="line">-rw-rw-r-- 1 tony tony   42 10月 20 17:20 slaves</div><div class="line">-rw-rw-r-- 1 tony tony 4565 10月 20 17:03 yarn-env.sh</div><div class="line">-rw-rw-r-- 1 tony tony  775 10月 20 17:04 yarn-site.xml</div></pre></td></tr></table></figure>
+<p>在core-site.xml中加入zookeeper的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt;</div><div class="line">    &lt;name&gt;ha.zookeeper.quorum&lt;/name&gt;</div><div class="line">    &lt;value&gt;zk1:2181,zk2:2181,zk3:2181,zk4:2181,zk5:2181&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div></pre></td></tr></table></figure>
+<p>通过docker-compose模版构建hadoop集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">hadoop-slave1:</div><div class="line">   image: tonywell/docker-hadoop</div><div class="line">   container_name: hadoop-slave1</div><div class="line">   volumes:</div><div class="line">     - ./conf:/usr/local/hadoop/etc/hadoop</div><div class="line">   net: zoo</div><div class="line">hadoop-slave2:</div><div class="line">   image: tonywell/docker-hadoop</div><div class="line">   container_name: hadoop-slave2</div><div class="line">   volumes:</div><div class="line">     - ./conf:/usr/local/hadoop/etc/hadoop</div><div class="line">   net: zoo</div><div class="line">hadoop-slave3:</div><div class="line">   image: tonywell/docker-hadoop</div><div class="line">   container_name: hadoop-slave3</div><div class="line">   volumes:</div><div class="line">     - ./conf:/usr/local/hadoop/etc/hadoop</div><div class="line">   net: zoo</div><div class="line">hadoop-master:</div><div class="line">   image: tonywell/docker-hadoop</div><div class="line">   container_name: hadoop-master</div><div class="line">   volumes:</div><div class="line">     - ./conf:/usr/local/hadoop/etc/hadoop</div><div class="line">   net: zoo</div><div class="line">   ports:</div><div class="line">     - &quot;50070:50070&quot;</div><div class="line">     - &quot;8088:8088&quot;</div><div class="line">   links:</div><div class="line">     - hadoop-slave1</div><div class="line">     - hadoop-slave2</div><div class="line">     - hadoop-slave3</div></pre></td></tr></table></figure>
+<p>启动容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker-compose up -d</div></pre></td></tr></table></figure>
+<p>首次启动，格式化namenode</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ docker exec -it hadoop-master bash</div><div class="line">$ cd /usr/local/hadoop/bin</div><div class="line">$ hdfs namenode -format</div></pre></td></tr></table></figure>
+<p>然后启动hdfs和yarn，同样是在hadoop-master容器中执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cd /usr/local/hadoop/sbin</div><div class="line">$ ./start-dfs.sh</div><div class="line">$ ./start-yarn.sh</div></pre></td></tr></table></figure>
+<p>然后连接50070端口看是否启动成功</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag">#Docker</a>
+          
+            <a href="/tags/Hadoop/" rel="tag">#Hadoop</a>
+          
+            <a href="/tags/大数据/" rel="tag">#大数据</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/26/Java8-Stream实践（一）/" rel="next" title="Java8 Stream实践（一）">
+                <i class="fa fa-chevron-left"></i> Java8 Stream实践（一）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/01/Docker搭建Hadoop集群（二）/" rel="prev" title="Docker搭建Hadoop集群（二）">
+                Docker搭建Hadoop集群（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tony" />
+          <p class="site-author-name" itemprop="name">tony</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、构建Hadoop基础镜像"><span class="nav-number">1.</span> <span class="nav-text">一、构建Hadoop基础镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、首先构建一个centos7的基础镜像"><span class="nav-number">1.1.</span> <span class="nav-text">1、首先构建一个centos7的基础镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、根据centos7镜像来构建jdk7的镜像"><span class="nav-number">1.2.</span> <span class="nav-text">2、根据centos7镜像来构建jdk7的镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、构建zookeeper基础镜像"><span class="nav-number">1.3.</span> <span class="nav-text">3、构建zookeeper基础镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、构建带Hadoop的基础镜像"><span class="nav-number">1.4.</span> <span class="nav-text">4、构建带Hadoop的基础镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5、构建mysql的基础镜像"><span class="nav-number">1.5.</span> <span class="nav-text">5、构建mysql的基础镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6、构建hive的基础镜像"><span class="nav-number">1.6.</span> <span class="nav-text">6、构建hive的基础镜像</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、构建Hadoop集群"><span class="nav-number">2.</span> <span class="nav-text">二、构建Hadoop集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、构建zookeeper集群"><span class="nav-number">2.1.</span> <span class="nav-text">1、构建zookeeper集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、构建hadoop集群"><span class="nav-number">2.2.</span> <span class="nav-text">2、构建hadoop集群</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tony</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

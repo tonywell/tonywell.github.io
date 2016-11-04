@@ -1,0 +1,666 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Docker,Hadoop,大数据," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="3、构建mysql容器后面的hive元数据是基于mysql数据，所以这里先创建mysql容器
+通过docker-compose模版来启动mysql容器
+123456789hadoop-mysql:   image: tonywell/docker-mysql   container_name: hadoop-mysql   volumes:     - ./data:/usr/local/mysq">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker搭建Hadoop集群（二）">
+<meta property="og:url" content="http://yoursite.com/2016/11/01/Docker搭建Hadoop集群（二）/index.html">
+<meta property="og:site_name" content="tony's blog">
+<meta property="og:description" content="3、构建mysql容器后面的hive元数据是基于mysql数据，所以这里先创建mysql容器
+通过docker-compose模版来启动mysql容器
+123456789hadoop-mysql:   image: tonywell/docker-mysql   container_name: hadoop-mysql   volumes:     - ./data:/usr/local/mysq">
+<meta property="og:updated_time" content="2016-11-04T07:27:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker搭建Hadoop集群（二）">
+<meta name="twitter:description" content="3、构建mysql容器后面的hive元数据是基于mysql数据，所以这里先创建mysql容器
+通过docker-compose模版来启动mysql容器
+123456789hadoop-mysql:   image: tonywell/docker-mysql   container_name: hadoop-mysql   volumes:     - ./data:/usr/local/mysq">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/01/Docker搭建Hadoop集群（二）/"/>
+
+  <title> Docker搭建Hadoop集群（二） | tony's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">tony's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Docker搭建Hadoop集群（二）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-01T11:07:02+08:00" content="2016-11-01">
+              2016-11-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Docker搭建大数据平台/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker搭建大数据平台</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="3、构建mysql容器"><a href="#3、构建mysql容器" class="headerlink" title="3、构建mysql容器"></a>3、构建mysql容器</h4><p>后面的hive元数据是基于mysql数据，所以这里先创建mysql容器</p>
+<p>通过docker-compose模版来启动mysql容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">hadoop-mysql:</div><div class="line">   image: tonywell/docker-mysql</div><div class="line">   container_name: hadoop-mysql</div><div class="line">   volumes:</div><div class="line">     - ./data:/usr/local/mysql-5.6.29/data</div><div class="line">   net: zoo</div><div class="line">   command: /usr/local/mysql-5.6.29/bin/mysqld_safe --user=mysql</div><div class="line">   ports:</div><div class="line">     - &quot;3306:3306&quot;</div></pre></td></tr></table></figure>
+<p>启动容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker-compose -f docker-compose-mysql.yml up -d</div></pre></td></tr></table></figure>
+<p>然后就要修改密码和配置远程访问mysql了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ docker exec -it hadoop-mysql bash</div><div class="line">$ cd /user/local/mysql-5.6.29/bin</div><div class="line">$ ./mysql -u root -p</div><div class="line">#默认密码为空，回车即可</div><div class="line">$ mysql&gt; use mysql;</div><div class="line">$ mysql&gt; UPDATE user SET Password=PASSWORD(&apos;新密码&apos;) where USER=&apos;root&apos;;</div><div class="line">$ mysql&gt; FLUSH PRIVILEGES;</div><div class="line">#授权远程访问</div><div class="line">$ mysql&gt; grant ALL PRIVILEGES ON *.* to root@&quot;%&quot; identified by &quot;root&quot; WITH GRANT OPTION;</div><div class="line">$ mysql&gt; FLUSH PRIVILEGES;</div><div class="line">#配置字符集，解决后面hive建表报错</div><div class="line">#FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. MetaException(message:For direct MetaStore DB connections, we don&apos;t support retries at the client level.)</div><div class="line">$ mysql&gt; alter database hive character set latin1;</div></pre></td></tr></table></figure>
+<p>ok mysql容器配置完成</p>
+<h4 id="4、构建hive集群"><a href="#4、构建hive集群" class="headerlink" title="4、构建hive集群"></a>4、构建hive集群</h4><p>创建hive集群的配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir conf</div><div class="line">$ cd conf</div><div class="line">$ vim hive-env.sh</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># Set HADOOP_HOME to point to a specific hadoop install directory</div><div class="line">HADOOP_HOME=/usr/local/hadoop</div><div class="line"></div><div class="line"># Hive Configuration Directory can be controlled by:</div><div class="line">export HIVE_CONF_DIR=/usr/local/hive/conf</div><div class="line"></div><div class="line"># Folder containing extra ibraries required for hive compilation/execution can be controlled by:</div><div class="line">export HIVE_AUX_JARS_PATH=/usr/local/hive/lib</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim hive-site.xml</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">...............</div><div class="line">  &lt;!--mysql--&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;</div><div class="line">    &lt;value&gt;jdbc:mysql://hadoop-mysql/hive?createDatabaseIfNotExist=true&amp;amp;useSSL=false&lt;/value&gt;</div><div class="line">    &lt;description&gt;JDBC connect string for a JDBC metastore&lt;/description&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;</div><div class="line">    &lt;value&gt;root&lt;/value&gt;</div><div class="line">    &lt;description&gt;username to use against metastore database&lt;/description&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  </div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;</div><div class="line">    &lt;value&gt;1234qwer&lt;/value&gt;</div><div class="line">    &lt;description&gt;password to use against metastore database&lt;/description&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;</div><div class="line">    &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  ...........</div><div class="line">  </div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;hive.querylog.location&lt;/name&gt;</div><div class="line">    &lt;value&gt;/usr/hive/log&lt;/value&gt;</div><div class="line">    &lt;description&gt;Location of Hive run time structured log file&lt;/description&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  </div><div class="line">  ............</div><div class="line">  </div><div class="line">  </div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;hive.metastore.warehouse.dir&lt;/name&gt;</div><div class="line">    &lt;value&gt;/user/hive/warehouse&lt;/value&gt;</div><div class="line">    &lt;description&gt;location of default database for the warehouse&lt;/description&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;hive.metastore.uris&lt;/name&gt;</div><div class="line">     &lt;value&gt;thrift://hadoop-master:9083&lt;/value&gt;</div><div class="line">    &lt;description&gt;Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.&lt;/description&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  .........</div><div class="line">  </div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;hive.log4j.file&lt;/name&gt;</div><div class="line">    &lt;value&gt;/usr/local/hive/conf/hive-log4j.properties&lt;/value&gt;</div><div class="line">    &lt;description&gt;</div><div class="line">      Hive log4j configuration file.</div><div class="line">      If the property is not set, then logging will be initialized using hive-log4j.properties found on the classpath.</div><div class="line">      If the property is set, the value must be a valid URI (java.net.URI, e.g. &quot;file:///tmp/my-logging.properties&quot;),</div><div class="line">      which you can then extract a URL from and pass to PropertyConfigurator.configure(URL).</div><div class="line">    &lt;/description&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;hive.exec.log4j.file&lt;/name&gt;</div><div class="line">    &lt;value&gt;/usr/local/hive/conf/hive-exec-log4j.properties&lt;/value&gt;</div><div class="line">    &lt;description&gt;</div><div class="line">      Hive log4j configuration file for execution mode(sub command).</div><div class="line">      If the property is not set, then logging will be initialized using hive-exec-log4j.properties found on the classpath.</div><div class="line">      If the property is set, the value must be a valid URI (java.net.URI, e.g. &quot;file:///tmp/my-logging.properties&quot;),</div><div class="line">      which you can then extract a URL from and pass to PropertyConfigurator.configure(URL).</div><div class="line">    &lt;/description&gt;</div><div class="line">  &lt;/property</div><div class="line">  </div><div class="line">  ..........</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># vim hive-log4j.properties</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">hive.log.threshold=ALL</div><div class="line">hive.root.logger=INFO,DRFA</div><div class="line">hive.log.dir=$&#123;java.io.tmpdir&#125;/$&#123;user.name&#125;</div><div class="line">hive.log.file=hive.log</div><div class="line"></div><div class="line"># Define the root logger to the system property &quot;hadoop.root.logger&quot;.</div><div class="line">log4j.rootLogger=$&#123;hive.root.logger&#125;, EventCounter</div><div class="line"></div><div class="line"># Logging Threshold</div><div class="line">log4j.threshold=$&#123;hive.log.threshold&#125;</div><div class="line"></div><div class="line">#</div><div class="line"># Daily Rolling File Appender</div><div class="line">#</div><div class="line"># Use the PidDailyerRollingFileAppend class instead if you want to use separate log files</div><div class="line"># for different CLI session.</div><div class="line">#</div><div class="line"># log4j.appender.DRFA=org.apache.hadoop.hive.ql.log.PidDailyRollingFileAppender</div><div class="line"></div><div class="line">log4j.appender.DRFA=org.apache.log4j.DailyRollingFileAppender</div><div class="line"></div><div class="line">log4j.appender.DRFA.File=$&#123;hive.log.dir&#125;/$&#123;hive.log.file&#125;</div><div class="line"></div><div class="line"># Rollver at midnight</div><div class="line">log4j.appender.DRFA.DatePattern=.yyyy-MM-dd</div><div class="line"></div><div class="line"># 30-day backup</div><div class="line">#log4j.appender.DRFA.MaxBackupIndex=30</div><div class="line">log4j.appender.DRFA.layout=org.apache.log4j.PatternLayout</div><div class="line"></div><div class="line"># Pattern format: Date LogLevel LoggerName LogMessage</div><div class="line">#log4j.appender.DRFA.layout.ConversionPattern=%d&#123;ISO8601&#125; %p %c: %m%n</div><div class="line"># Debugging Pattern format</div><div class="line">log4j.appender.DRFA.layout.ConversionPattern=%d&#123;ISO8601&#125; %-5p [%t]: %c&#123;2&#125; (%F:%M(%L)) - %m%n</div><div class="line"></div><div class="line"></div><div class="line">#</div><div class="line"># console</div><div class="line"># Add &quot;console&quot; to rootlogger above if you want to use this</div><div class="line">#</div><div class="line"></div><div class="line">log4j.appender.console=org.apache.log4j.ConsoleAppender</div><div class="line">log4j.appender.console.target=System.err</div><div class="line">log4j.appender.console.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.console.layout.ConversionPattern=%d&#123;yy/MM/dd HH:mm:ss&#125; [%t]: %p %c&#123;2&#125;: %m%n</div><div class="line">log4j.appender.console.encoding=UTF-8</div><div class="line"></div><div class="line">#</div><div class="line"># Event Counter Appender</div><div class="line"># Sends counts of logging messages at different severity levels to Hadoop Metrics.</div><div class="line">#</div><div class="line">log4j.appender.EventCounter=org.apache.hadoop.hive.shims.HiveEventCounter</div><div class="line"></div><div class="line"></div><div class="line">log4j.category.DataNucleus=ERROR,DRFA</div><div class="line">log4j.category.Datastore=ERROR,DRFA</div><div class="line">log4j.category.Datastore.Schema=ERROR,DRFA</div><div class="line">log4j.category.JPOX.Datastore=ERROR,DRFA</div><div class="line">log4j.category.JPOX.Plugin=ERROR,DRFA</div><div class="line">log4j.category.JPOX.MetaData=ERROR,DRFA</div><div class="line">log4j.category.JPOX.Query=ERROR,DRFA</div><div class="line">log4j.category.JPOX.General=ERROR,DRFA</div><div class="line">log4j.category.JPOX.Enhancer=ERROR,DRFA</div><div class="line"></div><div class="line"></div><div class="line"># Silence useless ZK logs</div><div class="line">log4j.logger.org.apache.zookeeper.server.NIOServerCnxn=WARN,DRFA</div><div class="line">log4j.logger.org.apache.zookeeper.ClientCnxnSocketNIO=WARN,DRFA</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim hive-exec-log4j.properties</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"># Define some default values that can be overridden by system properties</div><div class="line">hive.log.threshold=ALL</div><div class="line">hive.root.logger=INFO,FA</div><div class="line">hive.log.dir=$&#123;java.io.tmpdir&#125;/$&#123;user.name&#125;</div><div class="line">hive.query.id=hadoop</div><div class="line">hive.log.file=$&#123;hive.query.id&#125;.log</div><div class="line"></div><div class="line"># Define the root logger to the system property &quot;hadoop.root.logger&quot;.</div><div class="line">log4j.rootLogger=$&#123;hive.root.logger&#125;, EventCounter</div><div class="line"></div><div class="line"># Logging Threshold</div><div class="line">log4j.threshhold=$&#123;hive.log.threshold&#125;</div><div class="line"></div><div class="line">#</div><div class="line"># File Appender</div><div class="line">#</div><div class="line"></div><div class="line">log4j.appender.FA=org.apache.log4j.FileAppender</div><div class="line">log4j.appender.FA.File=$&#123;hive.log.dir&#125;/$&#123;hive.log.file&#125;</div><div class="line">log4j.appender.FA.layout=org.apache.log4j.PatternLayout</div><div class="line"></div><div class="line"># Pattern format: Date LogLevel LoggerName LogMessage</div><div class="line">#log4j.appender.DRFA.layout.ConversionPattern=%d&#123;ISO8601&#125; %p %c: %m%n</div><div class="line"># Debugging Pattern format</div><div class="line">log4j.appender.FA.layout.ConversionPattern=%d&#123;ISO8601&#125; %-5p [%t]: %c&#123;2&#125; (%F:%M(%L)) - %m%n</div><div class="line"></div><div class="line"></div><div class="line">#</div><div class="line"># console</div><div class="line"># Add &quot;console&quot; to rootlogger above if you want to use this</div><div class="line">#</div><div class="line"></div><div class="line">log4j.appender.console=org.apache.log4j.ConsoleAppender</div><div class="line">log4j.appender.console.target=System.err</div><div class="line">log4j.appender.console.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.console.layout.ConversionPattern=%d&#123;yy/MM/dd HH:mm:ss&#125; [%t] %p %c&#123;2&#125;: %m%n</div><div class="line"></div><div class="line">#custom logging levels</div><div class="line">#log4j.logger.xxx=DEBUG</div><div class="line"></div><div class="line">#</div><div class="line"># Event Counter Appender</div><div class="line"># Sends counts of logging messages at different severity levels to Hadoop Metrics.</div><div class="line">#</div><div class="line">log4j.appender.EventCounter=org.apache.hadoop.hive.shims.HiveEventCounter</div><div class="line"></div><div class="line"></div><div class="line">log4j.category.DataNucleus=ERROR,FA</div><div class="line">log4j.category.Datastore=ERROR,FA</div><div class="line">log4j.category.Datastore.Schema=ERROR,FA</div><div class="line">log4j.category.JPOX.Datastore=ERROR,FA</div><div class="line">log4j.category.JPOX.Plugin=ERROR,FA</div><div class="line">log4j.category.JPOX.MetaData=ERROR,FA</div><div class="line">log4j.category.JPOX.Query=ERROR,FA</div><div class="line">log4j.category.JPOX.General=ERROR,FA</div><div class="line">log4j.category.JPOX.Enhancer=ERROR,FA</div><div class="line"></div><div class="line"></div><div class="line"># Silence useless ZK logs</div><div class="line">log4j.logger.org.apache.zookeeper.server.NIOServerCnxn=WARN,FA</div><div class="line">log4j.logger.org.apache.zookeeper.ClientCnxnSocketNIO=WARN,FA</div></pre></td></tr></table></figure>
+<p>通过docker-compose模版来构建hive集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">hadoop-slave1:</div><div class="line">   image: tonywell/docker-hive</div><div class="line">   container_name: hadoop-slave1</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">   net: zoo</div><div class="line">hadoop-slave2:</div><div class="line">   image: tonywell/docker-hive</div><div class="line">   container_name: hadoop-slave2</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">   net: zoo</div><div class="line">hadoop-slave3:</div><div class="line">   image: tonywell/docker-hive</div><div class="line">   container_name: hadoop-slave3</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">   net: zoo</div><div class="line">hadoop-master:</div><div class="line">   image: tonywell/docker-hive</div><div class="line">   container_name: hadoop-master</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">   net: zoo</div><div class="line">   ports:</div><div class="line">     - &quot;50070:50070&quot;</div><div class="line">     - &quot;9083:9083&quot;</div><div class="line">     - &quot;8088:8088&quot;</div><div class="line">   links:</div><div class="line">     - hadoop-slave1</div><div class="line">     - hadoop-slave2</div><div class="line">     - hadoop-slave3</div></pre></td></tr></table></figure>
+<p>和单纯的hadoop集群相比，镜像使用了安装了hive的tonywell/docker-hive，然后加入hive配置</p>
+<p>启动hive容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker-compose -f docker-compose-hive up -d</div></pre></td></tr></table></figure>
+<p>启动hive集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ docker exec -it hadoop-master bash</div><div class="line">$ cd /usr/local/hadoop/bin</div><div class="line">$ hdfs namenode -format</div><div class="line">$ cd /usr/local/hadoop/sbin</div><div class="line">$ ./start-all.sh</div></pre></td></tr></table></figure>
+<p>测试hive登陆hive</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cd /usr/local/hive/bin</div><div class="line">$ ./hive shell</div><div class="line">$ hive&gt;</div></pre></td></tr></table></figure>
+<h4 id="5、构建spark集群"><a href="#5、构建spark集群" class="headerlink" title="5、构建spark集群"></a>5、构建spark集群</h4><p>创建配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir conf</div><div class="line">$ cd conf</div><div class="line">$ vim hbase-env.sh</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/usr/local/jdk1.7   #要加上不如启动回报JAVA_HOME找不到</div><div class="line">export HADOOP_HOME=/usr/local/hadoop</div><div class="line">export SPARK_DIST_CLASSPATH=$($HADOOP_HOME/bin/hadoop classpath)</div><div class="line">export SPARK_LOCAL_DIRS=/works/spark</div><div class="line">export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop</div><div class="line"></div><div class="line">export HIVE_HOME=/usr/local/hive</div><div class="line">export SPARK_WORKER_MEMORY=2g</div><div class="line">export SPARK_MASTER_IP=hadoop-master</div><div class="line">export HIVE_CONF_DIR=$HIVE_HOME/conf</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim spark-defaults.conf</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"># Default system properties included when running spark-submit.</div><div class="line"># This is useful for setting default environmental settings.</div><div class="line"></div><div class="line"># Example:</div><div class="line"># spark.master                     spark://master:7077</div><div class="line"># spark.eventLog.enabled           true</div><div class="line"># spark.eventLog.dir               hdfs://namenode:8021/directory</div><div class="line"># spark.serializer                 org.apache.spark.serializer.KryoSerializer</div><div class="line"># spark.driver.memory              5g</div><div class="line"># spark.executor.extraJavaOptions  -XX:+PrintGCDetails -Dkey=value -Dnumbers=&quot;one two three&quot;</div><div class="line"></div><div class="line"></div><div class="line">spark.executor.extraClassPath   /usr/local/hive/lib/mysql-connector-java-5.1.39-bin.jar:/usr/local/hive/lib/guava-14.0.1.jar</div><div class="line">spark.driver.extraClassPath     /usr/local/hive/lib/mysql-connector-java-5.1.39-bin.jar:/usr/local/hive/lib/guava-14.0.1.jar</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim slaves</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># A Spark Worker will be started on each of the machines listed below.</div><div class="line">hadoop-slave1</div><div class="line">hadoop-slave2</div><div class="line">hadoop-slave3</div></pre></td></tr></table></figure>
+<p>通过docker-compose模版来构建spark集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim docker-compose-spark.yml</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">hadoop-slave1:</div><div class="line">   image: tonywell/docker-spark</div><div class="line">   container_name: hadoop-slave1</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">     - ./docker-spark/conf:/usr/local/spark/conf</div><div class="line">   net: zoo</div><div class="line">hadoop-slave2:</div><div class="line">   image: tonywell/docker-spark</div><div class="line">   container_name: hadoop-slave2</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">     - ./docker-spark/conf:/usr/local/spark/conf</div><div class="line">   net: zoo</div><div class="line">hadoop-slave3:</div><div class="line">   image: tonywell/docker-spark</div><div class="line">   container_name: hadoop-slave3</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">     - ./docker-spark/conf:/usr/local/spark/conf</div><div class="line">   net: zoo</div><div class="line">hadoop-master:</div><div class="line">   image: tonywell/docker-spark</div><div class="line">   container_name: hadoop-master</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">     - ./docker-spark/conf:/usr/local/spark/conf</div><div class="line">   net: zoo</div><div class="line">   ports:</div><div class="line">     - &quot;50070:50070&quot;</div><div class="line">     - &quot;9083:9083&quot;</div><div class="line">     - &quot;8088:8088&quot;</div><div class="line">     - &quot;8080:8080&quot;</div><div class="line">     - &quot;8042:8042&quot;</div><div class="line">   links:</div><div class="line">     - hadoop-slave1</div><div class="line">     - hadoop-slave2</div><div class="line">     - hadoop-slave3</div></pre></td></tr></table></figure>
+<p>启动容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker-compose -f docker-compose-spark.yml up -d</div></pre></td></tr></table></figure>
+<p>启动集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ docker exec -it hadoop-master bash</div><div class="line">$ /user/local/hadoop/bin/hdfs namenode -format</div><div class="line">$ sh /usr/local/hadoop/sbin/start-all.sh</div><div class="line">$ sh /user/local/spark/sbin/start-all.sh</div></pre></td></tr></table></figure>
+<h4 id="6、构建hbase集群"><a href="#6、构建hbase集群" class="headerlink" title="6、构建hbase集群"></a>6、构建hbase集群</h4><p>创建配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir conf</div><div class="line">$ cd conf</div><div class="line">$ vim hbase-env.sh</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">.......</div><div class="line"></div><div class="line">export JAVA_HOME=/usr/local/jdk1.7</div><div class="line"></div><div class="line">........</div><div class="line"></div><div class="line">export HBASE_OPTS=&quot;-XX:+UseConcMarkSweepGC&quot;</div><div class="line"></div><div class="line">........</div><div class="line"></div><div class="line">export HBASE_MANAGES_ZK=false</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim hbase-site.xml</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</div><div class="line">&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&gt;</div><div class="line">&lt;!--</div><div class="line">/**</div><div class="line"> *</div><div class="line"> * Licensed to the Apache Software Foundation (ASF) under one</div><div class="line"> * or more contributor license agreements.  See the NOTICE file</div><div class="line"> * distributed with this work for additional information</div><div class="line"> * regarding copyright ownership.  The ASF licenses this file</div><div class="line"> * to you under the Apache License, Version 2.0 (the</div><div class="line"> * &quot;License&quot;); you may not use this file except in compliance</div><div class="line"> * with the License.  You may obtain a copy of the License at</div><div class="line"> *</div><div class="line"> *     http://www.apache.org/licenses/LICENSE-2.0</div><div class="line"> *</div><div class="line"> * Unless required by applicable law or agreed to in writing, software</div><div class="line"> * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</div><div class="line"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</div><div class="line"> * See the License for the specific language governing permissions and</div><div class="line"> * limitations under the License.</div><div class="line"> */</div><div class="line">--&gt;</div><div class="line">&lt;configuration&gt;</div><div class="line">	&lt;property&gt;</div><div class="line">		&lt;name&gt;hbase.rootdir&lt;/name&gt;</div><div class="line">		&lt;value&gt;hdfs://hadoop-master:54310/hbase&lt;/value&gt;</div><div class="line">	&lt;/property&gt;</div><div class="line">	&lt;property&gt;</div><div class="line">		&lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;</div><div class="line">		&lt;value&gt;zk1,zk2,z3&lt;/value&gt;</div><div class="line">	&lt;/property&gt;</div><div class="line">	&lt;property&gt;</div><div class="line">		&lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</div><div class="line">		&lt;value&gt;true&lt;/value&gt;</div><div class="line">	&lt;/property&gt;</div><div class="line">	&lt;property&gt;</div><div class="line">		&lt;name&gt;hbase.tmp.dir&lt;/name&gt;</div><div class="line">		&lt;value&gt;/hworks/hbase/tmp&lt;/value&gt;</div><div class="line">	&lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim regionservers</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hadoop-master</div><div class="line">hadoop-slave1</div><div class="line">hadoop-slave2</div><div class="line">hadoop-slave3</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim backup-masters</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hadoop-slave1</div></pre></td></tr></table></figure>
+<p>通过docker-compose模版来构建hbase集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim docker-compose-hbase.yml</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">hadoop-slave1:</div><div class="line">   image: tonywell/docker-hbase</div><div class="line">   container_name: hadoop-slave1</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">     - ./docker-spark/conf:/usr/local/spark/conf</div><div class="line">     - ./docker-hbase/conf:/usr/local/hbase/conf</div><div class="line">   net: zoo</div><div class="line">hadoop-slave2:</div><div class="line">   image: tonywell/docker-hbase</div><div class="line">   container_name: hadoop-slave2</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">     - ./docker-spark/conf:/usr/local/spark/conf</div><div class="line">     - ./docker-hbase/conf:/usr/local/hbase/conf</div><div class="line">   net: zoo</div><div class="line">hadoop-slave3:</div><div class="line">   image: tonywell/docker-hbase</div><div class="line">   container_name: hadoop-slave3</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">     - ./docker-spark/conf:/usr/local/spark/conf</div><div class="line">     - ./docker-hbase/conf:/usr/local/hbase/conf</div><div class="line">   net: zoo</div><div class="line">hadoop-master:</div><div class="line">   image: tonywell/docker-hbase</div><div class="line">   container_name: hadoop-master</div><div class="line">   volumes:</div><div class="line">     - ./docker-hadoop/conf:/usr/local/hadoop/etc/hadoop</div><div class="line">     - ./docker-hive/conf:/usr/local/hive/conf</div><div class="line">     - ./docker-spark/conf:/usr/local/spark/conf</div><div class="line">     - ./docker-hbase/conf:/usr/local/hbase/conf</div><div class="line">   net: zoo</div><div class="line">   #command: bash /usr/local/hadoop/bin/hdfs namenode -format -y &amp;&amp; sh /usr/local/hadoop/sbin/start-all.sh -yes &amp;&amp; sh /usr/local/spark/sbin/start-all.sh &amp;&amp; sh /usr/local/hbase/bin/start-hbase.sh &amp;&amp; ping localhost &gt; /dev/null</div><div class="line">   ports:</div><div class="line">     - &quot;50070:50070&quot;</div><div class="line">     - &quot;9083:9083&quot;</div><div class="line">     - &quot;8088:8088&quot;</div><div class="line">     - &quot;8080:8080&quot;</div><div class="line">     - &quot;8042:8042&quot;</div><div class="line">     - &quot;16010:16010&quot;</div><div class="line">   links:</div><div class="line">     - hadoop-slave1</div><div class="line">     - hadoop-slave2</div><div class="line">     - hadoop-slave3</div></pre></td></tr></table></figure>
+<p>启动容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker-compose -f docker-compose-hbase.yml up -d</div></pre></td></tr></table></figure>
+<p>启动集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ docker exec -it hadoop-master bash</div><div class="line">$ /user/local/hadoop/bin/hdfs namenode -format</div><div class="line">$ sh /usr/local/hadoop/sbin/start-all.sh</div><div class="line">$ sh /usr/local/spark/sbin/start-all.sh</div><div class="line">$ sh /usr/local/hbase/bin/start-hbase.sh</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag">#Docker</a>
+          
+            <a href="/tags/Hadoop/" rel="tag">#Hadoop</a>
+          
+            <a href="/tags/大数据/" rel="tag">#大数据</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/16/Docker搭建Hadoop集群/" rel="next" title="Docker搭建Hadoop集群">
+                <i class="fa fa-chevron-left"></i> Docker搭建Hadoop集群
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tony" />
+          <p class="site-author-name" itemprop="name">tony</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#3、构建mysql容器"><span class="nav-number">1.</span> <span class="nav-text">3、构建mysql容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、构建hive集群"><span class="nav-number">2.</span> <span class="nav-text">4、构建hive集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5、构建spark集群"><span class="nav-number">3.</span> <span class="nav-text">5、构建spark集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6、构建hbase集群"><span class="nav-number">4.</span> <span class="nav-text">6、构建hbase集群</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tony</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
