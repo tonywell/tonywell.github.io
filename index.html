@@ -298,11 +298,11 @@
 
       
         
-          
-          一、首先centos7安装docker1、添加docker源1$ vim /etc/yum.repos.d/docker.repo
-12345678910[dockerrepo]name=Docker Repositorybaseurl=https://yum.dockerproject.org/r
-          ...
-
+          <h3 id="一、首先centos7安装docker"><a href="#一、首先centos7安装docker" class="headerlink" title="一、首先centos7安装docker"></a>一、首先centos7安装docker</h3><h4 id="1、添加docker源"><a href="#1、添加docker源" class="headerlink" title="1、添加docker源"></a>1、添加docker源</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/yum.repos.d/docker.repo</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[dockerrepo]</div><div class="line">name=Docker Repository</div><div class="line"></div><div class="line">baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/</div><div class="line"></div><div class="line">enabled=1</div><div class="line"></div><div class="line">gpgcheck=1</div><div class="line"></div><div class="line">gpgkey=https://yum.dockerproject.org/gpg</div></pre></td></tr></table></figure>
+<h4 id="2、yum安装docker"><a href="#2、yum安装docker" class="headerlink" title="2、yum安装docker"></a>2、yum安装docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install docker-engine</div></pre></td></tr></table></figure>
+<h4 id="3、启动docker"><a href="#3、启动docker" class="headerlink" title="3、启动docker"></a>3、启动docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ service docker start</div></pre></td></tr></table></figure>
+<h3 id="二、安装docker-compose"><a href="#二、安装docker-compose" class="headerlink" title="二、安装docker-compose"></a>二、安装docker-compose</h3>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/11/04/centos7基于docker搭建gitlab/#more" rel="contents">
               阅读全文 &raquo;
@@ -417,12 +417,14 @@
 
       
         
-          
-          3、构建mysql容器后面的hive元数据是基于mysql数据，所以这里先创建mysql容器
-通过docker-compose模版来启动mysql容器
-123456789hadoop-mysql:   image: tonywell/docker-mysql   container_name: ha
-          ...
-
+          <h4 id="3、构建mysql容器"><a href="#3、构建mysql容器" class="headerlink" title="3、构建mysql容器"></a>3、构建mysql容器</h4><p>后面的hive元数据是基于mysql数据，所以这里先创建mysql容器</p>
+<p>通过docker-compose模版来启动mysql容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">hadoop-mysql:</div><div class="line">   image: tonywell/docker-mysql</div><div class="line">   container_name: hadoop-mysql</div><div class="line">   volumes:</div><div class="line">     - ./data:/usr/local/mysql-5.6.29/data</div><div class="line">   net: zoo</div><div class="line">   command: /usr/local/mysql-5.6.29/bin/mysqld_safe --user=mysql</div><div class="line">   ports:</div><div class="line">     - &quot;3306:3306&quot;</div></pre></td></tr></table></figure>
+<p>启动容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker-compose -f docker-compose-mysql.yml up -d</div></pre></td></tr></table></figure>
+<p>然后就要修改密码和配置远程访问mysql了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ docker exec -it hadoop-mysql bash</div><div class="line">$ cd /user/local/mysql-5.6.29/bin</div><div class="line">$ ./mysql -u root -p</div><div class="line">#默认密码为空，回车即可</div><div class="line">$ mysql&gt; use mysql;</div><div class="line">$ mysql&gt; UPDATE user SET Password=PASSWORD(&apos;新密码&apos;) where USER=&apos;root&apos;;</div><div class="line">$ mysql&gt; FLUSH PRIVILEGES;</div><div class="line">#授权远程访问</div><div class="line">$ mysql&gt; grant ALL PRIVILEGES ON *.* to root@&quot;%&quot; identified by &quot;root&quot; WITH GRANT OPTION;</div><div class="line">$ mysql&gt; FLUSH PRIVILEGES;</div><div class="line">#配置字符集，解决后面hive建表报错</div><div class="line">#FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. MetaException(message:For direct MetaStore DB connections, we don&apos;t support retries at the client level.)</div><div class="line">$ mysql&gt; alter database hive character set latin1;</div></pre></td></tr></table></figure>
+<p>ok mysql容器配置完成</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/11/01/Docker搭建Hadoop集群（二）/#more" rel="contents">
               阅读全文 &raquo;
@@ -537,14 +539,15 @@
 
       
         
-          
-          最近为了学习大数据，所以需要在本地搭建Hadoop的分布式集群环境，整虚拟机的话开销太大，所以就想用Docker来做虚拟化。步骤如下：
-
-通过dockerfile文件方式构建Hadoop的基础镜像
-
-一、构建Hadoop基础镜像1、首先构建一个centos7的基础镜像首先创建目录,并创建Docker
-          ...
-
+          <p>最近为了学习大数据，所以需要在本地搭建Hadoop的分布式集群环境，整虚拟机的话开销太大，所以就想用Docker来做虚拟化。步骤如下：</p>
+<ul>
+<li>通过dockerfile文件方式构建Hadoop的基础镜像</li>
+</ul>
+<h3 id="一、构建Hadoop基础镜像"><a href="#一、构建Hadoop基础镜像" class="headerlink" title="一、构建Hadoop基础镜像"></a>一、构建Hadoop基础镜像</h3><h4 id="1、首先构建一个centos7的基础镜像"><a href="#1、首先构建一个centos7的基础镜像" class="headerlink" title="1、首先构建一个centos7的基础镜像"></a>1、首先构建一个centos7的基础镜像</h4><p>首先创建目录,并创建Dockerfile：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir docker-centos</div><div class="line">$ cd docker-centos</div><div class="line">$ vim Docker</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">FROM centos</div><div class="line">MAINTAINER tonywell &lt;tongwei1985@gmail.com&gt;</div><div class="line"></div><div class="line"># root password</div><div class="line">RUN echo &apos;root:!23$QweR&apos; | chpasswd</div><div class="line"></div><div class="line"># 为解决Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY问题</div><div class="line">RUN rpm --import /etc/pki/rpm-gpg/RPM*</div><div class="line"></div><div class="line">RUN \</div><div class="line">    yum -y install \</div><div class="line">        openssh openssh-server openssh-clients \</div><div class="line">        sudo passwd wget &amp;&amp;\</div><div class="line">        yum clean all</div><div class="line"></div><div class="line"># 设置sshd</div><div class="line">RUN sshd-keygen</div><div class="line">RUN sed -i &quot;s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g&quot; /etc/ssh/sshd_config</div><div class="line">RUN sed -i &quot;s/UsePAM.*/UsePAM no/g&quot; /etc/ssh/sshd_config</div><div class="line"></div><div class="line">RUN mkdir /var/run/sshd</div><div class="line">EXPOSE 22</div><div class="line">CMD [&quot;/usr/sbin/sshd&quot;, &quot;-D&quot;]</div></pre></td></tr></table></figure>
+<p>然后执行构建命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker build -t tonywell/docker-contos .   //一定不能漏了&quot;.&quot;</div></pre></td></tr></table></figure>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/10/16/Docker搭建Hadoop集群/#more" rel="contents">
               阅读全文 &raquo;

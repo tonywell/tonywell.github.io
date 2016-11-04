@@ -100,7 +100,7 @@
 
 一、构建Hadoop基础镜像1、首先构建一个centos7的基础镜像首先创建目录,并创建Dockerfile：
 123$ mkdir docker-centos$ cd docker-centos$">
-<meta property="og:updated_time" content="2016-11-01T03:46:38.000Z">
+<meta property="og:updated_time" content="2016-11-04T08:44:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker搭建Hadoop集群">
 <meta name="twitter:description" content="最近为了学习大数据，所以需要在本地搭建Hadoop的分布式集群环境，整虚拟机的话开销太大，所以就想用Docker来做虚拟化。步骤如下：
@@ -339,6 +339,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">FROM centos</div><div class="line">MAINTAINER tonywell &lt;tongwei1985@gmail.com&gt;</div><div class="line"></div><div class="line"># root password</div><div class="line">RUN echo &apos;root:!23$QweR&apos; | chpasswd</div><div class="line"></div><div class="line"># 为解决Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY问题</div><div class="line">RUN rpm --import /etc/pki/rpm-gpg/RPM*</div><div class="line"></div><div class="line">RUN \</div><div class="line">    yum -y install \</div><div class="line">        openssh openssh-server openssh-clients \</div><div class="line">        sudo passwd wget &amp;&amp;\</div><div class="line">        yum clean all</div><div class="line"></div><div class="line"># 设置sshd</div><div class="line">RUN sshd-keygen</div><div class="line">RUN sed -i &quot;s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g&quot; /etc/ssh/sshd_config</div><div class="line">RUN sed -i &quot;s/UsePAM.*/UsePAM no/g&quot; /etc/ssh/sshd_config</div><div class="line"></div><div class="line">RUN mkdir /var/run/sshd</div><div class="line">EXPOSE 22</div><div class="line">CMD [&quot;/usr/sbin/sshd&quot;, &quot;-D&quot;]</div></pre></td></tr></table></figure>
 <p>然后执行构建命令</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker build -t tonywell/docker-contos .   //一定不能漏了&quot;.&quot;</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <h4 id="2、根据centos7镜像来构建jdk7的镜像"><a href="#2、根据centos7镜像来构建jdk7的镜像" class="headerlink" title="2、根据centos7镜像来构建jdk7的镜像"></a>2、根据centos7镜像来构建jdk7的镜像</h4><p>创建目录，并进入目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir centos-jdk</div><div class="line">$ cd centos-jdk</div></pre></td></tr></table></figure>
 <p>下载jdk安装包：</p>

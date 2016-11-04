@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="tony's blog">
 <meta property="og:description" content="一、首先centos7安装docker1、添加docker源1$ vim /etc/yum.repos.d/docker.repo
 12345678910[dockerrepo]name=Docker Repositorybaseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/enabled=1gpgcheck=1gpg">
-<meta property="og:updated_time" content="2016-11-04T08:24:11.000Z">
+<meta property="og:updated_time" content="2016-11-04T08:44:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos7基于docker搭建gitlab">
 <meta name="twitter:description" content="一、首先centos7安装docker1、添加docker源1$ vim /etc/yum.repos.d/docker.repo
@@ -303,7 +303,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[dockerrepo]</div><div class="line">name=Docker Repository</div><div class="line"></div><div class="line">baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/</div><div class="line"></div><div class="line">enabled=1</div><div class="line"></div><div class="line">gpgcheck=1</div><div class="line"></div><div class="line">gpgkey=https://yum.dockerproject.org/gpg</div></pre></td></tr></table></figure>
 <h4 id="2、yum安装docker"><a href="#2、yum安装docker" class="headerlink" title="2、yum安装docker"></a>2、yum安装docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install docker-engine</div></pre></td></tr></table></figure>
 <h4 id="3、启动docker"><a href="#3、启动docker" class="headerlink" title="3、启动docker"></a>3、启动docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ service docker start</div></pre></td></tr></table></figure>
-<h3 id="二、安装docker-compose"><a href="#二、安装docker-compose" class="headerlink" title="二、安装docker-compose"></a>二、安装docker-compose</h3><p>docker-compose通过pip来安装，如果系统没有安装pip，先安装pip</p>
+<h3 id="二、安装docker-compose"><a href="#二、安装docker-compose" class="headerlink" title="二、安装docker-compose"></a>二、安装docker-compose</h3><a id="more"></a>
+<p>docker-compose通过pip来安装，如果系统没有安装pip，先安装pip</p>
 <h4 id="1、安装pip"><a href="#1、安装pip" class="headerlink" title="1、安装pip"></a>1、安装pip</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install python-pip.noarch</div></pre></td></tr></table></figure>
 <p>如果遇到下面错误</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">没有可用软件包 python-pip.noarch。</div><div class="line">错误：无须任何处理</div></pre></td></tr></table></figure>
