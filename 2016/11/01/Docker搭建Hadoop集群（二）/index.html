@@ -94,7 +94,7 @@
 <meta property="og:description" content="3、构建mysql容器后面的hive元数据是基于mysql数据，所以这里先创建mysql容器
 通过docker-compose模版来启动mysql容器
 123456789hadoop-mysql:   image: tonywell/docker-mysql   container_name: hadoop-mysql   volumes:     - ./data:/usr/local/mysq">
-<meta property="og:updated_time" content="2016-11-04T08:44:53.000Z">
+<meta property="og:updated_time" content="2016-11-07T08:12:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker搭建Hadoop集群（二）">
 <meta name="twitter:description" content="3、构建mysql容器后面的hive元数据是基于mysql数据，所以这里先创建mysql容器
@@ -327,7 +327,7 @@
 <p>启动容器</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker-compose -f docker-compose-mysql.yml up -d</div></pre></td></tr></table></figure>
 <p>然后就要修改密码和配置远程访问mysql了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ docker exec -it hadoop-mysql bash</div><div class="line">$ cd /user/local/mysql-5.6.29/bin</div><div class="line">$ ./mysql -u root -p</div><div class="line">#默认密码为空，回车即可</div><div class="line">$ mysql&gt; use mysql;</div><div class="line">$ mysql&gt; UPDATE user SET Password=PASSWORD(&apos;新密码&apos;) where USER=&apos;root&apos;;</div><div class="line">$ mysql&gt; FLUSH PRIVILEGES;</div><div class="line">#授权远程访问</div><div class="line">$ mysql&gt; grant ALL PRIVILEGES ON *.* to root@&quot;%&quot; identified by &quot;root&quot; WITH GRANT OPTION;</div><div class="line">$ mysql&gt; FLUSH PRIVILEGES;</div><div class="line">#配置字符集，解决后面hive建表报错</div><div class="line">#FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. MetaException(message:For direct MetaStore DB connections, we don&apos;t support retries at the client level.)</div><div class="line">$ mysql&gt; alter database hive character set latin1;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ docker exec -it hadoop-mysql bash</div><div class="line">$ cd /usr/local/mysql-5.6.29/bin</div><div class="line">$ ./mysql -u root -p</div><div class="line">#默认密码为空，回车即可</div><div class="line">$ mysql&gt; use mysql;</div><div class="line">$ mysql&gt; UPDATE user SET Password=PASSWORD(&apos;新密码&apos;) where USER=&apos;root&apos;;</div><div class="line">$ mysql&gt; FLUSH PRIVILEGES;</div><div class="line">#授权远程访问</div><div class="line">$ mysql&gt; grant ALL PRIVILEGES ON *.* to root@&quot;%&quot; identified by &quot;root&quot; WITH GRANT OPTION;</div><div class="line">$ mysql&gt; FLUSH PRIVILEGES;</div><div class="line">#配置字符集，解决后面hive建表报错</div><div class="line">#FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. MetaException(message:For direct MetaStore DB connections, we don&apos;t support retries at the client level.)</div><div class="line">$ mysql&gt; alter database hive character set latin1;</div></pre></td></tr></table></figure>
 <p>ok mysql容器配置完成</p>
 <a id="more"></a>
 <h4 id="4、构建hive集群"><a href="#4、构建hive集群" class="headerlink" title="4、构建hive集群"></a>4、构建hive集群</h4><p>创建hive集群的配置文件</p>
@@ -491,7 +491,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -556,7 +556,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
