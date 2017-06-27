@@ -255,6 +255,311 @@
             
               
                 
+                <a class="post-title-link" href="/2017/06/27/k8s集群搭建（三）/" itemprop="url">
+                  k8s集群搭建（三）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-27T22:30:59+08:00" content="2017-06-27">
+              2017-06-27
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Dashboard安装Kubernetes Dashboard是k8s提供基于Web的监控和操作界面，可以通过UI来显示集群的所有工作负载，除了查看资源，还是创建、编辑、更新、删除资源。
+根据Kubernetes Dashboard的github上提供的样例编写kubernate-dashboard
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/06/27/k8s集群搭建（三）/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/06/26/k8s集群搭建（二）/" itemprop="url">
+                  k8s集群搭建（二）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-26T15:32:02+08:00" content="2017-06-26">
+              2017-06-26
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          前面已经安装配置好docker和etcd集群，接下来继续安装
+安装配置flannel在node1、node2、node3上安装flannel，flannel来提供集群内部的网络通信
+1、使用yum安装flannel1$ yum -y install flannel
+2、配置etcd服务修改/etc/
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/06/26/k8s集群搭建（二）/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/06/22/k8s集群搭建（一）/" itemprop="url">
+                  k8s集群搭建（一）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-22T18:24:43+08:00" content="2017-06-22">
+              2017-06-22
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          环境说明总共4台设备,设备分配如下：
+master
+123ip: 172.16.110.108os: centos 7应用：etcd flannel kubernetes docker
+Node1
+123ip: 172.16.110.105os: centos 7应用：etcd flannel ku
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/06/22/k8s集群搭建（一）/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/12/27/Jenkins2、gitlab、Docker Swarm集群搭建持续构建环境(一)/" itemprop="url">
                   Jenkins2、gitlab、Docker Swarm集群搭建持续交付环境(一)
                 </a>
@@ -998,371 +1303,6 @@ CDH5: 5.6.0
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/10/2016-03-10-angular2-python项目实践2/" itemprop="url">
-                  angular2+python项目实践2
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-10T21:57:05+08:00" content="2016-03-10">
-              2016-03-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/angular2-python项目实践/" itemprop="url" rel="index">
-                    <span itemprop="name">angular2+python项目实践</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          上文中，已经创建好项目目录
-接下来tachyon
-
-          
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/10/2016-03-10-angular2-python项目实践2/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/08/2016-03-08-angular2-python项目实践1/" itemprop="url">
-                  angular2+python项目实践1
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-08T21:43:40+08:00" content="2016-03-08">
-              2016-03-08
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/angular2-python项目实践/" itemprop="url" rel="index">
-                    <span itemprop="name">angular2+python项目实践</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="题记"><a href="#题记" class="headerlink" title="题记"></a>题记</h3><p>​    最近运维提出在产品中增加一个资源管理的功能，我刚好也在看angular2和tornado，而这个需求也比较 简单，刚好拿来练练手，并在此记录下来，当然这里也不会使用真实项目代码。</p>
-<p> 功能列表：</p>
-<ul>
-<li>机房信息管理 ：管理机房IP、联系人、供应商等信息</li>
-<li>IP资源管理：管理IP使用状态、领用人、应用于什么应用等</li>
-<li>外部节点管理：管理外部节点，节点IP、用户名、密码、端口、协议等</li>
-</ul>
-<p>技术选型：</p>
-<ul>
-<li>前端：angular2</li>
-<li>前端构建工具：webpack</li>
-<li>前端测试框架：karma，jasmine</li>
-<li>后端语言：python</li>
-<li>后端框架：tornado</li>
-<li>数据库：sqllite3</li>
-<li>反向代理：Nginx</li>
-</ul>
-<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>开始创建项目目录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir rmg</div><div class="line">$ cd rmg</div></pre></td></tr></table></figure>
-<p>这里就省略了node环境的安装</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/08/2016-03-08-angular2-python项目实践1/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/06/2016-03-06-virtualenv-supervisor-plus-tornado/" itemprop="url">
-                  virtualenv_supervisor+tornado
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-06T16:31:19+08:00" content="2016-03-06">
-              2016-03-06
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="配置virtualenv-supervisor-tornado项目总结"><a href="#配置virtualenv-supervisor-tornado项目总结" class="headerlink" title="配置virtualenv+supervisor+tornado项目总结"></a>配置virtualenv+supervisor+tornado项目总结</h2><p>virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。  </p>
-<p>如果系统没有安装virtualenv，先安装，我是通过pip来安装的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install virtualenv</div></pre></td></tr></table></figure>
-<p>在我的项目rmg目录下通过命令创建python2.7的虚拟环境</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd rmg</div><div class="line">virtualenv -p python2.7 rmg_env</div></pre></td></tr></table></figure>
-<p>激活虚拟化环境并安装配置supervisor和tornado</p>
-<p>激活虚拟化环境</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source rmg_env/bin/activate</div></pre></td></tr></table></figure>
-<p>执行完命令行前多出“(rmg_env)”,说明虚拟环境已经创建成功。</p>
-<p>接下来开始在虚拟环境中安装supervisor和tornado</p>
-<p>我是通过pip_requirements.txt配置，requirements.pip文件内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">supervisor</div><div class="line">tornado</div></pre></td></tr></table></figure>
-<p>接下来开始安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -r pip_requirements.txt</div></pre></td></tr></table></figure>
-<p>以下省略项目代码</p>
-<p>……</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/06/2016-03-06-virtualenv-supervisor-plus-tornado/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1408,7 +1348,7 @@ CDH5: 5.6.0
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

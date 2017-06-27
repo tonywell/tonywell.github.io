@@ -1,0 +1,635 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tony" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="环境说明总共4台设备,设备分配如下：
+master
+123ip: 172.16.110.108os: centos 7应用：etcd flannel kubernetes docker
+Node1
+123ip: 172.16.110.105os: centos 7应用：etcd flannel kubernetes docker
+Node2
+123ip: 172.16.110.106os: cen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s集群搭建（一）">
+<meta property="og:url" content="http://tonywell.github.io/2017/06/22/k8s集群搭建（一）/index.html">
+<meta property="og:site_name" content="tony's blog">
+<meta property="og:description" content="环境说明总共4台设备,设备分配如下：
+master
+123ip: 172.16.110.108os: centos 7应用：etcd flannel kubernetes docker
+Node1
+123ip: 172.16.110.105os: centos 7应用：etcd flannel kubernetes docker
+Node2
+123ip: 172.16.110.106os: cen">
+<meta property="og:updated_time" content="2017-06-27T02:05:05.632Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="k8s集群搭建（一）">
+<meta name="twitter:description" content="环境说明总共4台设备,设备分配如下：
+master
+123ip: 172.16.110.108os: centos 7应用：etcd flannel kubernetes docker
+Node1
+123ip: 172.16.110.105os: centos 7应用：etcd flannel kubernetes docker
+Node2
+123ip: 172.16.110.106os: cen">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://tonywell.github.io/2017/06/22/k8s集群搭建（一）/"/>
+
+  <title> k8s集群搭建（一） | tony's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">tony's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                k8s集群搭建（一）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-22T18:24:43+08:00" content="2017-06-22">
+              2017-06-22
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h4><p>总共4台设备,设备分配如下：</p>
+<p>master</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ip: 172.16.110.108</div><div class="line">os: centos 7</div><div class="line">应用：etcd flannel kubernetes docker</div></pre></td></tr></table></figure>
+<p>Node1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ip: 172.16.110.105</div><div class="line">os: centos 7</div><div class="line">应用：etcd flannel kubernetes docker</div></pre></td></tr></table></figure>
+<p>Node2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ip: 172.16.110.106</div><div class="line">os: centos 7</div><div class="line">应用：kubernetes docker flannel</div></pre></td></tr></table></figure>
+<p>Node3</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ip: 172.16.110.107</div><div class="line">os: centos 7</div><div class="line">应用：etcd flannel kubernetes docker</div></pre></td></tr></table></figure>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><h5 id="1、关闭防火墙"><a href="#1、关闭防火墙" class="headerlink" title="1、关闭防火墙"></a>1、关闭防火墙</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ systemctl stop firewalld</div><div class="line">$ systemctl disable firewalld</div></pre></td></tr></table></figure>
+<h5 id="2、时钟同步，安装、启动NTP"><a href="#2、时钟同步，安装、启动NTP" class="headerlink" title="2、时钟同步，安装、启动NTP"></a>2、时钟同步，安装、启动NTP</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ yum -y install ntp</div><div class="line">$ systemctl start ntpd</div><div class="line">$ systemctl enable ntpd</div></pre></td></tr></table></figure>
+<h5 id="3、设置主机名"><a href="#3、设置主机名" class="headerlink" title="3、设置主机名"></a>3、设置主机名</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">master  172.16.110.108</div><div class="line">node1 172.16.110.105</div><div class="line">node2 172.16.110.106</div><div class="line">node3 172.16.110.107</div></pre></td></tr></table></figure>
+<p>设置hostname命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostnamectl set-hostname master</div></pre></td></tr></table></figure>
+<h5 id="4、配置hosts文件，添加配置"><a href="#4、配置hosts文件，添加配置" class="headerlink" title="4、配置hosts文件，添加配置"></a>4、配置hosts文件，添加配置</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">172.16.110.108 master</div><div class="line">172.16.110.105 node1</div><div class="line">172.16.110.106 node2</div><div class="line">172.16.110.107 node3</div></pre></td></tr></table></figure>
+<h4 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h4><p>这里我选择yum来安装，使用官方提供的yum源</p>
+<h5 id="1、添加yum源"><a href="#1、添加yum源" class="headerlink" title="1、添加yum源"></a>1、添加yum源</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ sudo tee /etc/yum.repos.d/docker.repo &lt;&lt;-&apos;EOF&apos;</div><div class="line">[dockerrepo]</div><div class="line">name=Docker Repository</div><div class="line">baseurl=https://yum.dockerproject.org/repo/main/centos/7/</div><div class="line">enabled=1</div><div class="line">gpgcheck=1</div><div class="line">gpgkey=https://yum.dockerproject.org/gpg</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<h5 id="2、安装docker-engine"><a href="#2、安装docker-engine" class="headerlink" title="2、安装docker-engine"></a>2、安装docker-engine</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install docker-engine</div></pre></td></tr></table></figure>
+<h5 id="3、设置docker开机启动，并启动docker服务"><a href="#3、设置docker开机启动，并启动docker服务" class="headerlink" title="3、设置docker开机启动，并启动docker服务"></a>3、设置docker开机启动，并启动docker服务</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo systemctl enable docker.service</div><div class="line">$ sudo systemctl start docker</div></pre></td></tr></table></figure>
+<h5 id="4、配置docker加速器"><a href="#4、配置docker加速器" class="headerlink" title="4、配置docker加速器"></a>4、配置docker加速器</h5><p>因为国内网络原因，dockerhub下载镜像速度太慢，失败率过高，可以通过阿里云或者daocloud提供的加速器，我这里选择的阿里云的加速器</p>
+<p>docker1.10以上版本可以通过修改daemon配置文件<code>/etc/docker/daemon.json</code>来使用加速器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ sudo mkdir -p /etc/docker</div><div class="line">$ sudo tee /etc/docker/daemon.json &lt;&lt;-&apos;EOF&apos;</div><div class="line">&#123;</div><div class="line">  &quot;registry-mirrors&quot;: [&quot;https://&#123;阿里分配&#125;.mirror.aliyuncs.com&quot;]</div><div class="line">&#125;</div><div class="line">EOF</div><div class="line">$ sudo systemctl daemon-reload</div><div class="line">$ sudo systemctl restart docker</div></pre></td></tr></table></figure>
+<p>ok，docker服务安装配置完毕！</p>
+<h4 id="安装etcd集群"><a href="#安装etcd集群" class="headerlink" title="安装etcd集群"></a>安装etcd集群</h4><p>我这里通过yum来安装，etc集群主机数遵循2n+1原则，那我这里就使用三台设备来安装</p>
+<ul>
+<li>etcd1 172.16.110.108</li>
+<li>etcd2 172.16.110.105</li>
+<li>etcd3 172.16.110.107</li>
+</ul>
+<h5 id="1、安装etcd"><a href="#1、安装etcd" class="headerlink" title="1、安装etcd"></a>1、安装etcd</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install -y etcd</div></pre></td></tr></table></figure>
+<h5 id="2、修改etcd配置"><a href="#2、修改etcd配置" class="headerlink" title="2、修改etcd配置"></a>2、修改etcd配置</h5><p> 以etcd1为例，配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/etcd/etcd.conf</div><div class="line"></div><div class="line">ETCD_NAME=etcd1</div><div class="line">ETCD_DATA_DIR=&quot;/var/lib/etcd/etcd1.etcd&quot;</div><div class="line">ETCD_LISTEN_PEER_URLS=&quot;http://0.0.0.0:2380&quot;</div><div class="line">ETCD_LISTEN_CLIENT_URLS=&quot;http://0.0.0.0:2379&quot;</div><div class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;http://172.16.110.108:2380&quot;</div><div class="line">ETCD_ADVERTISE_CLIENT_URLS=&quot;http://172.16.110.108:2379&quot;</div><div class="line">ETCD_INITIAL_CLUSTER=&quot;etcd1=http://172.16.110.108:2380,etcd2=http://172.16.110.105:2380,etcd3=http://172.16.110.107:2380&quot;</div><div class="line">ETCD_INITIAL_CLUSTER 定义集群成员</div><div class="line">ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;                        # 初始化状态使用 new，建立之后改此值为 existing</div><div class="line">ETCD_INITIAL_CLUSTER_TOKEN=&quot;dev-etcd-cluster&quot;           # etcd 集群名</div></pre></td></tr></table></figure>
+<h5 id="3、启动集群"><a href="#3、启动集群" class="headerlink" title="3、启动集群"></a>3、启动集群</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo systemctl enable etcd</div><div class="line">$ sudo systemctl start etcd</div></pre></td></tr></table></figure>
+<h5 id="4、查看集群情况"><a href="#4、查看集群情况" class="headerlink" title="4、查看集群情况"></a>4、查看集群情况</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ etcdctl member list</div><div class="line">5acdfe2a456a663d: name=etcd3 peerURLs=http://172.16.110.107:2380 clientURLs=http://172.16.110.107:2379 isLeader=true</div><div class="line">ba370913a75cbeda: name=etcd1 peerURLs=http://172.16.110.108:2380 clientURLs=http://172.16.110.108:2379 isLeader=false</div><div class="line">cc3862ff09c0ae20: name=etcd2 peerURLs=http://172.16.110.105:2380 clientURLs=http://172.16.110.105:2379 isLeader=false</div></pre></td></tr></table></figure>
+<h5 id="5、将集群中的flannel网段信息提前写入etcd"><a href="#5、将集群中的flannel网段信息提前写入etcd" class="headerlink" title="5、将集群中的flannel网段信息提前写入etcd"></a>5、将集群中的flannel网段信息提前写入etcd</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ etcdctl mk /flannel/network/config &apos;&#123;&quot;Network&quot;:&quot;172.17.0.0/16&quot;&#125;&apos;</div></pre></td></tr></table></figure>
+<p>在任意一台设备查看一下是否添加成功:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ etcdctl get /flannel/network/config</div><div class="line">&#123;&quot;Network&quot;:&quot;172.17.0.0/16&quot;&#125;</div></pre></td></tr></table></figure>
+<p>ok,etcd集群安装配置完成！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/27/Jenkins2、gitlab、Docker Swarm集群搭建持续构建环境(一)/" rel="next" title="Jenkins2、gitlab、Docker Swarm集群搭建持续交付环境(一)">
+                <i class="fa fa-chevron-left"></i> Jenkins2、gitlab、Docker Swarm集群搭建持续交付环境(一)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/26/k8s集群搭建（二）/" rel="prev" title="k8s集群搭建（二）">
+                k8s集群搭建（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tony" />
+          <p class="site-author-name" itemprop="name">tony</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#环境说明"><span class="nav-number">1.</span> <span class="nav-text">环境说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">2.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、关闭防火墙"><span class="nav-number">2.1.</span> <span class="nav-text">1、关闭防火墙</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、时钟同步，安装、启动NTP"><span class="nav-number">2.2.</span> <span class="nav-text">2、时钟同步，安装、启动NTP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3、设置主机名"><span class="nav-number">2.3.</span> <span class="nav-text">3、设置主机名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、配置hosts文件，添加配置"><span class="nav-number">2.4.</span> <span class="nav-text">4、配置hosts文件，添加配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Docker"><span class="nav-number">3.</span> <span class="nav-text">安装Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、添加yum源"><span class="nav-number">3.1.</span> <span class="nav-text">1、添加yum源</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、安装docker-engine"><span class="nav-number">3.2.</span> <span class="nav-text">2、安装docker-engine</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3、设置docker开机启动，并启动docker服务"><span class="nav-number">3.3.</span> <span class="nav-text">3、设置docker开机启动，并启动docker服务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、配置docker加速器"><span class="nav-number">3.4.</span> <span class="nav-text">4、配置docker加速器</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装etcd集群"><span class="nav-number">4.</span> <span class="nav-text">安装etcd集群</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、安装etcd"><span class="nav-number">4.1.</span> <span class="nav-text">1、安装etcd</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、修改etcd配置"><span class="nav-number">4.2.</span> <span class="nav-text">2、修改etcd配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3、启动集群"><span class="nav-number">4.3.</span> <span class="nav-text">3、启动集群</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、查看集群情况"><span class="nav-number">4.4.</span> <span class="nav-text">4、查看集群情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5、将集群中的flannel网段信息提前写入etcd"><span class="nav-number">4.5.</span> <span class="nav-text">5、将集群中的flannel网段信息提前写入etcd</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tony</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
