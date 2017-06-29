@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="java8,hbase," />
+  <meta name="keywords" content="tony" />
 
 
 
@@ -84,19 +84,61 @@
 
 
 
-<meta name="description" content="最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。
-获取数据通过Collectors.toMap(cell -&amp;gt; Bytes.toString(CellUt">
+<meta name="description" content="前面我通过yum已经部署过k8s的集群，不过没有开启集群的TLS安全认证，而且yum安装k8s官方源的最高版本号只有1.5.2，本系列开始通过二进制来部署k8s的1.6.6版本并开启安全认证。
+集群规划
+
+
+IP
+系统
+角色
+应用
+
+
+
+
+172.16.110.108
+centos 7.3
+master node
+kube-apiserver kube-controller- manager ku">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java8 Stream实践（一）">
-<meta property="og:url" content="http://tonywell.github.io/2016/09/26/Java8-Stream实践（一）/index.html">
+<meta property="og:title" content="k8s1.6.6集群部署--开启TLS安全认证（一）">
+<meta property="og:url" content="http://tonywell.github.io/2017/06/28/k8s1-6-6集群部署-开启TLS安全认证（一）/index.html">
 <meta property="og:site_name" content="tony's blog">
-<meta property="og:description" content="最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。
-获取数据通过Collectors.toMap(cell -&amp;gt; Bytes.toString(CellUt">
-<meta property="og:updated_time" content="2016-09-27T08:53:26.000Z">
+<meta property="og:description" content="前面我通过yum已经部署过k8s的集群，不过没有开启集群的TLS安全认证，而且yum安装k8s官方源的最高版本号只有1.5.2，本系列开始通过二进制来部署k8s的1.6.6版本并开启安全认证。
+集群规划
+
+
+IP
+系统
+角色
+应用
+
+
+
+
+172.16.110.108
+centos 7.3
+master node
+kube-apiserver kube-controller- manager ku">
+<meta property="og:updated_time" content="2017-06-29T03:53:21.042Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java8 Stream实践（一）">
-<meta name="twitter:description" content="最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。
-获取数据通过Collectors.toMap(cell -&amp;gt; Bytes.toString(CellUt">
+<meta name="twitter:title" content="k8s1.6.6集群部署--开启TLS安全认证（一）">
+<meta name="twitter:description" content="前面我通过yum已经部署过k8s的集群，不过没有开启集群的TLS安全认证，而且yum安装k8s官方源的最高版本号只有1.5.2，本系列开始通过二进制来部署k8s的1.6.6版本并开启安全认证。
+集群规划
+
+
+IP
+系统
+角色
+应用
+
+
+
+
+172.16.110.108
+centos 7.3
+master node
+kube-apiserver kube-controller- manager ku">
 
 
 
@@ -117,9 +159,9 @@
 
 
 
-  <link rel="canonical" href="http://tonywell.github.io/2016/09/26/Java8-Stream实践（一）/"/>
+  <link rel="canonical" href="http://tonywell.github.io/2017/06/28/k8s1-6-6集群部署-开启TLS安全认证（一）/"/>
 
-  <title> Java8 Stream实践（一） | tony's blog </title>
+  <title> k8s1.6.6集群部署--开启TLS安全认证（一） | tony's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -259,7 +301,7 @@
             
             
               
-                Java8 Stream实践（一）
+                k8s1.6.6集群部署--开启TLS安全认证（一）
               
             
           </h1>
@@ -271,8 +313,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-26T22:54:35+08:00" content="2016-09-26">
-              2016-09-26
+            <time itemprop="dateCreated" datetime="2017-06-28T16:02:52+08:00" content="2017-06-28">
+              2017-06-28
             </time>
           </span>
 
@@ -299,41 +341,95 @@
       
 
       
-        <p>最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。</p>
-<h3 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h3><p>通过Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell)))把结果收集到一个Map，并将所有Map收集到一个List中。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ResultScanner rs = table.getScanner(scan);</div><div class="line">List&lt;Map&lt;String, String&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">rs.forEach((r) -&gt; &#123;</div><div class="line">      Map&lt;String, String&gt; map = r.listCells().stream().collect(Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell))));</div><div class="line">      list.add(map);</div><div class="line">     &#125;);</div></pre></td></tr></table></figure>
-<p>1）通过forEach方法接收一个 Lambda 表达式，其实就是遍历ResultScanner结果</p>
-<p>2）r.listCells将Result转成list</p>
-<p>3）调用stream将List转成流</p>
-<p>3）Collectors.toMap把结果收集到Map</p>
-<p>4）collect将结果收集到List</p>
-<a id="more"></a>
-<h3 id="数据分类"><a href="#数据分类" class="headerlink" title="数据分类"></a>数据分类</h3><p>因为需求是要不同的股票要写入不同的文件，所以我们需要对数据再进行分组。</p>
-<p>我们是根据SCode和MarketType来区分数据，所有我们就要将SCode和MarketType相同的数据归集到一个新的List，并将SCode_MarketType作为Key收集到Map中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Map&lt;String, List&lt;Map&lt;String,String&gt;&gt;&gt; datas =  list.stream().collect(Collectors.groupingBy(m -&gt; m.get(&quot;SCode&quot;) + &quot;-&quot; + m.get(&quot;MarketType&quot;)));</div></pre></td></tr></table></figure>
-<p>1）调用stream将List转成流</p>
-<p>2）通过收集器方法groupingBy来分组数据</p>
-<p>3）最终将数据归集成Map</p>
-<h3 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h3><p>foreach遍历结果集，通过Stream  map将Map的所有值按照keys的顺序拼成一个字符串，再通过collect将结果收集到List中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; keys = Arrays.asList(job.getKeys().split(&quot;,&quot;));   //有序的列名</div><div class="line"></div><div class="line">//Map&lt;String, List&lt;Map&lt;String,String&gt;&gt;&gt; datas</div><div class="line">datas.forEach((k,v) -&gt; &#123;</div><div class="line">    List&lt;String&gt; texts = v.stream().map(m -&gt;</div><div class="line">          String.join(&quot;|&quot;, keys.parallelStream().map(s -&gt; m.get(s)).collect(Collectors.toList()))</div><div class="line">      ).collect(Collectors.toList());</div><div class="line">          this.writeFile(texts, job, k);</div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
-<p>1）通过forEach方法接收一个 Lambda 表达式，其实就是遍历结果集</p>
-<p>2）通过stream将list转成流</p>
-<p>3）调用流的map</p>
-<p>  3.1) 通过parallelStream将keys转成流</p>
-<p>  3.2）调用流的map，通过每个元素到结果集的map中获取value</p>
-<p>  3.4）调用collect将结果归集为list</p>
-<p>4）调用writeFile写文件</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Stream 的特性可以归纳为：</p>
+        <p>前面我通过yum已经部署过k8s的集群，不过没有开启集群的TLS安全认证，而且yum安装k8s官方源的最高版本号只有1.5.2，本系列开始通过二进制来部署k8s的1.6.6版本并开启安全认证。</p>
+<h4 id="集群规划"><a href="#集群规划" class="headerlink" title="集群规划"></a>集群规划</h4><table>
+<thead>
+<tr>
+<th>IP</th>
+<th>系统</th>
+<th>角色</th>
+<th>应用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>172.16.110.108</td>
+<td>centos 7.3</td>
+<td>master node</td>
+<td>kube-apiserver kube-controller- manager kube-scheduler kubelet kube-proxy etcd flannel</td>
+</tr>
+<tr>
+<td>172.16.110.105</td>
+<td>centos 7.3</td>
+<td>node</td>
+<td>kubelet kube-proxy etcd flannel</td>
+</tr>
+<tr>
+<td>172.16.110.107</td>
+<td>centos 7.3</td>
+<td>node</td>
+<td>kubelet kube-proxy etcd flannel</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Docker私服搭建"><a href="#Docker私服搭建" class="headerlink" title="Docker私服搭建"></a>Docker私服搭建</h4><p>因为官方提供的kubernetes组件的下载都需要翻墙，所以我这里搭建一个docker私服，来上传这些组件。</p>
+<p>我这里私服选择的是harbor，harbor是由VMware中国研发团队负责开发的开源Docker容器镜像仓库，可帮助用户迅速搭建Registry服务，它提供远程镜像同步功能，实现多数据中心跨云的镜像同步。</p>
+<ol>
+<li><p>从github下载在线安装包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ wget https://github.com/vmware/harbor/releases/download/v1.1.2/harbor-online-installer-v1.1.2.tgz</div></pre></td></tr></table></figure>
+</li>
+<li><p>解压安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ tar xvf harbor-online-installer-v1.1.2.tgz</div></pre></td></tr></table></figure>
+</li>
+<li><p>配置harbro</p>
+<p>配置harbor.cfg文件，配置hostname,admin password及邮箱相关信息</p>
 <ul>
-<li>不是新的集合类</li>
-<li>没有内存存储，不会修改数据结构，只会产生新的流程</li>
-<li>所有 Stream 的操作必须以 lambda 表达式为参数</li>
-<li>非常容易生产数组或者集合</li>
+<li><p>hostname 配置宿主机的IP即可，不能使用localhost和127.0.0.1</p>
+</li>
+<li><p>ui_url_protocol  使用默认的http，这里配置为https</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#可选的https证书配置地址 </div><div class="line">ssl_cert = /root/cert/server.crt </div><div class="line">ssl_cert_key = /root/cert/server.key</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>Email 可用来重置用户密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">email_server = smtp.mydomain.com</div><div class="line">email_server_port = 25</div><div class="line">email_username = sample_admin@mydomain.com</div><div class="line">email_password = abc</div><div class="line">email_from = admin &lt;sample_admin@mydomain.com&gt;</div><div class="line">email_ssl = false</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>harbor_admin_password 初始密码</p>
+</li>
+<li><p>auth_mode 认证方式，还是简单点选择默认的db_auth</p>
+</li>
 </ul>
-<p>还没有应用到的特性</p>
-<ul>
-<li>并行能力</li>
-</ul>
+</li>
+<li><p>创建CA证书</p>
+<p>创建目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir -p /data/cert</div><div class="line">$ cd /data/cert</div></pre></td></tr></table></figure>
+<p>创建CA证书有效期10年:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ openssl req \</div><div class="line">    -newkey rsa:4096 -nodes -sha256 -keyout ca.key \</div><div class="line">    -x509 -days 3650 -out ca.crt</div></pre></td></tr></table></figure>
+<p>生成证书签名请求:</p>
+<p>可以用域名，我这里使用的是IP访问</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ openssl req \</div><div class="line">    -newkey rsa:4096 -nodes -sha256 -keyout 172.16.110.106.key \</div><div class="line">    -out 172.16.110.106.csr</div></pre></td></tr></table></figure>
+<p>生成客户端CA证书：</p>
+<p>如果使用域名访问的话直接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ openssl x509 -req -days 3650 -in yourdomain.com.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out yourdomain.com.crt</div></pre></td></tr></table></figure>
+<p>如何使用IP访问则通过下面方式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo subjectAltName = IP:172.16.110.106 &gt; extfile.cnf</div><div class="line">$ openssl x509 -req -days 3650 -in 172.16.110.106.csr -CA ca.crt -CAkey ca.key -CAcreateserial -extfile extfile.cnf -out 172.16.110.106.crt</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>storage配置</p>
+<p>harbor默认把镜像存储在本地文件系统，如果使用其他的存储方式可以修改common/templates/registry/config.yml中的存储配置部分,我这里存储在本地就不做改动</p>
+</li>
+<li><p>安装并启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ./install.sh</div></pre></td></tr></table></figure>
+<p>看到下面信息表示安装成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">✔ ----Harbor has been installed and started successfully.----</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>客户端访问配置</p>
+<p>将ca.crt拷贝到客户端的/etc/docker/certs.d/172.16.110.106（如果是域名这里就用域名）下，登陆测试一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker login 172.16.110.106</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ol>
 
       
     </div>
@@ -354,30 +450,18 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/java8/" rel="tag">#java8</a>
-          
-            <a href="/tags/hbase/" rel="tag">#hbase</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/24/2016-03-24-Hadoop2-7完全分布式模式安装/" rel="next" title="Hadoop2.7完全分布式模式安装">
-                <i class="fa fa-chevron-left"></i> Hadoop2.7完全分布式模式安装
+              <a href="/2017/06/27/k8s集群搭建（三）/" rel="next" title="k8s集群搭建（三）">
+                <i class="fa fa-chevron-left"></i> k8s集群搭建（三）
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/16/Docker搭建Hadoop集群/" rel="prev" title="Docker搭建Hadoop集群">
-                Docker搭建Hadoop集群 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -491,7 +575,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取数据"><span class="nav-number">1.</span> <span class="nav-text">获取数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据分类"><span class="nav-number">2.</span> <span class="nav-text">数据分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写文件"><span class="nav-number">3.</span> <span class="nav-text">写文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#集群规划"><span class="nav-number">1.</span> <span class="nav-text">集群规划</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker私服搭建"><span class="nav-number">2.</span> <span class="nav-text">Docker私服搭建</span></a></li></ol></div>
             
           </div>
         </section>
