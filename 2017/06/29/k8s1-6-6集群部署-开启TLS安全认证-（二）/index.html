@@ -1,0 +1,672 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tony" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前面，已经搭建好docker私服、etcd集群，接下来我们继续搭建k8s集群之旅。
+Flannel安装部署安装flannel1$ yum -y install flannel
+配置flannel修改/etc/sysconfig/flanneld文件，同样复用kubernetes的证书和秘钥
+12345FLANNEL_ETCD_ENDPOINTS=&amp;quot;https://172.16.110.1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s1.6.6集群部署(开启TLS安全认证)（二）">
+<meta property="og:url" content="http://tonywell.github.io/2017/06/29/k8s1-6-6集群部署-开启TLS安全认证-（二）/index.html">
+<meta property="og:site_name" content="tony's blog">
+<meta property="og:description" content="前面，已经搭建好docker私服、etcd集群，接下来我们继续搭建k8s集群之旅。
+Flannel安装部署安装flannel1$ yum -y install flannel
+配置flannel修改/etc/sysconfig/flanneld文件，同样复用kubernetes的证书和秘钥
+12345FLANNEL_ETCD_ENDPOINTS=&amp;quot;https://172.16.110.1">
+<meta property="og:updated_time" content="2017-06-30T04:13:30.951Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="k8s1.6.6集群部署(开启TLS安全认证)（二）">
+<meta name="twitter:description" content="前面，已经搭建好docker私服、etcd集群，接下来我们继续搭建k8s集群之旅。
+Flannel安装部署安装flannel1$ yum -y install flannel
+配置flannel修改/etc/sysconfig/flanneld文件，同样复用kubernetes的证书和秘钥
+12345FLANNEL_ETCD_ENDPOINTS=&amp;quot;https://172.16.110.1">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://tonywell.github.io/2017/06/29/k8s1-6-6集群部署-开启TLS安全认证-（二）/"/>
+
+  <title> k8s1.6.6集群部署(开启TLS安全认证)（二） | tony's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">tony's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                k8s1.6.6集群部署(开启TLS安全认证)（二）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-29T23:10:33+08:00" content="2017-06-29">
+              2017-06-29
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前面，已经搭建好docker私服、etcd集群，接下来我们继续搭建k8s集群之旅。</p>
+<h4 id="Flannel安装部署"><a href="#Flannel安装部署" class="headerlink" title="Flannel安装部署"></a>Flannel安装部署</h4><h5 id="安装flannel"><a href="#安装flannel" class="headerlink" title="安装flannel"></a>安装flannel</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum -y install flannel</div></pre></td></tr></table></figure>
+<h5 id="配置flannel"><a href="#配置flannel" class="headerlink" title="配置flannel"></a>配置flannel</h5><p>修改/etc/sysconfig/flanneld文件，同样复用kubernetes的证书和秘钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">FLANNEL_ETCD_ENDPOINTS=&quot;https://172.16.110.108:2379,https://172.16.110.105:2379,https://172.16.110.107:2379&quot;</div><div class="line">FLANNEL_ETCD_PREFIX=&quot;/flannel/network&quot;</div><div class="line">FLANNEL_OPTIONS=&quot;-etcd-cafile=/etc/kubernetes/ssl/ca.pem -etcd-</div><div class="line">   certfile=/etc/kubernetes/ssl/kubernetes.pem -etcd-</div><div class="line">   keyfile=/etc/kubernetes/ssl/kubernetes-key.pem&quot;</div></pre></td></tr></table></figure>
+<h5 id="向etcd集群写入网段信息"><a href="#向etcd集群写入网段信息" class="headerlink" title="向etcd集群写入网段信息"></a>向etcd集群写入网段信息</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ etcdctl --ca-file=/etc/kubernetes/ssl/ca.pem \</div><div class="line">     --cert-file=/etc/kubernetes/ssl/kubernetes.pem \</div><div class="line">     --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \</div><div class="line">     --endpoints=https://172.16.110.108:2379,https://172.16.110.105:2379,https://172.16.110.107:2379 mk /flannel/network/config &apos;&#123;&quot;Network&quot;:&quot;172.17.0.0/16&quot;&#125;&apos;</div></pre></td></tr></table></figure>
+<p>查看是否添加成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ etcdctl --ca-file=/etc/kubernetes/ssl/ca.pem \</div><div class="line">     --cert-file=/etc/kubernetes/ssl/kubernetes.pem \</div><div class="line">     --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \</div><div class="line">     --endpoints=https://172.16.110.108:2379,https://172.16.110.105:2379,https://172.16.110.107:2379 get /flannel/network/config</div><div class="line">&#123;&quot;Network&quot;:&quot;172.17.0.0/16&quot;&#125;</div></pre></td></tr></table></figure>
+<h5 id="启动flannel服务"><a href="#启动flannel服务" class="headerlink" title="启动flannel服务"></a>启动flannel服务</h5><p>在所有节点执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ systemctl restart flanneld</div><div class="line">$ systemctl enable flanneld</div></pre></td></tr></table></figure>
+<p>前期准备工作完成，接下来开始安装k8s集群</p>
+<h4 id="安装kubectl"><a href="#安装kubectl" class="headerlink" title="安装kubectl"></a>安装kubectl</h4><p>kubectl 默认从 <code>~/.kube/config</code> 配置文件获取访问 kube-apiserver 地址、证书、用户名等信息，如果没有配置该文件，执行命令时出错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ kubectl get componentstatuses</div><div class="line">The connection to the server localhost:8080 was refused - did you specify the right host or port?</div></pre></td></tr></table></figure>
+<h5 id="安装admin证书和私钥"><a href="#安装admin证书和私钥" class="headerlink" title="安装admin证书和私钥"></a>安装admin证书和私钥</h5><p>将前面创建的admin证书和私钥拷贝到/etc/kubernetes/ssl目录下</p>
+<h5 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ wget https://dl.k8s.io/v1.6.6/kubernetes-client-linux-amd64.tar.gz</div><div class="line">$ tar -xzvf kubernetes-client-linux-amd64.tar.gz</div><div class="line">$ cp kubernetes/client/bin/kube* /usr/bin/</div><div class="line">$ chmod a+x /usr/bin/kube*</div></pre></td></tr></table></figure>
+<h5 id="创建kubectl-kubeconfig文件"><a href="#创建kubectl-kubeconfig文件" class="headerlink" title="创建kubectl kubeconfig文件"></a>创建kubectl kubeconfig文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">#设置集群参数</div><div class="line">kubectl config set-cluster kubernetes \</div><div class="line">  --certificate-authority=/etc/kubernetes/ssl/ca.pem \</div><div class="line">  --embed-certs=true \</div><div class="line">  --server=&quot;https://172.16.110.108:6443&quot;</div><div class="line">#设置客户端认证参数</div><div class="line">kubectl config set-credentials admin \</div><div class="line">  --client-certificate=/etc/kubernetes/ssl/admin.pem \</div><div class="line">  --embed-certs=true \</div><div class="line">  --client-key=/etc/kubernetes/ssl/admin-key.pem</div><div class="line">#设置上下文参数</div><div class="line">kubectl config set-context kubernetes \</div><div class="line">  --cluster=kubernetes \</div><div class="line">  --user=admin</div><div class="line">#设置默认上下文</div><div class="line">kubectl config use-context kubernetes</div></pre></td></tr></table></figure>
+<h4 id="部署k8s-master节点"><a href="#部署k8s-master节点" class="headerlink" title="部署k8s master节点"></a>部署k8s master节点</h4><p>master组件包括kube-apiserver、kube-scheduler、kube-controller-manager,这三个组件统一部署在108设备上</p>
+<h5 id="下载安装-1"><a href="#下载安装-1" class="headerlink" title="下载安装"></a>下载安装</h5><p>我这里采用二进制文件安装，翻墙到<a href="https://dl.k8s.io/v1.6.6/kubernetes-server-linux-amd64.tar.gz下载，解压文件，将二进制文件拷贝到设备的/usr/bin下" target="_blank" rel="external">https://dl.k8s.io/v1.6.6/kubernetes-server-linux-amd64.tar.gz下载，解压文件，将二进制文件拷贝到设备的/usr/bin下</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ tar -xzvf kubernetes-server-linux-amd64.tar.gz</div><div class="line">$ cp -r kubernetes/server/bin/&#123;kube-apiserver,kube-scheduler,kube-controller-manager&#125; /usr/bin/</div></pre></td></tr></table></figure>
+<h5 id="kube-apiserver"><a href="#kube-apiserver" class="headerlink" title="kube-apiserver"></a>kube-apiserver</h5><h6 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h6><ol>
+<li><p>创建客户端token文件</p>
+<p>k8s支持通过kube-apiserver为客户端生成TLS证书的TLS Bootstrapping功能，kubelet <strong>首次启动</strong>时向 kube-apiserver 发送 TLS Bootstrapping 请求，kube-apiserver 验证 kubelet 请求中的 token 是否与它配置的 token.csv 一致，如果一致则自动为 kubelet生成证书和秘钥。</p>
+<p>开始创建token文件，token可以自行生成写入文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ vim token.csv</div><div class="line">81f7y4ba8b7ca874fcff68bf5ct41a7c,kubelet-bootstrap,10001,&quot;system:kubelet-bootstrap&quot;</div></pre></td></tr></table></figure>
+<p>将token文件移动到目标目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ mv token.csv /etc/kubernetes/</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>创建kube-apiserver的systemd unit文件</p>
+<p>文件创建在/etc/systemd/system/kube-apiserver.service，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[Unit]</div><div class="line">  Description=Kubernetes API Service</div><div class="line">  Documentation=https://github.com/GoogleCloudPlatform/kubernetes</div><div class="line">  After=network.target</div><div class="line">  After=etcd.service</div><div class="line">[Service]</div><div class="line">  EnvironmentFile=-/etc/kubernetes/config</div><div class="line">  EnvironmentFile=-/etc/kubernetes/apiserver</div><div class="line">  ExecStart=/usr/bin/kube-apiserver \</div><div class="line">          $KUBE_LOGTOSTDERR \</div><div class="line">          $KUBE_LOG_LEVEL \</div><div class="line">          $KUBE_ETCD_SERVERS \</div><div class="line">          $KUBE_API_ADDRESS \</div><div class="line">          $KUBE_API_PORT \</div><div class="line">          $KUBELET_PORT \</div><div class="line">          $KUBE_ALLOW_PRIV \</div><div class="line">          $KUBE_SERVICE_ADDRESSES \</div><div class="line">          $KUBE_ADMISSION_CONTROL \</div><div class="line">          $KUBE_API_ARGS</div><div class="line">  Restart=on-failure</div><div class="line">  Type=notify</div><div class="line">  LimitNOFILE=65536</div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div></pre></td></tr></table></figure>
+</li>
+<li><p>创建config文件</p>
+<p>config在前面创建的/etc/kubernetes目录下，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;</div><div class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;</div><div class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=true&quot;</div><div class="line">KUBE_MASTER=&quot;--master=http://172.16.110.108:8080&quot;</div></pre></td></tr></table></figure>
+<p>这个文件kube-controller-manager和kube-scheduler会同样用到</p>
+</li>
+<li><p>创建apiserver文件</p>
+<p>apiserver配置文件同样在/etc/kubernetes目录下，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">KUBE_API_ADDRESS=&quot;--advertise-address=172.16.110.108 --bind-address=172.16.110.108 --insecure-bind-address=172.16.110.108&quot;</div><div class="line">KUBE_ETCD_SERVERS=&quot;--etcd-servers=https://172.16.110.108:2379,172.16.110.105,172.16.110.107&quot;</div><div class="line">KUBE_SERVICE_ADDRESSES=&quot;--service-cluster-ip-range=10.254.0.0/16&quot;</div><div class="line">KUBE_ADMISSION_CONTROL=&quot;--admission-control=ServiceAccount,NamespaceLifecycle,NamespaceExists,LimitRanger,ResourceQuota&quot;</div><div class="line">KUBE_API_ARGS=&quot;--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s.io/v1beta1 --kubelet-https=true --experimental-bootstrap-token-auth --token-auth-file=/etc/kubernetes/token.csv --service-node-port-range=30000-32767 --tls-cert-file=/etc/kubernetes/ssl/kubernetes.pem --tls-private-key-file=/etc/kubernetes/ssl/kubernetes-key.pem --client-ca-file=/etc/kubernetes/ssl/ca.pem --service-account-key-file=/etc/kubernetes/ssl/ca-key.pem --etcd-cafile=/etc/kubernetes/ssl/ca.pem --etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem --etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem --enable-swagger-ui=true --apiserver-count=3 --audit-log-maxage=30 --audit-log-maxbackup=3 --audit-log-maxsize=100 --audit-log-path=/var/lib/audit.log --event-ttl=1h&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>--authorization-mode=RBAC</code> 指定在安全端口使用 RBAC 授权模式，拒绝未通过授权的请求；</li>
+<li>kube-scheduler、kube-controller-manager 一般和 kube-apiserver 部署在同一台机器上，它们使用<strong>非安全端口</strong>和 kube-apiserver通信;</li>
+<li>kubelet、kube-proxy、kubectl 部署在其它 Node 节点上，如果通过<strong>安全端口</strong>访问 kube-apiserver，则必须先通过 TLS 证书认证，再通过 RBAC 授权；</li>
+<li>kube-proxy、kubectl 通过在使用的证书里指定相关的 User、Group 来达到通过 RBAC 授权的目的；</li>
+<li>如果使用了 kubelet TLS Boostrap 机制，则不能再指定 <code>--kubelet-certificate-authority</code>、<code>--kubelet-client-certificate</code> 和 <code>--kubelet-client-key</code> 选项，否则后续 kube-apiserver 校验 kubelet 证书时出现 ”x509: certificate signed by unknown authority“ 错误；</li>
+<li><code>--admission-control</code> 值必须包含 <code>ServiceAccount</code>；</li>
+<li><code>--bind-address</code> 不能为 <code>127.0.0.1</code>；</li>
+<li><code>runtime-config</code>配置为<code>rbac.authorization.k8s.io/v1beta1</code>，表示运行时的apiVersion；</li>
+<li><code>--service-cluster-ip-range</code> 指定 Service Cluster IP 地址段，该地址段不能路由可达；</li>
+<li>缺省情况下 kubernetes 对象保存在 etcd <code>/registry</code> 路径下，可以通过 <code>--etcd-prefix</code>参数进行调整；</li>
+</ul>
+<h6 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ sudo systemctl daemon-reload</div><div class="line">$ sudo systemctl enable kube-apiserver</div><div class="line">$ sudo systemctl start kube-apiserver</div><div class="line">$ sudo systemctl status kube-apiserver</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h5 id="kube-controller-manager"><a href="#kube-controller-manager" class="headerlink" title="kube-controller-manager"></a>kube-controller-manager</h5><h6 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h6><ol>
+<li><p>创建kube-controller-manager的systemd unit文件</p>
+<p>文件为/etc/systemd/system/kube-controller-manager.service，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">[Unit]</div><div class="line">Description=Kubernetes Controller Manager</div><div class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</div><div class="line"></div><div class="line">[Service]</div><div class="line">EnvironmentFile=-/etc/kubernetes/config</div><div class="line">EnvironmentFile=-/etc/kubernetes/controller-manager</div><div class="line">ExecStart=/usr/bin/kube-controller-manager \</div><div class="line">           $KUBE_LOGTOSTDERR \</div><div class="line">           $KUBE_LOG_LEVEL \</div><div class="line">           $KUBE_MASTER \</div><div class="line">           $KUBE_CONTROLLER_MANAGER_ARGS</div><div class="line">Restart=on-failure</div><div class="line">RestartSec=5</div><div class="line"></div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div></pre></td></tr></table></figure>
+</li>
+<li><p>创建controller-manager</p>
+<p>文件同样放在/etc/kubernetes/目录下，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">KUBE_CONTROLLER_MANAGER_ARGS=&quot;--address=127.0.0.1 --service-cluster-ip-range=10.254.0.0/16 --cluster-name=kubernetes --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem  --service-account-private-key-file=/etc/kubernetes/ssl/ca-key.pem --root-ca-file=/etc/kubernetes/ssl/ca.pem --leader-elect=true&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>--service-cluster-ip-range</code> 参数指定 Cluster 中 Service 的CIDR范围，该网络在各 Node 间必须路由不可达，必须和 kube-apiserver 中的参数一致；</li>
+<li><code>--cluster-signing-*</code> 指定的证书和私钥文件用来签名为 TLS BootStrap 创建的证书和私钥；</li>
+<li><code>--root-ca-file</code> 用来对 kube-apiserver 证书进行校验，<strong>指定该参数后，才会在Pod 容器的 ServiceAccount 中放置该 CA 证书文件</strong>；</li>
+<li><code>--address</code> 值必须为 <code>127.0.0.1</code>，因为当前 kube-apiserver 期望 scheduler 和 controller-manager 在同一台机器</li>
+</ul>
+</li>
+</ol>
+<h6 id="启动服务-1"><a href="#启动服务-1" class="headerlink" title="启动服务"></a>启动服务</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ sudo systemctl daemon-reload</div><div class="line">$ sudo systemctl enable kube-controller-manager</div><div class="line">$ sudo systemctl start kube-controller-manager</div><div class="line">$ sudo systemctl status kube-controller-manager</div></pre></td></tr></table></figure>
+<h5 id="kube-scheduler"><a href="#kube-scheduler" class="headerlink" title="kube-scheduler"></a>kube-scheduler</h5><h6 id="配置-2"><a href="#配置-2" class="headerlink" title="配置"></a>配置</h6><ol>
+<li><p>创建kube-scheduler的systemd unit文件</p>
+<p>文件为/etc/systemd/system/kube-scheduler.service,内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[Unit]</div><div class="line">   Description=Kubernetes Scheduler Plugin</div><div class="line">   Documentation=https://github.com/GoogleCloudPlatform/kubernetes</div><div class="line">[Service]</div><div class="line">   EnvironmentFile=-/etc/kubernetes/config</div><div class="line">   EnvironmentFile=-/etc/kubernetes/scheduler</div><div class="line">   ExecStart=/usr/bin/kube-scheduler \</div><div class="line">               $KUBE_LOGTOSTDERR \</div><div class="line">               $KUBE_LOG_LEVEL \</div><div class="line">               $KUBE_MASTER \</div><div class="line">               $KUBE_SCHEDULER_ARGS</div><div class="line">   Restart=on-failure</div><div class="line">   LimitNOFILE=65536</div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>创建scheduler文件</p>
+<p>文件同样是在/etc/kubernetes目录下，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">KUBE_SCHEDULER_ARGS=&quot;--leader-elect=true --address=127.0.0.1&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>--address</code> 值同样必须为 <code>127.0.0.1</code>，因为当前 kube-apiserver 期望 scheduler 和 controller-manager 在同一台机器；</li>
+</ul>
+</li>
+</ol>
+<h6 id="启动服务-2"><a href="#启动服务-2" class="headerlink" title="启动服务"></a>启动服务</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ systemctl daemon-reload</div><div class="line">$ systemctl enable kube-scheduler</div><div class="line">$ systemctl start kube-scheduler</div><div class="line">$ systemctl status kube-scheduler</div></pre></td></tr></table></figure>
+<h5 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ kubectl get componentstatuses</div><div class="line">NAME                 STATUS    MESSAGE              ERROR</div><div class="line">scheduler            Healthy   ok</div><div class="line">controller-manager   Healthy   ok</div><div class="line">etcd-0               Healthy   &#123;&quot;health&quot;: &quot;true&quot;&#125;</div><div class="line">etcd-2               Healthy   &#123;&quot;health&quot;: &quot;true&quot;&#125;</div><div class="line">etcd-1               Healthy   &#123;&quot;health&quot;: &quot;true&quot;&#125;</div></pre></td></tr></table></figure>
+<p>master节点部署完成，下一步开始部署node节点。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/28/k8s1-6-6集群部署-开启TLS安全认证（一）/" rel="next" title="k8s1.6.6集群部署(开启TLS安全认证)（一）">
+                <i class="fa fa-chevron-left"></i> k8s1.6.6集群部署(开启TLS安全认证)（一）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tony" />
+          <p class="site-author-name" itemprop="name">tony</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Flannel安装部署"><span class="nav-number">1.</span> <span class="nav-text">Flannel安装部署</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装flannel"><span class="nav-number">1.1.</span> <span class="nav-text">安装flannel</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置flannel"><span class="nav-number">1.2.</span> <span class="nav-text">配置flannel</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#向etcd集群写入网段信息"><span class="nav-number">1.3.</span> <span class="nav-text">向etcd集群写入网段信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动flannel服务"><span class="nav-number">1.4.</span> <span class="nav-text">启动flannel服务</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装kubectl"><span class="nav-number">2.</span> <span class="nav-text">安装kubectl</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装admin证书和私钥"><span class="nav-number">2.1.</span> <span class="nav-text">安装admin证书和私钥</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载安装"><span class="nav-number">2.2.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建kubectl-kubeconfig文件"><span class="nav-number">2.3.</span> <span class="nav-text">创建kubectl kubeconfig文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署k8s-master节点"><span class="nav-number">3.</span> <span class="nav-text">部署k8s master节点</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#下载安装-1"><span class="nav-number">3.1.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#kube-apiserver"><span class="nav-number">3.2.</span> <span class="nav-text">kube-apiserver</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#配置"><span class="nav-number">3.2.1.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#启动服务"><span class="nav-number">3.2.2.</span> <span class="nav-text">启动服务</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#kube-controller-manager"><span class="nav-number">3.3.</span> <span class="nav-text">kube-controller-manager</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#配置-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#启动服务-1"><span class="nav-number">3.3.2.</span> <span class="nav-text">启动服务</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#kube-scheduler"><span class="nav-number">3.4.</span> <span class="nav-text">kube-scheduler</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#配置-2"><span class="nav-number">3.4.1.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#启动服务-2"><span class="nav-number">3.4.2.</span> <span class="nav-text">启动服务</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#验证"><span class="nav-number">3.5.</span> <span class="nav-text">验证</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tony</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
