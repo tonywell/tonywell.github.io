@@ -255,6 +255,109 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/26/Java8-Stream实践（一）/" itemprop="url">
+                  Java8 Stream实践（一）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-26T22:54:35+08:00" content="2016-09-26">
+              2016-09-26
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。</p>
+<h3 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h3><p>通过Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell)))把结果收集到一个Map，并将所有Map收集到一个List中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ResultScanner rs = table.getScanner(scan);</div><div class="line">List&lt;Map&lt;String, String&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">rs.forEach((r) -&gt; &#123;</div><div class="line">      Map&lt;String, String&gt; map = r.listCells().stream().collect(Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell))));</div><div class="line">      list.add(map);</div><div class="line">     &#125;);</div></pre></td></tr></table></figure>
+<p>1）通过forEach方法接收一个 Lambda 表达式，其实就是遍历ResultScanner结果</p>
+<p>2）r.listCells将Result转成list</p>
+<p>3）调用stream将List转成流</p>
+<p>3）Collectors.toMap把结果收集到Map</p>
+<p>4）collect将结果收集到List</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/09/26/Java8-Stream实践（一）/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/03/24/2016-03-24-Hadoop2-7完全分布式模式安装/" itemprop="url">
                   Hadoop2.7完全分布式模式安装
                 </a>
@@ -1442,167 +1545,6 @@ repositories{
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/06/04/2014-06-04-minashi-xian-jian-dan-de-tcp-server/" itemprop="url">
-                  Mina实现简单的TCP Server
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-06-04T21:30:57+08:00" content="2014-06-04">
-              2014-06-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/mina/" itemprop="url" rel="index">
-                    <span itemprop="name">mina</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/mina/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/mina/java/Nio/" itemprop="url" rel="index">
-                    <span itemprop="name">Nio</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="编写mina时间服务器"><a href="#编写mina时间服务器" class="headerlink" title="编写mina时间服务器"></a>编写mina时间服务器</h3><p>刚好这段时间也想把gradle学习一下，就用gradle构建项目了。<br>首先创建工作目录；mkdir -p mina/minaTimeServer</p>
-<p>进入工作目录创建一个gradle.build如下：  </p>
-<pre><code>apply plugin: &apos;java&apos;  //指定项目为java项目,项目编译时生成项目的jar包
-apply plugin: &apos;application&apos;  //指定项目为application
-/*createJavaProject初始化目录布局*/
-task createJavaProject &lt;&lt;{
-  sourceSets*.java.srcDirs*.each {it.mkdirs()}
-  sourceSets*.resources.srcDirs*.each{it.mkdirs()}
-}
-/*依赖maven的中央仓库*/
-repositories{
-   mavenCentral();
-}
-</code></pre><p>在工作目录下执行gradle createJavaProject来初始化目录</p>
-<p>开始在src/main/java下创建一个叫MinaTimeServer.java的文件（当然java目录下还需要根据包名创建目录，如果是用IDE就不用关系，如果是手工的话，就要手工创建包目录了），初始代码如下：  </p>
-<pre><code>public class MinaTimeServer{
-
- public static void main(String[] args){
-    // code will go here next
- }
-
-}
-</code></pre>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/06/04/2014-06-04-minashi-xian-jian-dan-de-tcp-server/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1648,7 +1590,7 @@ repositories{
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

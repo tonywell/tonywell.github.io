@@ -1,0 +1,670 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tony" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前面我们已经搭建部署好了docker私服、etcd集群，flannel、master，接下来开始部署k8s node节点
+部署k8s node节点node节点包括docker、kubelet、kube-proxy组件，docker安装比较简单，这里就不赘述了，下面主要是kubelet和proxy组件的安装配置。
+node节点规划为108、105、107三个节点
+设置docker0网桥地址12$ s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s1.6.6集群部署(开启TLS安全认证)（三）">
+<meta property="og:url" content="http://tonywell.github.io/2017/06/30/k8s1-6-6集群部署-开启TLS安全认证-（三）/index.html">
+<meta property="og:site_name" content="tony's blog">
+<meta property="og:description" content="前面我们已经搭建部署好了docker私服、etcd集群，flannel、master，接下来开始部署k8s node节点
+部署k8s node节点node节点包括docker、kubelet、kube-proxy组件，docker安装比较简单，这里就不赘述了，下面主要是kubelet和proxy组件的安装配置。
+node节点规划为108、105、107三个节点
+设置docker0网桥地址12$ s">
+<meta property="og:updated_time" content="2017-06-30T10:49:27.906Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="k8s1.6.6集群部署(开启TLS安全认证)（三）">
+<meta name="twitter:description" content="前面我们已经搭建部署好了docker私服、etcd集群，flannel、master，接下来开始部署k8s node节点
+部署k8s node节点node节点包括docker、kubelet、kube-proxy组件，docker安装比较简单，这里就不赘述了，下面主要是kubelet和proxy组件的安装配置。
+node节点规划为108、105、107三个节点
+设置docker0网桥地址12$ s">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://tonywell.github.io/2017/06/30/k8s1-6-6集群部署-开启TLS安全认证-（三）/"/>
+
+  <title> k8s1.6.6集群部署(开启TLS安全认证)（三） | tony's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">tony's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                k8s1.6.6集群部署(开启TLS安全认证)（三）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-30T13:15:12+08:00" content="2017-06-30">
+              2017-06-30
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前面我们已经搭建部署好了docker私服、etcd集群，flannel、master，接下来开始部署k8s node节点</p>
+<h4 id="部署k8s-node节点"><a href="#部署k8s-node节点" class="headerlink" title="部署k8s node节点"></a>部署k8s node节点</h4><p>node节点包括docker、kubelet、kube-proxy组件，docker安装比较简单，这里就不赘述了，下面主要是kubelet和proxy组件的安装配置。</p>
+<p>node节点规划为108、105、107三个节点</p>
+<h5 id="设置docker0网桥地址"><a href="#设置docker0网桥地址" class="headerlink" title="设置docker0网桥地址"></a>设置docker0网桥地址</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ source /run/flannel/subnet.env</div><div class="line">$ ifconfig docker0 $FLANNEL_SUBNET</div></pre></td></tr></table></figure>
+<p>这样docker0和flannel处于同一个子网。</p>
+<p>因为我是通过yum安装的，docker的systemd unit文件中没有加载flannel，所以就没有被flannel托管，造成docker0和flannel0都是172.17网段，但是子网的还是不一致</p>
+<p>修改/usr/systemd/system/docker.service文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">[Unit]</div><div class="line">Description=Docker Application Container Engine</div><div class="line">Documentation=https://docs.docker.com</div><div class="line">After=network.target firewalld.service</div><div class="line"></div><div class="line">[Service]</div><div class="line">Type=notify</div><div class="line"># the default is not to use systemd for cgroups because the delegate issues still</div><div class="line"># exists and systemd currently does not support the cgroup feature set required</div><div class="line"># for containers run by docker</div><div class="line">#ExecStart=/usr/bin/dockerd</div><div class="line">#ExecStart=/usr/bin/dockerd --registry-mirror=https://28b8dhu0.mirror.aliyuncs.com</div><div class="line">EnvironmentFile=-/etc/sysconfig/flanneld</div><div class="line">EnvironmentFile=-/run/flannel/subnet.env</div><div class="line">ExecStart=/usr/bin/docker daemon --bip=$&#123;FLANNEL_SUBNET&#125; --registry-mirror=https://28b8dhu0.mirror.aliyuncs.com</div><div class="line">ExecReload=/bin/kill -s HUP $MAINPID</div><div class="line"># Having non-zero Limit*s causes performance problems due to accounting overhead</div><div class="line"># in the kernel. We recommend using cgroups to do container-local accounting.</div><div class="line">LimitNOFILE=infinity</div><div class="line">LimitNPROC=infinity</div><div class="line">LimitCORE=infinity</div><div class="line"># Uncomment TasksMax if your systemd version supports it.</div><div class="line"># Only systemd 226 and above support this version.</div><div class="line">#TasksMax=infinity</div><div class="line">TimeoutStartSec=0</div><div class="line"># set delegate yes so that systemd does not reset the cgroups of docker containers</div><div class="line">Delegate=yes</div><div class="line"># kill only the docker process, not all processes in the cgroup</div><div class="line">KillMode=process</div><div class="line"></div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div></pre></td></tr></table></figure>
+<p>在执行前增加配置文件</p>
+<p>EnvironmentFile=-/etc/sysconfig/flanneld</p>
+<p>EnvironmentFile=-/run/flannel/subnet.env</p>
+<p>执行命令增加参数 –bip=${FLANNEL_SUBNET}</p>
+<p>重启docker问题得到解决。</p>
+<h5 id="安装证书和私钥"><a href="#安装证书和私钥" class="headerlink" title="安装证书和私钥"></a>安装证书和私钥</h5><p>将之前生成admin-key.pem、admin.pem、ca-key.pem、ca.pem、kube-proxy-key.pem、kube-proxy.pem、kubernetes-key.pem、kubernetes.pem等证书拷贝到108、105、107三台设备的/etc/kubernetes/ssl目录下，将token.csv文件拷贝到/etc/kubernetes目录下。</p>
+<h5 id="安装配置flanneld"><a href="#安装配置flanneld" class="headerlink" title="安装配置flanneld"></a>安装配置flanneld</h5><p>参考前一篇文章中master几点的配置</p>
+<h5 id="安装配置kubelet"><a href="#安装配置kubelet" class="headerlink" title="安装配置kubelet"></a>安装配置kubelet</h5><p>kubelet 启动时向 kube-apiserver 发送 TLS bootstrapping 请求，需要先将 bootstrap token 文件中的 kubelet-bootstrap 用户赋予 system:node-bootstrapper 角色，然后 kubelet 才有权限创建认证请求(certificatesigningrequests)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubectl create clusterrolebinding kubelet-bootstrap --clusterrole=system:node-bootstrapper --user=kubelet-bootstrap</div></pre></td></tr></table></figure>
+<ul>
+<li><code>--user=kubelet-bootstrap</code> 是文件 <code>/etc/kubernetes/token.csv</code> 中指定的用户名，同时也写入了文件 <code>/etc/kubernetes/bootstrap.kubeconfig</code>；</li>
+</ul>
+<h6 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h6><p>之前部署master节点时，下载的kubernetes-server-linux-amd64的kube-proxy和kubelet拷贝到三个节点的/usr/bin目录下</p>
+<h6 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h6><ol>
+<li><p>创建bootstrapping kubeconfig文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">#设置集群参数</div><div class="line">$ kubectl config set-cluster kubernetes \</div><div class="line">  --certificate-authority=/etc/kubernetes/ssl/ca.pem \</div><div class="line">  --embed-certs=true \</div><div class="line">  --server=&quot;https://172.16.110.108:6443&quot; \</div><div class="line">  --kubeconfig=bootstrap.kubeconfig</div><div class="line">#设置客户端认证参数</div><div class="line">$ kubectl config set-credentials kubelet-bootstrap \</div><div class="line">     --token=81f7y4ba8b7ca874fcff68bf5ct41a7c \</div><div class="line">     --kubeconfig=bootstrap.kubeconfig</div><div class="line">#设置上下文参数</div><div class="line">$ kubectl config set-context default \</div><div class="line">     --cluster=kubernetes \</div><div class="line">     --user=kubelet-bootstrap \</div><div class="line">     --kubeconfig=bootstrap.kubeconfig</div><div class="line">#设置默认上下文</div><div class="line">$ kubectl config use-context default --kubeconfig=bootstrap.kubeconfig</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>创建kubelet的systemd unit文件</p>
+<p>文件为/etc/systemd/system/kubelet.service，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">[Unit]</div><div class="line">   Description=Kubernetes Kubelet Server</div><div class="line">   After=docker.service</div><div class="line">   Requires=docker.service</div><div class="line">[Service]</div><div class="line">   WorkingDirectory=/var/lib/kubelet</div><div class="line">   EnvironmentFile=-/etc/kubernetes/config</div><div class="line">   EnvironmentFile=-/etc/kubernetes/kubelet</div><div class="line">   ExecStart=/usr/bin/kubelet \</div><div class="line">               $KUBE_LOGTOSTDERR \</div><div class="line">               $KUBE_LOG_LEVEL \</div><div class="line">               $KUBELET_API_SERVER \</div><div class="line">               $KUBELET_ADDRESS \</div><div class="line">               $KUBELET_PORT \</div><div class="line">               $KUBELET_HOSTNAME \</div><div class="line">               $KUBE_ALLOW_PRIV \</div><div class="line">               $KUBELET_POD_INFRA_CONTAINER \</div><div class="line">               $KUBELET_ARGS</div><div class="line">Restart=on-failure </div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div></pre></td></tr></table></figure>
+<p>创建工作目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ mkdir -p /var/lib/kubelet</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>创建kubelet配置文件</p>
+<p>/etc/kubernetes/kubelet</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">KUBELET_ADDRESS=&quot;--address=172.16.110.108&quot;</div><div class="line">KUBELET_HOSTNAME=&quot;--hostname-override=172.16.110.108&quot;</div><div class="line">KUBELET_API_SERVER=&quot;--api-servers=http://172.16.110.108:8080&quot;</div><div class="line">KUBELET_POD_INFRA_CONTAINER=&quot;--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest&quot;</div><div class="line">KUBELET_ARGS=&quot;--cgroup-driver=systemd --cluster_dns=10.254.0.2 --experimental-bootstrap-kubeconfig=/etc/kubernetes/bootstrap.kubeconfig --kubeconfig=/etc/kubernetes/kubelet.kubeconfig --require-kubeconfig --cert-dir=/etc/kubernetes/ssl --cluster_domain=cluster.local. --hairpin-mode promiscuous-bridge --serialize-image-pulls=false&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>--address</code> 不能设置为 <code>127.0.0.1</code>，否则后续 Pods 访问 kubelet 的 API 接口时会失败，因为 Pods 访问的 <code>127.0.0.1</code>指向自己而不是 kubelet，然后不同的节点根据实际IP来配置；</li>
+<li>如果设置了 <code>--hostname-override</code> 选项，则 <code>kube-proxy</code> 也需要设置该选项，否则会出现找不到 Node 的情况；</li>
+<li><code>--experimental-bootstrap-kubeconfig</code> 指向 bootstrap kubeconfig 文件，kubelet 使用该文件中的用户名和 token 向 kube-apiserver 发送 TLS Bootstrapping 请求；</li>
+<li>管理员通过了 CSR 请求后，kubelet 自动在 <code>--cert-dir</code> 目录创建证书和私钥文件(<code>kubelet-client.crt</code> 和 <code>kubelet-client.key</code>)，然后写入 <code>--kubeconfig</code> 文件(自动创建 <code>--kubeconfig</code> 指定的文件)；</li>
+<li>建议在 <code>--kubeconfig</code> 配置文件中指定 <code>kube-apiserver</code> 地址，如果未指定 <code>--api-servers</code> 选项，则必须指定 <code>--require-kubeconfig</code> 选项后才从配置文件中读取 kue-apiserver 的地址，否则 kubelet 启动后将找不到 kube-apiserver (日志中提示未找到 API Server），<code>kubectl get nodes</code> 不会返回对应的 Node 信息;</li>
+<li><code>--cluster_dns</code> 指定 kubedns 的 Service IP(可以先分配，后续创建 kubedns 服务时指定该 IP)，<code>--cluster_domain</code> 指定域名后缀，这两个参数同时指定后才会生效；</li>
+</ul>
+</li>
+</ol>
+<h6 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ sudo systemctl daemon-reload</div><div class="line">$ sudo systemctl enable kubelet</div><div class="line">$ sudo systemctl start kubelet</div><div class="line">$ sudo systemctl status kubelet</div></pre></td></tr></table></figure>
+<p>如果启动出现下面错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">failed to create kubelet: misconfiguration: kubelet cgroup driver: &quot;systemd&quot; is different from docker cgroup driver: &quot;systemd&quot; is different from docker cgroup driver: &quot;cgroupfs&quot;</div></pre></td></tr></table></figure>
+<p>要么修改kubelet的配置要么修改docker的配置，我这里修改kubelet的配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">KUBELET_ARGS=&quot;--cgroup-driver=cgroupfs --cluster_dns=10.254.0.2 --experimental-bootstrap-kubeconfig=/etc/kubernetes/bootstrap.kubeconfig --kubeconfig=/etc/kubernetes/kubelet.kubeconfig --require-kubeconfig --cert-dir=/etc/kubernetes/ssl --cluster_domain=cluster.local. --hairpin-mode promiscuous-bridge --serialize-image-pulls=false&quot;</div></pre></td></tr></table></figure>
+<h6 id="通过TLS证书请求"><a href="#通过TLS证书请求" class="headerlink" title="通过TLS证书请求"></a>通过TLS证书请求</h6><p>kubelet 首次启动时向 kube-apiserver 发送证书签名请求，必须通过后 kubernetes 系统才会将该 Node 加入到集群。</p>
+<p>查看未授权的CSR请求：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ kubectl get csr</div><div class="line">NAME        AGE       REQUESTOR           CONDITION</div><div class="line">csr-jtjd4   26m       kubelet-bootstrap   Approved,Issued</div><div class="line">csr-l7mz6   28s       kubelet-bootstrap   Pending</div></pre></td></tr></table></figure>
+<p>确认通过CRS请求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ kubectl certificate approve csr-l7mz6</div><div class="line">certificatesigningrequest &quot;csr-l7mz6&quot; approved</div><div class="line">$ kubectl get nodes</div><div class="line">NAME             STATUS    AGE       VERSION</div><div class="line">172.16.110.105   Ready     7s        v1.6.6</div><div class="line">172.16.110.108   Ready     6m        v1.6.6</div></pre></td></tr></table></figure>
+<h5 id="安装配置kube-proxy"><a href="#安装配置kube-proxy" class="headerlink" title="安装配置kube-proxy"></a>安装配置kube-proxy</h5><p>上一步，我已经把kube-proxy的二进制文件安装到三个节点的/usr/bin目录下，这里只需要配置启动即可。</p>
+<h6 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h6><ol>
+<li><p>创建kube-proxy kubeconfig文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"># 设置集群参数</div><div class="line">$ kubectl config set-cluster kubernetes \</div><div class="line">  --certificate-authority=/etc/kubernetes/ssl/ca.pem \</div><div class="line">  --embed-certs=true \</div><div class="line">  --server=&quot;https://172.16.110.108:6443&quot; \</div><div class="line">  --kubeconfig=kube-proxy.kubeconfig</div><div class="line"># 设置客户端认证参数</div><div class="line">$ kubectl config set-credentials kube-proxy \</div><div class="line">  --client-certificate=/etc/kubernetes/ssl/kube-proxy.pem \</div><div class="line">  --client-key=/etc/kubernetes/ssl/kube-proxy-key.pem \</div><div class="line">  --embed-certs=true \</div><div class="line">  --kubeconfig=kube-proxy.kubeconfig</div><div class="line"># 设置上下文参数</div><div class="line">$ kubectl config set-context default \</div><div class="line">  --cluster=kubernetes \</div><div class="line">  --user=kube-proxy \</div><div class="line">  --kubeconfig=kube-proxy.kubeconfig</div><div class="line"># 设置默认上下文</div><div class="line">$ kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig</div></pre></td></tr></table></figure>
+<ul>
+<li>设置集群参数和客户端认证参数时 <code>--embed-certs</code> 都为 <code>true</code>，这会将 <code>certificate-authority</code>、<code>client-certificate</code>和 <code>client-key</code> 指向的证书文件内容写入到生成的 <code>kube-proxy.kubeconfig</code> 文件中；</li>
+<li><code>kube-proxy.pem</code> 证书中 CN 为 <code>system:kube-proxy</code>，<code>kube-apiserver</code> 预定义的 RoleBinding <code>cluster-admin</code> 将User <code>system:kube-proxy</code> 与 Role <code>system:node-proxier</code> 绑定，该 Role 授予了调用 <code>kube-apiserver</code> Proxy 相关 API 的权限；</li>
+</ul>
+</li>
+<li><p>创建kube-proxy文件</p>
+<p>目录/etc/kubernetes，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">KUBE_PROXY_ARGS=&quot;--bind-address=172.16.110.108 --hostname-override=172.16.110.108 --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig --cluster-cidr=10.254.0.0/16&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>--hostname-override</code> 参数值必须与 kubelet 的值一致，否则 kube-proxy 启动后会找不到该 Node，从而不会创建任何 iptables 规则；</li>
+<li><code>--cluster-cidr</code> 必须与 kube-apiserver 的 <code>--service-cluster-ip-range</code> 选项值一致；</li>
+<li>kube-proxy 根据 <code>--cluster-cidr</code> 判断集群内部和外部流量，指定 <code>--cluster-cidr</code> 或 <code>--masquerade-all</code> 选项后 kube-proxy 才会对访问 Service IP 的请求做 SNAT；</li>
+<li><code>--kubeconfig</code> 指定的配置文件嵌入了 kube-apiserver 的地址、用户名、证书、秘钥等请求和认证信息；</li>
+<li>预定义的 RoleBinding <code>cluster-admin</code> 将User <code>system:kube-proxy</code> 与 Role <code>system:node-proxier</code> 绑定，该 Role 授予了调用 <code>kube-apiserver</code> Proxy 相关 API 的权限；</li>
+</ul>
+</li>
+<li><p>创建kube-proxy的systemd unit文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[Unit]</div><div class="line">Description=Kubernetes Kube-Proxy Server</div><div class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</div><div class="line">After=network.target</div><div class="line">[Service]</div><div class="line">EnvironmentFile=-/etc/kubernetes/config</div><div class="line">EnvironmentFile=-/etc/kubernetes/proxy</div><div class="line">ExecStart=/usr/bin/kube-proxy \</div><div class="line">           $KUBE_LOGTOSTDERR \</div><div class="line">           $KUBE_LOG_LEVEL \</div><div class="line">           $KUBE_MASTER \</div><div class="line">           $KUBE_PROXY_ARGS</div><div class="line">Restart=on-failure</div><div class="line">LimitNOFILE=65536</div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>启动服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ sudo systemctl daemon-reload</div><div class="line">$ sudo systemctl enable kube-proxy</div><div class="line">$ sudo systemctl start kube-proxy</div><div class="line">$ sudo systemctl status kube-proxy</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ol>
+<p>至此，k8s集群安装部署完毕，后面会继续安装dns和dashboard插件。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/29/k8s1-6-6集群部署-开启TLS安全认证-（二）/" rel="next" title="k8s1.6.6集群部署(开启TLS安全认证)（二）">
+                <i class="fa fa-chevron-left"></i> k8s1.6.6集群部署(开启TLS安全认证)（二）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tony" />
+          <p class="site-author-name" itemprop="name">tony</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#部署k8s-node节点"><span class="nav-number">1.</span> <span class="nav-text">部署k8s node节点</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#设置docker0网桥地址"><span class="nav-number">1.1.</span> <span class="nav-text">设置docker0网桥地址</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装证书和私钥"><span class="nav-number">1.2.</span> <span class="nav-text">安装证书和私钥</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装配置flanneld"><span class="nav-number">1.3.</span> <span class="nav-text">安装配置flanneld</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装配置kubelet"><span class="nav-number">1.4.</span> <span class="nav-text">安装配置kubelet</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#安装"><span class="nav-number">1.4.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#配置"><span class="nav-number">1.4.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#启动服务"><span class="nav-number">1.4.3.</span> <span class="nav-text">启动服务</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#通过TLS证书请求"><span class="nav-number">1.4.4.</span> <span class="nav-text">通过TLS证书请求</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装配置kube-proxy"><span class="nav-number">1.5.</span> <span class="nav-text">安装配置kube-proxy</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#配置-1"><span class="nav-number">1.5.1.</span> <span class="nav-text">配置</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tony</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
