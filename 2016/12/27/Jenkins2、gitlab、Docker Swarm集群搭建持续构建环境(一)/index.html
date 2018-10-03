@@ -91,7 +91,7 @@
 <meta property="og:site_name" content="tony&#39;s blog">
 <meta property="og:description" content="原来所接触的开发、测试、部署、运维的流程还是比较传统，大部分还是手工打包、发布、手工替换文件部署，效率比较底下，而且比较容易出错，随着DevOps的流行，持续交付要求周期短、粒度细、自动化、快速频繁交付，这样就要求开放、测试、运维更紧密的结合。git、Jenkins和docker的特性非常适合持续交付，本文将通过gitlab的安装，Jenkins的安装和Docker Swarm集群的搭建，以及实际">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2016-12-28T14:34:00.000Z">
+<meta property="og:updated_time" content="2018-10-03T14:25:04.164Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins2、gitlab、Docker Swarm集群搭建持续交付环境(一)">
 <meta name="twitter:description" content="原来所接触的开发、测试、部署、运维的流程还是比较传统，大部分还是手工打包、发布、手工替换文件部署，效率比较底下，而且比较容易出错，随着DevOps的流行，持续交付要求周期短、粒度细、自动化、快速频繁交付，这样就要求开放、测试、运维更紧密的结合。git、Jenkins和docker的特性非常适合持续交付，本文将通过gitlab的安装，Jenkins的安装和Docker Swarm集群的搭建，以及实际">
@@ -299,7 +299,7 @@
       
         <p>原来所接触的开发、测试、部署、运维的流程还是比较传统，大部分还是手工打包、发布、手工替换文件部署，效率比较底下，而且比较容易出错，随着DevOps的流行，持续交付要求周期短、粒度细、自动化、快速频繁交付，这样就要求开放、测试、运维更紧密的结合。git、Jenkins和docker的特性非常适合持续交付，本文将通过gitlab的安装，Jenkins的安装和Docker Swarm集群的搭建，以及实际案例来总结一下基于gitlab、jenkins、docker构建持续构建发布流程的经验。</p>
 <h2 id="gitlab"><a href="#gitlab" class="headerlink" title="gitlab"></a>gitlab</h2><hr>
-<p>前一篇文件<a href="/2016/11/04/centos7基于docker搭建gitlab/" title="centos7基于docker搭建gitlab">centos7基于docker搭建gitlab</a>中介绍了基于docker搭建gitlab服务。</p>
+<p>前一篇文章<a href="/2016/11/04/centos7基于docker搭建gitlab/" title="centos7基于docker搭建gitlab">centos7基于docker搭建gitlab</a>中介绍了基于docker搭建gitlab服务。</p>
 <h2 id="Docker-Swarm"><a href="#Docker-Swarm" class="headerlink" title="Docker Swarm"></a>Docker Swarm</h2><p>从编排管理工具的选择上，docker1.12版本内嵌了swarm mode集群管理模式，免安装很方便。</p>
 <ul>
 <li>本身具备强大的集群容错能力，如果出现节点故障，集群会自动启用新的副本。</li>
