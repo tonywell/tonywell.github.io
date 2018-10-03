@@ -91,20 +91,20 @@
 <meta property="og:site_name" content="tony&#39;s blog">
 <meta property="og:description" content="上一篇文章中介绍如何制作所需镜像，本文将继续记录搭建前后端的持续集成环境。 jenkins的集群环境我将使用docker-compose来编排。 一、jenkins集群简单一点，整个集群如下：  jenkins-master：jenkins主服务，主要是配置和job调度 jenkins-java8：java构建节点，用来构建java项目 jenkins-nodeyarn：前端构建节点，用来构建前端">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/20170831195845133.png">
-<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_41.png">
-<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_43.png">
-<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_44.png">
-<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_46.png">
-<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/image-20181003211507138.png">
-<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_48.png">
-<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_49.png">
-<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_50.png">
-<meta property="og:updated_time" content="2018-10-03T14:06:25.113Z">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/20170831195845133.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_41.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_43.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_44.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_46.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/image-20181003211507138.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_48.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_49.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_50.png">
+<meta property="og:updated_time" content="2018-10-03T14:15:58.633Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker+jenkins打造前后端持续集成环境(2)">
 <meta name="twitter:description" content="上一篇文章中介绍如何制作所需镜像，本文将继续记录搭建前后端的持续集成环境。 jenkins的集群环境我将使用docker-compose来编排。 一、jenkins集群简单一点，整个集群如下：  jenkins-master：jenkins主服务，主要是配置和job调度 jenkins-java8：java构建节点，用来构建java项目 jenkins-nodeyarn：前端构建节点，用来构建前端">
-<meta name="twitter:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/20170831195845133.png">
+<meta name="twitter:image" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/20170831195845133.png">
 
 
 
@@ -342,26 +342,26 @@
 <p>-d 选项让容器在后台运行</p>
 </blockquote>
 <h4 id="3、配置jenkins"><a href="#3、配置jenkins" class="headerlink" title="3、配置jenkins"></a>3、配置jenkins</h4><p>从docker-compose.yml文件中映射的jenkins端口是8088，在浏览器中访问<a href="http://ip:8088，就可以看到" target="_blank" rel="noopener">http://ip:8088，就可以看到</a></p>
-<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/20170831195845133.png" alt="20170831195845133"></p>
+<p><img src="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/20170831195845133.png" alt="img"></p>
 <p>因为jenkins的目录已经映射到data目录，直接打开宿主机上的data/secrets/initialAdminPassword文件，复制出其中的密钥，输入到输入框，确认进入下一步，安装插件，这里选择安装推荐插件：</p>
-<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_41.png" alt="Snip20181003_41"></p>
+<p><img src="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_41.png" alt="img"></p>
 <p>开始安装：</p>
-<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_43.png" alt="Snip20181003_43"></p>
+<p><img src="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_43.png" alt="img"></p>
 <p>创建用户：</p>
-<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_44.png" alt="Snip20181003_44"></p>
+<p><img src="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_44.png" alt="img"></p>
 <p>完成后进入欢迎界面，说明安装配置成功：</p>
-<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_46.png" alt="Snip20181003_46"></p>
+<p><img src="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_46.png" alt="img"></p>
 <p>安装swarm plugin：</p>
-<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/image-20181003211507138.png" alt="image-20181003211507138"></p>
+<p><img src="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/image-20181003211507138.png" alt="img"></p>
 <p>安装完成后，节点会自动上报注册，看到下列信息说明节点注册成功：</p>
-<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_48.png" alt="Snip20181003_48"></p>
+<p><img src="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_48.png" alt="img"></p>
 <h3 id="二、配置Git-sshkey"><a href="#二、配置Git-sshkey" class="headerlink" title="二、配置Git sshkey"></a>二、配置Git sshkey</h3><p>为了后面项目能够通过ssh免密pull项目，先配置一个全局的凭证</p>
 <p>从左侧列表的凭证 -&gt;  系统 -&gt; 全局凭证，点击添加凭证:</p>
-<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_49.png" alt="Snip20181003_49"></p>
+<p><img src="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_49.png" alt="img"></p>
 <p>类型选择：SSH Username with private key</p>
 <p>范围：全局</p>
 <p>Username：输入git的账户<br>Private Key：输入git的sshkey</p>
-<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_50.png" alt="Snip20181003_50"></p>
+<p><img src="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_50.png" alt="img"></p>
 <p>OK，至此基于dokcer的jenkins的集群环境安装配置完成，下一章将通过一个项目实例，记录jenkins pipeline配置项目构建发布流程。</p>
 
       
