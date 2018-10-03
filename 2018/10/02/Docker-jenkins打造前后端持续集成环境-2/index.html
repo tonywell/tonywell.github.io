@@ -1,0 +1,642 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tony" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="上一篇文章中介绍如何制作所需镜像，本文将继续记录搭建前后端的持续集成环境。 jenkins的集群环境我将使用docker-compose来编排。 一、jenkins集群简单一点，整个集群如下：  jenkins-master：jenkins主服务，主要是配置和job调度 jenkins-java8：java构建节点，用来构建java项目 jenkins-nodeyarn：前端构建节点，用来构建前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker+jenkins打造前后端持续集成环境(2)">
+<meta property="og:url" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/index.html">
+<meta property="og:site_name" content="tony&#39;s blog">
+<meta property="og:description" content="上一篇文章中介绍如何制作所需镜像，本文将继续记录搭建前后端的持续集成环境。 jenkins的集群环境我将使用docker-compose来编排。 一、jenkins集群简单一点，整个集群如下：  jenkins-master：jenkins主服务，主要是配置和job调度 jenkins-java8：java构建节点，用来构建java项目 jenkins-nodeyarn：前端构建节点，用来构建前端">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/20170831195845133.png">
+<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_41.png">
+<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_43.png">
+<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_44.png">
+<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_46.png">
+<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/image-20181003211507138.png">
+<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_48.png">
+<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_49.png">
+<meta property="og:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_50.png">
+<meta property="og:updated_time" content="2018-10-03T14:06:25.113Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker+jenkins打造前后端持续集成环境(2)">
+<meta name="twitter:description" content="上一篇文章中介绍如何制作所需镜像，本文将继续记录搭建前后端的持续集成环境。 jenkins的集群环境我将使用docker-compose来编排。 一、jenkins集群简单一点，整个集群如下：  jenkins-master：jenkins主服务，主要是配置和job调度 jenkins-java8：java构建节点，用来构建java项目 jenkins-nodeyarn：前端构建节点，用来构建前端">
+<meta name="twitter:image" content="http://tonywell.github.io/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/20170831195845133.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/"/>
+
+  <title> Docker+jenkins打造前后端持续集成环境(2) | tony's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">tony's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Docker+jenkins打造前后端持续集成环境(2)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-10-02T17:34:48+08:00" content="2018-10-02">
+              2018-10-02
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一篇文章中介绍如何制作所需镜像，本文将继续记录搭建前后端的持续集成环境。</p>
+<p>jenkins的集群环境我将使用docker-compose来编排。</p>
+<h3 id="一、jenkins集群"><a href="#一、jenkins集群" class="headerlink" title="一、jenkins集群"></a>一、jenkins集群</h3><p>简单一点，整个集群如下：</p>
+<ul>
+<li>jenkins-master：jenkins主服务，主要是配置和job调度</li>
+<li>jenkins-java8：java构建节点，用来构建java项目</li>
+<li>jenkins-nodeyarn：前端构建节点，用来构建前端项目</li>
+<li>jenkins-docker-compose：用来部署和启动项目</li>
+</ul>
+<h4 id="1、准备"><a href="#1、准备" class="headerlink" title="1、准备"></a>1、准备</h4><h5 id="准备每个节点环境变量文件"><a href="#准备每个节点环境变量文件" class="headerlink" title="准备每个节点环境变量文件"></a>准备每个节点环境变量文件</h5><p>jenkins-master.env，内容如下，具体配置想就不做介绍，根据具体情况来配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"># Specify the Java VM parameters</span><br><span class="line"># See: http://www.oracle.com/technetwork/articles/java/vmoptions-jsp-140102.html</span><br><span class="line">JAVA_VM_PARAMETERS=-Xmx1024m -Xms512m</span><br><span class="line"># Number of executors on Jenkins master.</span><br><span class="line">JENKINS_MASTER_EXECUTORS=0</span><br><span class="line"># Whitespace separated list of required plugins.</span><br><span class="line"># Example: gitlab-plugin hipchat swarm</span><br><span class="line">JENKINS_PLUGINS=swarm git</span><br><span class="line"># Parameters for setting up HTTP.</span><br><span class="line"># Example:</span><br><span class="line"># JENKINS_KEYSTORE_PASSWORD=swordfish</span><br><span class="line"># JENKINS_CERTIFICATE_DNAME=CN=SBleul,OU=Blacklabelops,O=blacklabelops.com,L=Munich,S=Bavaria,C=D</span><br><span class="line">JENKINS_KEYSTORE_PASSWORD=keystoreswordfish</span><br><span class="line">JENKINS_CERTIFICATE_DNAME=CN=SBleul,OU=Blacklabelops,O=blacklabelops.net,L=Munich,S=Bavaria,C=DE</span><br><span class="line"># Jenkins port for accepting swarm slave connections</span><br><span class="line">JENKINS_SLAVEPORT=50000</span><br><span class="line"># Jenkins startup parameters.</span><br><span class="line"># See: https://wiki.jenkins-ci.org/display/JENKINS/Starting+and+Accessing+Jenkins</span><br><span class="line">JENKINS_PARAMETERS=</span><br><span class="line"># Jenkins Mail Setup</span><br><span class="line">SMTP_USER_NAME=XXXXXXXX</span><br><span class="line">SMTP_USER_PASS=XXXXXX</span><br><span class="line">SMTP_HOST=smtp.exmail.qq.com</span><br><span class="line">SMTP_PORT=</span><br><span class="line">SMTP_REPLYTO_ADDRESS=XXXXXXX</span><br><span class="line">SMTP_USE_SSL=</span><br><span class="line">SMTP_CHARSET=</span><br><span class="line"># Jenkins log file. Not necessary, because Jenkins logs to Docker.</span><br><span class="line">JENKINS_LOG_FILE=</span><br></pre></td></tr></table></figure>
+<p>jenkins-slave-java8.env 内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SWARM_VM_PARAMETERS=</span><br><span class="line">SWARM^_MASTER_URL=https://jenkins:8080/</span><br><span class="line">SWARM_CLIENT_PARAMETERS=</span><br><span class="line">SWARM_CLIENT_NAME=jenkins-java8</span><br><span class="line">SWARM_JENKINS_USER=admin</span><br><span class="line">SWARM_JENKINS_PASSWORD=admin123</span><br><span class="line">SWARM_CLIENT_EXECUTORS=</span><br><span class="line">SWARM_CLIENT_LABELS=java8</span><br><span class="line">DOCKER_HOST=tcp://192.168.1.236:2375</span><br></pre></td></tr></table></figure>
+<p>jenkins-slave-nodeyarn.env内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SWARM_VM_PARAMETERS=</span><br><span class="line">SWARM^_MASTER_URL=https://jenkins:8080/</span><br><span class="line">SWARM_CLIENT_PARAMETERS=</span><br><span class="line">SWARM_CLIENT_NAME=jenkins-node-yarn</span><br><span class="line">SWARM_JENKINS_USER=admin</span><br><span class="line">SWARM_JENKINS_PASSWORD=admin123</span><br><span class="line">SWARM_CLIENT_EXECUTORS=</span><br><span class="line">SWARM_CLIENT_LABELS=node-yarn</span><br><span class="line">DOCKER_HOST=tcp://192.168.1.236:2375</span><br></pre></td></tr></table></figure>
+<p>jenkins-slave-dockercompose.env内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SWARM_VM_PARAMETERS=</span><br><span class="line">SWARM^_MASTER_URL=https://jenkins:8080/</span><br><span class="line">SWARM_CLIENT_PARAMETERS=</span><br><span class="line">SWARM_CLIENT_NAME=jenkins-docker-compose</span><br><span class="line">SWARM_JENKINS_USER=admin</span><br><span class="line">SWARM_JENKINS_PASSWORD=admin123</span><br><span class="line">SWARM_CLIENT_EXECUTORS=</span><br><span class="line">SWARM_CLIENT_LABELS=docker-compose</span><br><span class="line">DOCKER_HOST=tcp://192.168.1.236:2375</span><br></pre></td></tr></table></figure>
+<p>因为docker-compose文件使用V3版本，需要安装docker-compose，版本不能太低，我这里安装的是1.16.1版本，安装命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/<span class="built_in">local</span>/bin/docker-compose</span><br></pre></td></tr></table></figure>
+<p>编写docker-compose.yml文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'3'</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="comment"># Jenkins Master</span></span><br><span class="line"><span class="attr"> jenkins:</span></span><br><span class="line"><span class="attr">   image:</span> <span class="string">tonywell/jenkins-master</span></span><br><span class="line"><span class="attr">   container_name:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">   hostname:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">   networks:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">jenkinsnet</span></span><br><span class="line"><span class="attr">   environment:</span></span><br><span class="line"><span class="attr">     JAVA_OPTS:</span> <span class="string">"-Djava.awt.headless=true"</span></span><br><span class="line"><span class="attr">   ports:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"8088:8080"</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"50000"</span></span><br><span class="line"><span class="attr">   volumes:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">./data:/var/jenkins</span></span><br><span class="line"><span class="attr">   dns:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="number">8.8</span><span class="number">.8</span><span class="number">.8</span></span><br><span class="line"><span class="attr">   env_file:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">jenkins-master.env</span></span><br><span class="line"><span class="attr">   labels:</span></span><br><span class="line">     <span class="string">com.blacklabelops.description:</span> <span class="string">"Jenkins Continuous Integration System"</span></span><br><span class="line">     <span class="string">com.blacklabelops.service:</span> <span class="string">"jenkins-master"</span></span><br><span class="line"></span><br><span class="line"><span class="attr"> slave1:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">tonywell/jenkins-java8</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">jenkins-java8</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">jenkinsnet</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/usr/bin/docker:/usr/bin/docker:ro</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./workspace:/opt/jenkins/workspace</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./m2:/root/.m2</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/dev/release:/opt/jenkins/target</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/dev/test:/opt/jenkins/test</span></span><br><span class="line"><span class="attr">    links:</span></span><br><span class="line"><span class="attr">      - jenkins:</span><span class="string">jenkins</span></span><br><span class="line"><span class="attr">    env_file:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">jenkins-slave-java8.env</span></span><br><span class="line"><span class="attr">    labels:</span></span><br><span class="line">      <span class="string">com.blacklabelops.description:</span> <span class="string">"Jenkins Swarm JDK-8 Slave"</span></span><br><span class="line">      <span class="string">com.blacklabelops.service:</span> <span class="string">"slave"</span></span><br><span class="line">      <span class="string">com.blacklabelops.applications:</span> <span class="string">"java maven gradle"</span></span><br><span class="line"></span><br><span class="line"><span class="attr"> slave2:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">tonywell/jenkins-docker-compose</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">jenkins-docker-compose</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">jenkinsnet</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/usr/bin/docker:/usr/bin/docker:ro</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/dev/release:/opt/jenkins/target</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/dev/test:/opt/jenkins/test</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/dev/dockerfile/nginx:/opt/jenkins/nginx</span></span><br><span class="line"><span class="attr">    links:</span></span><br><span class="line"><span class="attr">      - jenkins:</span><span class="string">jenkins</span></span><br><span class="line"><span class="attr">    env_file:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">jenkins-slave-dockercompose.env</span></span><br><span class="line"><span class="attr">    labels:</span></span><br><span class="line">      <span class="string">com.blacklabelops.description:</span> <span class="string">"Jenkins Swarm docker-compose Slave"</span></span><br><span class="line">      <span class="string">com.blacklabelops.service:</span> <span class="string">"slave"</span></span><br><span class="line">      <span class="string">com.blacklabelops.applications:</span> <span class="string">"docker-compose"</span></span><br><span class="line"></span><br><span class="line"><span class="attr"> slave3:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">tonywell/jenkins-nodeyarn</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">jenkins-node-yarn</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">jenkinsnet</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/usr/bin/docker:/usr/bin/docker:ro</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./workspace:/opt/jenkins/workspace</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/dev/release:/opt/jenkins/target</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/dev/test:/opt/jenkins/test</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/dev/dockerfile/nginx:/opt/jenkins/nginx</span></span><br><span class="line"><span class="attr">    links:</span></span><br><span class="line"><span class="attr">      - jenkins:</span><span class="string">jenkins</span></span><br><span class="line"><span class="attr">    env_file:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">jenkins-slave-nodeyarn.env</span></span><br><span class="line"><span class="attr">    labels:</span></span><br><span class="line">      <span class="string">com.blacklabelops.description:</span> <span class="string">"Jenkins Swarm ndoe-yarn Slave"</span></span><br><span class="line">      <span class="string">com.blacklabelops.service:</span> <span class="string">"slave"</span></span><br><span class="line">      <span class="string">com.blacklabelops.applications:</span> <span class="string">"node-yarn"</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line"><span class="attr">   jenkinsnet:</span></span><br><span class="line"><span class="attr">      driver:</span> <span class="string">bridge</span></span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<blockquote>
+<p>1.将jenkins目录映射到本地的data目录</p>
+<p>2.将宿主机的docker映射到容器，可以执行docker命令，这里其实用不着</p>
+<p>3.宿主机当前的m2目录映射到容器，这样maven仓库就可以共享，容器重启maven仓库中缓存的jar不会丢失。</p>
+<p>4.发布发布目录和测试环境的目录映射到容器，多个节点共享，构建节点可以把构建好的包发布到目标地址，通过docker-compose节点启动容器</p>
+<p>5.networks定义网络，这样网络隔离，同时是jenkins集群之间能够通信。</p>
+</blockquote>
+<h4 id="2、启动jenkins集群"><a href="#2、启动jenkins集群" class="headerlink" title="2、启动jenkins集群"></a>2、启动jenkins集群</h4><p>在docker-compose.yml所在目录执行下面命令启动集群：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>-d 选项让容器在后台运行</p>
+</blockquote>
+<h4 id="3、配置jenkins"><a href="#3、配置jenkins" class="headerlink" title="3、配置jenkins"></a>3、配置jenkins</h4><p>从docker-compose.yml文件中映射的jenkins端口是8088，在浏览器中访问<a href="http://ip:8088，就可以看到" target="_blank" rel="noopener">http://ip:8088，就可以看到</a></p>
+<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/20170831195845133.png" alt="20170831195845133"></p>
+<p>因为jenkins的目录已经映射到data目录，直接打开宿主机上的data/secrets/initialAdminPassword文件，复制出其中的密钥，输入到输入框，确认进入下一步，安装插件，这里选择安装推荐插件：</p>
+<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_41.png" alt="Snip20181003_41"></p>
+<p>开始安装：</p>
+<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_43.png" alt="Snip20181003_43"></p>
+<p>创建用户：</p>
+<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_44.png" alt="Snip20181003_44"></p>
+<p>完成后进入欢迎界面，说明安装配置成功：</p>
+<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_46.png" alt="Snip20181003_46"></p>
+<p>安装swarm plugin：</p>
+<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/image-20181003211507138.png" alt="image-20181003211507138"></p>
+<p>安装完成后，节点会自动上报注册，看到下列信息说明节点注册成功：</p>
+<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_48.png" alt="Snip20181003_48"></p>
+<h3 id="二、配置Git-sshkey"><a href="#二、配置Git-sshkey" class="headerlink" title="二、配置Git sshkey"></a>二、配置Git sshkey</h3><p>为了后面项目能够通过ssh免密pull项目，先配置一个全局的凭证</p>
+<p>从左侧列表的凭证 -&gt;  系统 -&gt; 全局凭证，点击添加凭证:</p>
+<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_49.png" alt="Snip20181003_49"></p>
+<p>类型选择：SSH Username with private key</p>
+<p>范围：全局</p>
+<p>Username：输入git的账户<br>Private Key：输入git的sshkey</p>
+<p><img src="/Users/willtony/Documents/myblog/source/_posts/Docker-jenkins打造前后端持续集成环境-2/Snip20181003_50.png" alt="Snip20181003_50"></p>
+<p>OK，至此基于dokcer的jenkins的集群环境安装配置完成，下一章将通过一个项目实例，记录jenkins pipeline配置项目构建发布流程。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/02/Docker-jenkins打造前后端持续集成环境-1/" rel="next" title="Docker+jenkins打造前后端持续集成环境(1)">
+                <i class="fa fa-chevron-left"></i> Docker+jenkins打造前后端持续集成环境(1)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tony" />
+          <p class="site-author-name" itemprop="name">tony</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、jenkins集群"><span class="nav-number">1.</span> <span class="nav-text">一、jenkins集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、准备"><span class="nav-number">1.1.</span> <span class="nav-text">1、准备</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#准备每个节点环境变量文件"><span class="nav-number">1.1.1.</span> <span class="nav-text">准备每个节点环境变量文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、启动jenkins集群"><span class="nav-number">1.2.</span> <span class="nav-text">2、启动jenkins集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、配置jenkins"><span class="nav-number">1.3.</span> <span class="nav-text">3、配置jenkins</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、配置Git-sshkey"><span class="nav-number">2.</span> <span class="nav-text">二、配置Git sshkey</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tony</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

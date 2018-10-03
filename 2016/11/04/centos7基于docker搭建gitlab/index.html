@@ -84,19 +84,18 @@
 
 
 
-<meta name="description" content="一、首先centos7安装docker1、添加docker源1$ vim /etc/yum.repos.d/docker.repo
-12345678910[dockerrepo]name=Docker Repositorybaseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/enabled=1gpgcheck=1gpg">
+<meta name="description" content="一、首先centos7安装docker1、添加docker源1$ vim /etc/yum.repos.d/docker.repo 12345678910[dockerrepo]name=Docker Repositorybaseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/enabled=1gpgcheck=1gpg">
+<meta name="keywords" content="docker,gitlab">
 <meta property="og:type" content="article">
 <meta property="og:title" content="centos7基于docker搭建gitlab">
 <meta property="og:url" content="http://tonywell.github.io/2016/11/04/centos7基于docker搭建gitlab/index.html">
-<meta property="og:site_name" content="tony's blog">
-<meta property="og:description" content="一、首先centos7安装docker1、添加docker源1$ vim /etc/yum.repos.d/docker.repo
-12345678910[dockerrepo]name=Docker Repositorybaseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/enabled=1gpgcheck=1gpg">
+<meta property="og:site_name" content="tony&#39;s blog">
+<meta property="og:description" content="一、首先centos7安装docker1、添加docker源1$ vim /etc/yum.repos.d/docker.repo 12345678910[dockerrepo]name=Docker Repositorybaseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/enabled=1gpgcheck=1gpg">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-28T13:13:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos7基于docker搭建gitlab">
-<meta name="twitter:description" content="一、首先centos7安装docker1、添加docker源1$ vim /etc/yum.repos.d/docker.repo
-12345678910[dockerrepo]name=Docker Repositorybaseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/enabled=1gpgcheck=1gpg">
+<meta name="twitter:description" content="一、首先centos7安装docker1、添加docker源1$ vim /etc/yum.repos.d/docker.repo 12345678910[dockerrepo]name=Docker Repositorybaseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/enabled=1gpgcheck=1gpg">
 
 
 
@@ -299,28 +298,28 @@
       
 
       
-        <h3 id="一、首先centos7安装docker"><a href="#一、首先centos7安装docker" class="headerlink" title="一、首先centos7安装docker"></a>一、首先centos7安装docker</h3><h4 id="1、添加docker源"><a href="#1、添加docker源" class="headerlink" title="1、添加docker源"></a>1、添加docker源</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/yum.repos.d/docker.repo</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[dockerrepo]</div><div class="line">name=Docker Repository</div><div class="line"></div><div class="line">baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/</div><div class="line"></div><div class="line">enabled=1</div><div class="line"></div><div class="line">gpgcheck=1</div><div class="line"></div><div class="line">gpgkey=https://yum.dockerproject.org/gpg</div></pre></td></tr></table></figure>
-<h4 id="2、yum安装docker"><a href="#2、yum安装docker" class="headerlink" title="2、yum安装docker"></a>2、yum安装docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install docker-engine</div></pre></td></tr></table></figure>
-<h4 id="3、启动docker"><a href="#3、启动docker" class="headerlink" title="3、启动docker"></a>3、启动docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ service docker start</div></pre></td></tr></table></figure>
+        <h3 id="一、首先centos7安装docker"><a href="#一、首先centos7安装docker" class="headerlink" title="一、首先centos7安装docker"></a>一、首先centos7安装docker</h3><h4 id="1、添加docker源"><a href="#1、添加docker源" class="headerlink" title="1、添加docker源"></a>1、添加docker源</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/yum.repos.d/docker.repo</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[dockerrepo]</span><br><span class="line">name=Docker Repository</span><br><span class="line"></span><br><span class="line">baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/</span><br><span class="line"></span><br><span class="line">enabled=1</span><br><span class="line"></span><br><span class="line">gpgcheck=1</span><br><span class="line"></span><br><span class="line">gpgkey=https://yum.dockerproject.org/gpg</span><br></pre></td></tr></table></figure>
+<h4 id="2、yum安装docker"><a href="#2、yum安装docker" class="headerlink" title="2、yum安装docker"></a>2、yum安装docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum install docker-engine</span><br></pre></td></tr></table></figure>
+<h4 id="3、启动docker"><a href="#3、启动docker" class="headerlink" title="3、启动docker"></a>3、启动docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ service docker start</span><br></pre></td></tr></table></figure>
 <h3 id="二、安装docker-compose"><a href="#二、安装docker-compose" class="headerlink" title="二、安装docker-compose"></a>二、安装docker-compose</h3><a id="more"></a>
 <p>docker-compose通过pip来安装，如果系统没有安装pip，先安装pip</p>
-<h4 id="1、安装pip"><a href="#1、安装pip" class="headerlink" title="1、安装pip"></a>1、安装pip</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install python-pip.noarch</div></pre></td></tr></table></figure>
+<h4 id="1、安装pip"><a href="#1、安装pip" class="headerlink" title="1、安装pip"></a>1、安装pip</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum install python-pip.noarch</span><br></pre></td></tr></table></figure>
 <p>如果遇到下面错误</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">没有可用软件包 python-pip.noarch。</div><div class="line">错误：无须任何处理</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">没有可用软件包 python-pip.noarch。</span><br><span class="line">错误：无须任何处理</span><br></pre></td></tr></table></figure>
 <p>先安装epel扩展源：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum -y install epel-release</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum -y install epel-release</span><br></pre></td></tr></table></figure>
 <p>然后在执行安装pip命令</p>
 <h4 id="2、替换pip源"><a href="#2、替换pip源" class="headerlink" title="2、替换pip源"></a>2、替换pip源</h4><p>最近速度比较稳定的源师清华的，修改~/.pip/pip.conf，如果没有这个文件夹或者文件的手动创建一个</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[global]</div><div class="line"> index-url = https://pypi.tuna.tsinghua.edu.cn/simple</div></pre></td></tr></table></figure>
-<h4 id="3、安装docker-compose"><a href="#3、安装docker-compose" class="headerlink" title="3、安装docker-compose"></a>3、安装docker-compose</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pip install docker-compose</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line"> index-url = https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+<h4 id="3、安装docker-compose"><a href="#3、安装docker-compose" class="headerlink" title="3、安装docker-compose"></a>3、安装docker-compose</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install docker-compose</span><br></pre></td></tr></table></figure>
 <p>然后我执行docker-compose命令的时候遇到下面错误</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Traceback (most recent call last):</div><div class="line">  File &quot;/usr/bin/docker-compose&quot;, line 5, in &lt;module&gt;</div><div class="line">    from pkg_resources import load_entry_point</div><div class="line">  File &quot;/usr/lib/python2.7/site-packages/pkg_resources.py&quot;, line 3011, in &lt;module&gt;</div><div class="line">    parse_requirements(__requires__), Environment()</div><div class="line">  File &quot;/usr/lib/python2.7/site-packages/pkg_resources.py&quot;, line 626, in resolve</div><div class="line">    raise DistributionNotFound(req)</div><div class="line">pkg_resources.DistributionNotFound: backports.ssl-match-hostname&gt;=3.5</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;/usr/bin/docker-compose&quot;, line 5, in &lt;module&gt;</span><br><span class="line">    from pkg_resources import load_entry_point</span><br><span class="line">  File &quot;/usr/lib/python2.7/site-packages/pkg_resources.py&quot;, line 3011, in &lt;module&gt;</span><br><span class="line">    parse_requirements(__requires__), Environment()</span><br><span class="line">  File &quot;/usr/lib/python2.7/site-packages/pkg_resources.py&quot;, line 626, in resolve</span><br><span class="line">    raise DistributionNotFound(req)</span><br><span class="line">pkg_resources.DistributionNotFound: backports.ssl-match-hostname&gt;=3.5</span><br></pre></td></tr></table></figure>
 <p>使用pip 更新backports.ssl-match-hostname的版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install --upgrade backports.ssl_match_hostname</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade backports.ssl_match_hostname</span><br></pre></td></tr></table></figure>
 <p>问题解决</p>
 <h3 id="二、通过docker-compose-yml安装搭建gitlab"><a href="#二、通过docker-compose-yml安装搭建gitlab" class="headerlink" title="二、通过docker-compose.yml安装搭建gitlab"></a>二、通过docker-compose.yml安装搭建gitlab</h3><p>参考：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://github.com/tonywell/docker-gitlab</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/tonywell/docker-gitlab</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -432,7 +431,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -497,7 +496,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

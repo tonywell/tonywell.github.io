@@ -1,0 +1,669 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tony" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本系列文章将记录如何从零开始构建一个基于docker的持续集成环境，包括自动构建、发布、部署等。 一、Docker环境安装服务器是阿里云ubuntu14.04，这里安装的是社区版的docker，从2017年3月开始，docker就分为社区版和企业版，原来的安装方式就已经过时了，下面就开始安装docker ####清理旧版的docker 旧版的docker，一般是docker或者docker-eng">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker+jenkins打造前后端持续集成环境(1)">
+<meta property="og:url" content="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-1/index.html">
+<meta property="og:site_name" content="tony&#39;s blog">
+<meta property="og:description" content="本系列文章将记录如何从零开始构建一个基于docker的持续集成环境，包括自动构建、发布、部署等。 一、Docker环境安装服务器是阿里云ubuntu14.04，这里安装的是社区版的docker，从2017年3月开始，docker就分为社区版和企业版，原来的安装方式就已经过时了，下面就开始安装docker ####清理旧版的docker 旧版的docker，一般是docker或者docker-eng">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-03T09:56:50.246Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker+jenkins打造前后端持续集成环境(1)">
+<meta name="twitter:description" content="本系列文章将记录如何从零开始构建一个基于docker的持续集成环境，包括自动构建、发布、部署等。 一、Docker环境安装服务器是阿里云ubuntu14.04，这里安装的是社区版的docker，从2017年3月开始，docker就分为社区版和企业版，原来的安装方式就已经过时了，下面就开始安装docker ####清理旧版的docker 旧版的docker，一般是docker或者docker-eng">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://tonywell.github.io/2018/10/02/Docker-jenkins打造前后端持续集成环境-1/"/>
+
+  <title> Docker+jenkins打造前后端持续集成环境(1) | tony's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">tony's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Docker+jenkins打造前后端持续集成环境(1)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-10-02T17:27:31+08:00" content="2018-10-02">
+              2018-10-02
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本系列文章将记录如何从零开始构建一个基于docker的持续集成环境，包括自动构建、发布、部署等。</p>
+<h3 id="一、Docker环境安装"><a href="#一、Docker环境安装" class="headerlink" title="一、Docker环境安装"></a>一、Docker环境安装</h3><p>服务器是阿里云ubuntu14.04，这里安装的是社区版的docker，从2017年3月开始，docker就分为社区版和企业版，原来的安装方式就已经过时了，下面就开始安装docker</p>
+<p>####清理旧版的docker</p>
+<p>旧版的docker，一般是docker或者docker-engine,如果之前被安装，先卸载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove docker docker-engine docker.io</span><br></pre></td></tr></table></figure>
+<p>####通过docker的repositories安装</p>
+<p>当然还有其他的方式来安装，这里就一一说明，我只是用repositories安装</p>
+<p>1、更新apt源的索引信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<p>2、安装下列所需包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common</span><br></pre></td></tr></table></figure>
+<p>3、添加docker官方GPG key:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</span><br></pre></td></tr></table></figure>
+<p>4、设置repository：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository <span class="string">"deb [arch=amd64] https://download.docker.com/linux/ubuntu <span class="variable">$(lsb_release -cs)</span> stable"</span></span><br></pre></td></tr></table></figure>
+<p>这里只是设置基于X86_64平台的repository，如果是其他平台，还是需要参考官方文档。</p>
+<p>5、再次更新apt源的索引：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<p>6、安装最新版docker-ce</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install docker-ce</span><br></pre></td></tr></table></figure>
+<p>如果想安装指定版本docker，到网上搜索安装方法，这里就不做说明了</p>
+<p>7、取消sudo（如果当前用户不是root，执行下面命令）:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo gpasswd -a &#123;username&#125; docker</span><br><span class="line">sudo service docker restart</span><br></pre></td></tr></table></figure>
+<p>8、添加加速器</p>
+<p>因为网络原因，去官方pull镜像实在太慢，还有失败率实在太高，所以直接添加加速器，docker官方也提供了国内的加速器，可以参考官方的配置，我这里使用的阿里云的加速器，注册了阿里云的开发者账户之后可以免费使用。</p>
+<p>因为我刚刚安装的docker版本已经高于1.10.0版本，可以通过修改daemon配置文件，来使用加速器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-<span class="string">'EOF'</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://&#123;XXXXX&#125;.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo service docker restart</span><br></pre></td></tr></table></figure>
+<p>9、配置远程连接</p>
+<p>为了后面项目部署需要，这里先开通docker的远程连接，还是在daemon配置文件中加入下面配置:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"hosts"</span>:[<span class="string">"tcp://0.0.0.0:2375"</span>,<span class="string">"unix:///var/run/docker.sock"</span>]</span><br></pre></td></tr></table></figure>
+<p>然后重启docker，至此打造持续集成环境准备工作已经做好。</p>
+<h3 id="二、制作所需docker镜像"><a href="#二、制作所需docker镜像" class="headerlink" title="二、制作所需docker镜像"></a>二、制作所需docker镜像</h3><p>这次打造的CI/CD环境准备全docker话，所以需要准备制作一下镜像：</p>
+<ul>
+<li>jenkins镜像：jenkins master</li>
+<li>java slave镜像：用于java编译节点</li>
+<li>node slave镜像：用于前端编译节点</li>
+<li>docker-compose镜像：用于部署项目节点</li>
+<li>nginx镜像：用于部署前端项目和做方向代理</li>
+<li>tomcat镜像：用于部署java后台</li>
+</ul>
+<p>虽然已经有大量的现成镜像可用，但是有时候很难完全符合自己要求（太大或者缺少所需的工具），我这里就自己来制作镜像。我这里选择了alpine为基础来制作，选择alpine是因为它比较小，因为jenkins环境都需要java，需要先制作jre和jdk的基础镜像（我这里使用的Oracle jdk，不是openjdk）。</p>
+<h4 id="1、制作jre镜像"><a href="#1、制作jre镜像" class="headerlink" title="1、制作jre镜像"></a>1、制作jre镜像</h4><p>因为java需要依赖glibc，所以基础镜像使用的是alpine-glibc，大小为11.3M</p>
+<h5 id="下载jre"><a href="#下载jre" class="headerlink" title="下载jre"></a>下载jre</h5><p>在Dockerfile通过curl下载jre的话网络原因，经常失败，所以我这里先下载好，通过ADD的方式安装到镜像中，我们所有的环境都是基于java8，所以我下载的是jre1.8的版本，因为要使用tini-static来进行进程管理，所以也提前下载好tini-static。</p>
+<h5 id="精简jre"><a href="#精简jre" class="headerlink" title="精简jre"></a>精简jre</h5><p>下载下来的jre有78M，解压以后更大了，为了使我们的基础镜像更小，方便发布部署，需要删除一些不必要的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#解压</span></span><br><span class="line">tar -xvf jre-8u181-linux-x64.tar.gz</span><br><span class="line"><span class="built_in">cd</span> jre1.8.0_181</span><br><span class="line"><span class="comment">#删除文本文件</span></span><br><span class="line">rm -rf COPYRIGHT LICENSE README release THIRDPARTYLICENSEREADME-JAVAFX.txtTHIRDPARTYLICENSEREADME.txt Welcome.html</span><br><span class="line"><span class="comment">#删除其他无用文件</span></span><br><span class="line">rm -rf     bin/jjs \</span><br><span class="line">           bin/ordb \</span><br><span class="line">           bin/pack200 \</span><br><span class="line">           bin/policytool \</span><br><span class="line">           bin/rmid \</span><br><span class="line">           bin/rmiregistry \</span><br><span class="line">           bin/servertool \</span><br><span class="line">           bin/tnameserv \</span><br><span class="line">           bin/unpack200 \</span><br><span class="line">           bin/javaws \</span><br><span class="line">           lib/javaws.jar \</span><br><span class="line">           lib/desktop \</span><br><span class="line">           plugin \</span><br><span class="line">           lib/deploy* \</span><br><span class="line">           lib/*javafx* \</span><br><span class="line">           lib/*jfx* \</span><br><span class="line">           lib/amd64/libdecora_sse.so \</span><br><span class="line">           lib/amd64/libprism_*.so \</span><br><span class="line">           lib/amd64/libfxplugins.so \</span><br><span class="line">           lib/amd64/libglass.so \</span><br><span class="line">           lib/amd64/libgstreamer-lite.so \</span><br><span class="line">           lib/amd64/libjavafx*.so \</span><br><span class="line">           lib/amd64/libjfx*.so</span><br><span class="line">           lib/plugin.jar \</span><br><span class="line">           lib/ext/nashorn.jar \</span><br><span class="line">           lib/oblique-fonts \</span><br><span class="line">           lib/ext/jfxrt.jar \</span><br><span class="line"> <span class="comment">#重新打包</span></span><br><span class="line"> tar zcvf jre8.tar.gz *</span><br></pre></td></tr></table></figure>
+<p>精简完的jre压缩后大约41M。</p>
+<h5 id="创建Dockerfile"><a href="#创建Dockerfile" class="headerlink" title="创建Dockerfile"></a>创建Dockerfile</h5><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> frolvlad/alpine-glibc</span><br><span class="line"></span><br><span class="line"><span class="keyword">MAINTAINER</span> tonywell <span class="string">"tongwei1985@gmail.com"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> jre8.tar.gz /usr/<span class="built_in">local</span>/java</span></span><br><span class="line"><span class="bash">ENV JAVA_HOME=/usr/<span class="built_in">local</span>/java \</span></span><br><span class="line"><span class="bash">    PATH=<span class="variable">$&#123;PATH&#125;</span>:/usr/<span class="built_in">local</span>/java/bin</span></span><br><span class="line"><span class="bash">COPY tini-static /bin/tini</span></span><br><span class="line"><span class="bash"><span class="comment">#配置apk的阿里镜像，方便后面安装，同时将时区设置为上海</span></span></span><br><span class="line"><span class="bash">RUN <span class="built_in">echo</span> <span class="string">"http://mirrors.aliyun.com/alpine/v3.4/main"</span> &gt; /etc/apk/repositories \</span></span><br><span class="line"><span class="bash">    &amp;&amp; <span class="built_in">echo</span> <span class="string">"http://mirrors.aliyun.com/alpine/v3.4/community"</span> &gt;&gt; /etc/apk/repositories \</span></span><br><span class="line"><span class="bash">    &amp;&amp; apk add --no-cache --virtual=build-dependencies ca-certificates tzdata &amp;&amp; \</span></span><br><span class="line"><span class="bash">    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">"Asia/Shanghai"</span> &gt; /etc/timezone &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">export</span> TINI_VERSION=0.9.0 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">export</span> TINI_SHA=fa23d1e20732501c3bb8eeeca423c89ac80ed452 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">'Calculated checksum: '</span>$(sha1sum /bin/tini) &amp;&amp; \</span></span><br><span class="line"><span class="bash">    chmod +x /bin/tini &amp;&amp; <span class="built_in">echo</span> <span class="string">"<span class="variable">$TINI_SHA</span>  /bin/tini"</span> | sha1sum -c - &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk del build-dependencies &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4'</span> &gt;&gt; /etc/nsswitch.conf</span></span><br></pre></td></tr></table></figure>
+<h5 id="构建jre8镜像"><a href="#构建jre8镜像" class="headerlink" title="构建jre8镜像"></a>构建jre8镜像</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t tonywell/alpine-jre8 .</span><br></pre></td></tr></table></figure>
+<p>注意：需要将Dockerfile、jre8.tar.gz、tini-static置于同一目录。</p>
+<h4 id="2、制作jdk镜像"><a href="#2、制作jdk镜像" class="headerlink" title="2、制作jdk镜像"></a>2、制作jdk镜像</h4><h5 id="下载jdk"><a href="#下载jdk" class="headerlink" title="下载jdk"></a>下载jdk</h5><p>同上，我们提前下载好jdk1.8的包，后台ADD的方式安装到镜像中。</p>
+<h5 id="精简jdk"><a href="#精简jdk" class="headerlink" title="精简jdk"></a>精简jdk</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#解压</span></span><br><span class="line">tar -xvf jdk-8u181-linux-x64.tar.gz</span><br><span class="line"><span class="built_in">cd</span> jdk1.8.0_181</span><br><span class="line">rm -rf *src.zip \</span><br><span class="line">       lib/missioncontrol \</span><br><span class="line">       lib/visualvm \</span><br><span class="line">       lib/*javafx* \</span><br><span class="line">       jre/plugin \</span><br><span class="line">       jre/bin/javaws \</span><br><span class="line">       jre/bin/jjs \</span><br><span class="line">       jre/bin/orbd \</span><br><span class="line">       jre/bin/pack200 \</span><br><span class="line">       jre/bin/policytool \</span><br><span class="line">       jre/bin/rmid \</span><br><span class="line">       jre/bin/rmiregistry \</span><br><span class="line">       jre/bin/servertool \</span><br><span class="line">       jre/bin/tnameserv \</span><br><span class="line">       jre/bin/unpack200 \</span><br><span class="line">       jre/lib/javaws.jar \</span><br><span class="line">       jre/lib/deploy* \</span><br><span class="line">       jre/lib/desktop \</span><br><span class="line">       jre/lib/*javafx* \</span><br><span class="line">       jre/lib/*jfx* \</span><br><span class="line">       jre/lib/amd64/libdecora_sse.so \</span><br><span class="line">       jre/lib/amd64/libprism_*.so \</span><br><span class="line">       jre/lib/amd64/libfxplugins.so \</span><br><span class="line">       jre/lib/amd64/libglass.so \</span><br><span class="line">       jre/lib/amd64/libgstreamer-lite.so \</span><br><span class="line">       jre/lib/amd64/libjavafx*.so \</span><br><span class="line">       jre/lib/amd64/libjfx*.so \</span><br><span class="line">       jre/lib/ext/jfxrt.jar \</span><br><span class="line">       jre/lib/ext/nashorn.jar \</span><br><span class="line">       jre/lib/oblique-fonts \</span><br><span class="line">       jre/lib/plugin.jar \</span><br><span class="line"> <span class="comment">#重新打包</span></span><br><span class="line"> tar zcvf jre8.tar.gz *</span><br></pre></td></tr></table></figure>
+<h5 id="创建Dockerfile-1"><a href="#创建Dockerfile-1" class="headerlink" title="创建Dockerfile"></a>创建Dockerfile</h5><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> frolvlad/alpine-glibc</span><br><span class="line"></span><br><span class="line"><span class="keyword">MAINTAINER</span> tonywell <span class="string">"tongwei1985@gmail.com"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> jdk8.tar.gz /usr/<span class="built_in">local</span>/java</span></span><br><span class="line"><span class="bash">ENV JAVA_HOME=/usr/<span class="built_in">local</span>/java \</span></span><br><span class="line"><span class="bash">    PATH=<span class="variable">$&#123;PATH&#125;</span>:/usr/<span class="built_in">local</span>/java/bin</span></span><br><span class="line"><span class="bash">COPY tini-static /bin/tini</span></span><br><span class="line"><span class="bash"><span class="comment">#配置apk的阿里镜像，方便后面安装，同时将时区设置为上海</span></span></span><br><span class="line"><span class="bash">RUN <span class="built_in">echo</span> <span class="string">"http://mirrors.aliyun.com/alpine/v3.4/main"</span> &gt; /etc/apk/repositories \</span></span><br><span class="line"><span class="bash">    &amp;&amp; <span class="built_in">echo</span> <span class="string">"http://mirrors.aliyun.com/alpine/v3.4/community"</span> &gt;&gt; /etc/apk/repositories \</span></span><br><span class="line"><span class="bash">    &amp;&amp; apk add --no-cache --virtual=build-dependencies ca-certificates tzdata &amp;&amp; \</span></span><br><span class="line"><span class="bash">    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">"Asia/Shanghai"</span> &gt; /etc/timezone &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">export</span> TINI_VERSION=0.9.0 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">export</span> TINI_SHA=fa23d1e20732501c3bb8eeeca423c89ac80ed452 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">'Calculated checksum: '</span>$(sha1sum /bin/tini) &amp;&amp; \</span></span><br><span class="line"><span class="bash">    chmod +x /bin/tini &amp;&amp; <span class="built_in">echo</span> <span class="string">"<span class="variable">$TINI_SHA</span>  /bin/tini"</span> | sha1sum -c - &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk del build-dependencies &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4'</span> &gt;&gt; /etc/nsswitch.conf</span></span><br></pre></td></tr></table></figure>
+<h5 id="构建jdk8镜像"><a href="#构建jdk8镜像" class="headerlink" title="构建jdk8镜像"></a>构建jdk8镜像</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t tonywell/alpine-jdk8 .</span><br></pre></td></tr></table></figure>
+<h4 id="3、制作jenkins镜像"><a href="#3、制作jenkins镜像" class="headerlink" title="3、制作jenkins镜像"></a>3、制作jenkins镜像</h4><p>jenkins的镜像是作为jenkins master只用配置管理和job调度，不运行job，所以使用jre就行，所以讲前面构建的tonywell/alpine-jre8作为基础镜像来制作。</p>
+<h5 id="下载jenkins"><a href="#下载jenkins" class="headerlink" title="下载jenkins"></a>下载jenkins</h5><p>去jenkins下载war包备用</p>
+<h5 id="创建Dockerfile-2"><a href="#创建Dockerfile-2" class="headerlink" title="创建Dockerfile"></a>创建Dockerfile</h5><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> tonywell/alpine-jre8</span><br><span class="line"></span><br><span class="line"><span class="keyword">MAINTAINER</span> tonywell <span class="string">"tongwei1985@gmail.com"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ARG</span> CONTAINER_UID=<span class="number">1000</span></span><br><span class="line"><span class="keyword">ARG</span> CONTAINER_GID=<span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> JENKINS_HOME /var/jenkins</span><br><span class="line"><span class="keyword">ENV</span> JENKINS_SLAVE_AGENT_PORT <span class="number">50000</span></span><br><span class="line"><span class="keyword">ENV</span> JENKINS_UC https://updates.jenkins.io</span><br><span class="line"><span class="keyword">ENV</span> JENKINS_UC_EXPERIMENTAL=https://updates.jenkins.io/experimental</span><br><span class="line"></span><br><span class="line"><span class="keyword">VOLUME</span><span class="bash"> /var/jenkins</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">RUN apk upgrade --update &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk add --update \</span></span><br><span class="line"><span class="bash">    git openssh-client bash ttf-dejavu coreutils &amp;&amp;\</span></span><br><span class="line"><span class="bash">    rm -rf /var/cache/apk/* &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">export</span> CONTAINER_USER=jenkins &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">export</span> CONTAINER_GROUP=jenkins &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="comment"># Add user</span></span></span><br><span class="line"><span class="bash">    addgroup -g <span class="variable">$CONTAINER_GID</span> jenkins &amp;&amp; \</span></span><br><span class="line"><span class="bash">    adduser -u <span class="variable">$CONTAINER_UID</span> -G jenkins -h <span class="string">"JENKINS_HOME"</span> -s /bin/bash -S jenkins &amp;&amp; \</span></span><br><span class="line"><span class="bash">    mkdir -p /usr/share/jenkins/ref/init.groovy.d &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="comment"># Install jenkins</span></span></span><br><span class="line"><span class="bash">    chown -R <span class="variable">$CONTAINER_USER</span>:<span class="variable">$CONTAINER_GROUP</span> /usr/share/jenkins &amp;&amp; \</span></span><br><span class="line"><span class="bash">    chown -R jenkins <span class="string">"<span class="variable">$JENKINS_HOME</span>"</span> /usr/share/jenkins/ref &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="comment"># Remove obsolete packages and cleanup</span></span></span><br><span class="line"><span class="bash">    rm -rf /var/cache/apk/* &amp;&amp; rm -rf /var/<span class="built_in">log</span>/* &amp;&amp; rm -rf /tmp/*</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">ENV COPY_REFERENCE_FILE_LOG <span class="variable">$JENKINS_HOME</span>/copy_reference_file.log</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">ENV JAVA_VM_PARAMETERS=-Xmx512m \</span></span><br><span class="line"><span class="bash">    JENKINS_MASTER_EXECUTORS= \</span></span><br><span class="line"><span class="bash">    JENKINS_SLAVEPORT=50000 \</span></span><br><span class="line"><span class="bash">    JENKINS_PLUGINS= \</span></span><br><span class="line"><span class="bash">    JENKINS_PARAMETERS= \</span></span><br><span class="line"><span class="bash">    JENKINS_KEYSTORE_PASSWORD= \</span></span><br><span class="line"><span class="bash">    JENKINS_CERTIFICATE_DNAME= \</span></span><br><span class="line"><span class="bash">    JENKINS_ENV_FILE= \</span></span><br><span class="line"><span class="bash">    JENKINS_DELAYED_START= \</span></span><br><span class="line"><span class="bash">    JENKINS_CLI_URL=http://localhost:8080 \</span></span><br><span class="line"><span class="bash">    JENKINS_CLI_SSH=</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">EXPOSE 8080 50000</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">USER jenkins</span></span><br><span class="line"><span class="bash">COPY jenkins.war /usr/share/jenkins</span></span><br><span class="line"><span class="bash">COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy</span></span><br><span class="line"><span class="bash">COPY jenkins-support /usr/<span class="built_in">local</span>/bin/jenkins-support</span></span><br><span class="line"><span class="bash">COPY jenkins.sh /usr/<span class="built_in">local</span>/bin/jenkins.sh</span></span><br><span class="line"><span class="bash">ENTRYPOINT [<span class="string">"/bin/tini"</span>, <span class="string">"--"</span>,<span class="string">"/usr/local/bin/jenkins.sh"</span>]</span></span><br></pre></td></tr></table></figure>
+<p>init.groovy设置agent端口，具体内容如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hudson.model.*;</span><br><span class="line"><span class="keyword">import</span> jenkins.model.*;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Thread.start &#123;</span><br><span class="line">      sleep <span class="number">10000</span></span><br><span class="line">      println <span class="string">"--&gt; setting agent port for jnlp"</span></span><br><span class="line">      <span class="keyword">def</span> env = System.getenv()</span><br><span class="line">      <span class="keyword">int</span> port = env[<span class="string">'JENKINS_SLAVE_AGENT_PORT'</span>].toInteger()</span><br><span class="line">      Jenkins.instance.setSlaveAgentPort(port)</span><br><span class="line">      println <span class="string">"--&gt; setting agent port for jnlp... done"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>jenkins-support内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash -eu</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># compare if version1 &lt; version2</span></span><br><span class="line"><span class="function"><span class="title">versionLT</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> v1; v1=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$1</span>"</span> | cut -d <span class="string">'-'</span> -f 1 )</span><br><span class="line">    <span class="built_in">local</span> q1; q1=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$1</span>"</span> | cut -s -d <span class="string">'-'</span> -f 2- )</span><br><span class="line">    <span class="built_in">local</span> v2; v2=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$2</span>"</span> | cut -d <span class="string">'-'</span> -f 1 )</span><br><span class="line">    <span class="built_in">local</span> q2; q2=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$2</span>"</span> | cut -s -d <span class="string">'-'</span> -f 2- )</span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">"<span class="variable">$v1</span>"</span> = <span class="string">"<span class="variable">$v2</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">if</span> [ <span class="string">"<span class="variable">$q1</span>"</span> = <span class="string">"<span class="variable">$q2</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">return</span> 1</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">if</span> [ -z <span class="string">"<span class="variable">$q1</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">                <span class="built_in">return</span> 1</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">if</span> [ -z <span class="string">"<span class="variable">$q2</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">                    <span class="built_in">return</span> 0</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    [  <span class="string">"<span class="variable">$q1</span>"</span> = <span class="string">"<span class="variable">$(echo -e "$q1\n$q2" | sort -V | head -n1)</span>"</span> ]</span><br><span class="line">                <span class="keyword">fi</span></span><br><span class="line">            <span class="keyword">fi</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        [  <span class="string">"<span class="variable">$v1</span>"</span> = <span class="string">"<span class="variable">$(echo -e "$v1\n$v2" | sort -V | head -n1)</span>"</span> ]</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># returns a plugin version from a plugin archive</span></span><br><span class="line"><span class="function"><span class="title">get_plugin_version</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> archive; archive=<span class="variable">$1</span></span><br><span class="line">    <span class="built_in">local</span> version; version=$(unzip -p <span class="string">"<span class="variable">$archive</span>"</span> META-INF/MANIFEST.MF | grep <span class="string">"^Plugin-Version: "</span> | sed -e <span class="string">'s#^Plugin-Version: ##'</span>)</span><br><span class="line">    version=<span class="variable">$&#123;version%%[[:space:]]&#125;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$version</span>"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy files from /usr/share/jenkins/ref into $JENKINS_HOME</span></span><br><span class="line"><span class="comment"># So the initial JENKINS-HOME is set with expected content.</span></span><br><span class="line"><span class="comment"># Don't override, as this is just a reference setup, and use from UI</span></span><br><span class="line"><span class="comment"># can then change this, upgrade plugins, etc.</span></span><br><span class="line"><span class="function"><span class="title">copy_reference_file</span></span>() &#123;</span><br><span class="line">    f=<span class="string">"<span class="variable">$&#123;1%/&#125;</span>"</span></span><br><span class="line">    b=<span class="string">"<span class="variable">$&#123;f%.override&#125;</span>"</span></span><br><span class="line">    rel=<span class="string">"<span class="variable">$&#123;b:23&#125;</span>"</span></span><br><span class="line">    version_marker=<span class="string">"<span class="variable">$&#123;rel&#125;</span>.version_from_image"</span></span><br><span class="line">    dir=$(dirname <span class="string">"<span class="variable">$&#123;b&#125;</span>"</span>)</span><br><span class="line">    <span class="built_in">local</span> action;</span><br><span class="line">    <span class="built_in">local</span> reason;</span><br><span class="line">    <span class="built_in">local</span> container_version;</span><br><span class="line">    <span class="built_in">local</span> image_version;</span><br><span class="line">    <span class="built_in">local</span> marker_version;</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">log</span>; <span class="built_in">log</span>=<span class="literal">false</span></span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$&#123;rel&#125;</span> == plugins/*.jpi ]]; <span class="keyword">then</span></span><br><span class="line">        container_version=$(get_plugin_version <span class="string">"<span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;rel&#125;</span>"</span>)</span><br><span class="line">        image_version=$(get_plugin_version <span class="string">"<span class="variable">$&#123;f&#125;</span>"</span>)</span><br><span class="line">        <span class="keyword">if</span> [[ -e <span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;version_marker&#125;</span> ]]; <span class="keyword">then</span></span><br><span class="line">            marker_version=$(cat <span class="string">"<span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;version_marker&#125;</span>"</span>)</span><br><span class="line">            <span class="keyword">if</span> versionLT <span class="string">"<span class="variable">$marker_version</span>"</span> <span class="string">"<span class="variable">$container_version</span>"</span>; <span class="keyword">then</span></span><br><span class="line">                action=<span class="string">"SKIPPED"</span></span><br><span class="line">                reason=<span class="string">"Installed version (<span class="variable">$container_version</span>) has been manually upgraded from initial version (<span class="variable">$marker_version</span>)"</span></span><br><span class="line">                <span class="built_in">log</span>=<span class="literal">true</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">if</span> [[ <span class="string">"<span class="variable">$image_version</span>"</span> == <span class="string">"<span class="variable">$container_version</span>"</span> ]]; <span class="keyword">then</span></span><br><span class="line">                    action=<span class="string">"SKIPPED"</span></span><br><span class="line">                    reason=<span class="string">"Version from image is the same as the installed version <span class="variable">$image_version</span>"</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    <span class="keyword">if</span> versionLT <span class="string">"<span class="variable">$image_version</span>"</span> <span class="string">"<span class="variable">$container_version</span>"</span>; <span class="keyword">then</span></span><br><span class="line">                        action=<span class="string">"SKIPPED"</span></span><br><span class="line">                        <span class="built_in">log</span>=<span class="literal">true</span></span><br><span class="line">                        reason=<span class="string">"Image version (<span class="variable">$image_version</span>) is older than installed version (<span class="variable">$container_version</span>)"</span></span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        action=<span class="string">"UPGRADED"</span></span><br><span class="line">                        <span class="built_in">log</span>=<span class="literal">true</span></span><br><span class="line">                        reason=<span class="string">"Image version (<span class="variable">$image_version</span>) is newer than installed version (<span class="variable">$container_version</span>)"</span></span><br><span class="line">                    <span class="keyword">fi</span></span><br><span class="line">                <span class="keyword">fi</span></span><br><span class="line">            <span class="keyword">fi</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">if</span> [[ -n <span class="string">"<span class="variable">$TRY_UPGRADE_IF_NO_MARKER</span>"</span> ]]; <span class="keyword">then</span></span><br><span class="line">                <span class="keyword">if</span> [[ <span class="string">"<span class="variable">$image_version</span>"</span> == <span class="string">"<span class="variable">$container_version</span>"</span> ]]; <span class="keyword">then</span></span><br><span class="line">                    action=<span class="string">"SKIPPED"</span></span><br><span class="line">                    reason=<span class="string">"Version from image is the same as the installed version <span class="variable">$image_version</span> (no marker found)"</span></span><br><span class="line">                    <span class="comment"># Add marker for next time</span></span><br><span class="line">                    <span class="built_in">echo</span> <span class="string">"<span class="variable">$image_version</span>"</span> &gt; <span class="string">"<span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;version_marker&#125;</span>"</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    <span class="keyword">if</span> versionLT <span class="string">"<span class="variable">$image_version</span>"</span> <span class="string">"<span class="variable">$container_version</span>"</span>; <span class="keyword">then</span></span><br><span class="line">                        action=<span class="string">"SKIPPED"</span></span><br><span class="line">                        <span class="built_in">log</span>=<span class="literal">true</span></span><br><span class="line">                        reason=<span class="string">"Image version (<span class="variable">$image_version</span>) is older than installed version (<span class="variable">$container_version</span>) (no marker found)"</span></span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        action=<span class="string">"UPGRADED"</span></span><br><span class="line">                        <span class="built_in">log</span>=<span class="literal">true</span></span><br><span class="line">                        reason=<span class="string">"Image version (<span class="variable">$image_version</span>) is newer than installed version (<span class="variable">$container_version</span>) (no marker found)"</span></span><br><span class="line">                    <span class="keyword">fi</span></span><br><span class="line">                <span class="keyword">fi</span></span><br><span class="line">            <span class="keyword">fi</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">        <span class="keyword">if</span> [[ ! -e <span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;rel&#125;</span> || <span class="string">"<span class="variable">$action</span>"</span> == <span class="string">"UPGRADED"</span> || <span class="variable">$f</span> = *.override ]]; <span class="keyword">then</span></span><br><span class="line">            action=<span class="variable">$&#123;action:-"INSTALLED"&#125;</span></span><br><span class="line">            <span class="built_in">log</span>=<span class="literal">true</span></span><br><span class="line">            mkdir -p <span class="string">"<span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;dir:23&#125;</span>"</span></span><br><span class="line">            cp -r <span class="string">"<span class="variable">$&#123;f&#125;</span>"</span> <span class="string">"<span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;rel&#125;</span>"</span>;</span><br><span class="line">            <span class="comment"># pin plugins on initial copy</span></span><br><span class="line">            touch <span class="string">"<span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;rel&#125;</span>.pinned"</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"<span class="variable">$image_version</span>"</span> &gt; <span class="string">"<span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;version_marker&#125;</span>"</span></span><br><span class="line">            reason=<span class="variable">$&#123;reason:-$image_version&#125;</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            action=<span class="variable">$&#123;action:-"SKIPPED"&#125;</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">if</span> [[ ! -e <span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;rel&#125;</span> || <span class="variable">$f</span> = *.override ]]</span><br><span class="line">        <span class="keyword">then</span></span><br><span class="line">            action=<span class="string">"INSTALLED"</span></span><br><span class="line">            <span class="built_in">log</span>=<span class="literal">true</span></span><br><span class="line">            mkdir -p <span class="string">"<span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;dir:23&#125;</span>"</span></span><br><span class="line">            cp -r <span class="string">"<span class="variable">$&#123;f&#125;</span>"</span> <span class="string">"<span class="variable">$JENKINS_HOME</span>/<span class="variable">$&#123;rel&#125;</span>"</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            action=<span class="string">"SKIPPED"</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">if</span> [[ -n <span class="string">"<span class="variable">$VERBOSE</span>"</span> || <span class="string">"<span class="variable">$log</span>"</span> == <span class="string">"true"</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">if</span> [ -z <span class="string">"<span class="variable">$reason</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"<span class="variable">$action</span> <span class="variable">$rel</span>"</span> &gt;&gt; <span class="string">"<span class="variable">$COPY_REFERENCE_FILE_LOG</span>"</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"<span class="variable">$action</span> <span class="variable">$rel</span> : <span class="variable">$reason</span>"</span> &gt;&gt; <span class="string">"<span class="variable">$COPY_REFERENCE_FILE_LOG</span>"</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>进行通过shell脚本来启动，jenkins.sh内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/bash -e</span></span><br><span class="line"></span><br><span class="line">: <span class="string">"<span class="variable">$&#123;JENKINS_HOME:="/var/jenkins"&#125;</span>"</span></span><br><span class="line">touch <span class="string">"<span class="variable">$&#123;COPY_REFERENCE_FILE_LOG&#125;</span>"</span> || &#123; <span class="built_in">echo</span> <span class="string">"Can not write to <span class="variable">$&#123;COPY_REFERENCE_FILE_LOG&#125;</span>. Wrong volume permissions?"</span>; <span class="built_in">exit</span> 1; &#125;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"--- Copying files at <span class="variable">$(date)</span>"</span> &gt;&gt; <span class="string">"<span class="variable">$COPY_REFERENCE_FILE_LOG</span>"</span></span><br><span class="line">find /usr/share/jenkins/ref/ \( -<span class="built_in">type</span> f -o -<span class="built_in">type</span> l \) -<span class="built_in">exec</span> bash -c <span class="string">'. /usr/local/bin/jenkins-support; for arg; do copy_reference_file "$arg"; done'</span> _ &#123;&#125; +</span><br><span class="line"></span><br><span class="line"><span class="comment"># if `docker run` first argument start with `--` the user is passing jenkins launcher arguments</span></span><br><span class="line"><span class="keyword">if</span> [[ <span class="variable">$#</span> -lt 1 ]] || [[ <span class="string">"<span class="variable">$1</span>"</span> == <span class="string">"--"</span>* ]]; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># read JAVA_OPTS and JENKINS_OPTS into arrays to avoid need for eval (and associated vulnerabilities)</span></span><br><span class="line">  java_opts_array=()</span><br><span class="line">  <span class="keyword">while</span> IFS= <span class="built_in">read</span> -r -d <span class="string">''</span> item; <span class="keyword">do</span></span><br><span class="line">    java_opts_array+=( <span class="string">"<span class="variable">$item</span>"</span> )</span><br><span class="line">  <span class="keyword">done</span> &lt; &lt;([[ <span class="variable">$JAVA_OPTS</span> ]] &amp;&amp; xargs <span class="built_in">printf</span> <span class="string">'%s\0'</span> &lt;&lt;&lt;<span class="string">"<span class="variable">$JAVA_OPTS</span>"</span>)</span><br><span class="line"></span><br><span class="line">  jenkins_opts_array=( )</span><br><span class="line">  <span class="keyword">while</span> IFS= <span class="built_in">read</span> -r -d <span class="string">''</span> item; <span class="keyword">do</span></span><br><span class="line">    jenkins_opts_array+=( <span class="string">"<span class="variable">$item</span>"</span> )</span><br><span class="line">  <span class="keyword">done</span> &lt; &lt;([[ <span class="variable">$JENKINS_OPTS</span> ]] &amp;&amp; xargs <span class="built_in">printf</span> <span class="string">'%s\0'</span> &lt;&lt;&lt;<span class="string">"<span class="variable">$JENKINS_OPTS</span>"</span>)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">exec</span> java <span class="string">"<span class="variable">$&#123;java_opts_array[@]&#125;</span>"</span> -jar /usr/share/jenkins/jenkins.war <span class="string">"<span class="variable">$&#123;jenkins_opts_array[@]&#125;</span>"</span> <span class="string">"<span class="variable">$@</span>"</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># As argument is not jenkins, assume user want to run his own process, for example a `bash` shell to explore this image</span></span><br><span class="line"><span class="built_in">exec</span> <span class="string">"<span class="variable">$@</span>"</span></span><br></pre></td></tr></table></figure>
+<h5 id="构建jenkins-master镜像"><a href="#构建jenkins-master镜像" class="headerlink" title="构建jenkins-master镜像"></a>构建jenkins-master镜像</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t tonywell/jenkins-master .</span><br></pre></td></tr></table></figure>
+<h4 id="4、制作jenkins-swarm镜像"><a href="#4、制作jenkins-swarm镜像" class="headerlink" title="4、制作jenkins-swarm镜像"></a>4、制作jenkins-swarm镜像</h4><p>我这里通过jenkins swarm plugin + swarm-client.jar来是job节点自动发现jenkins master并且自动注册到master节点，所以先制动一个swarm的基础镜像，因为job节点需要用来具体执行构建任务，特别是java的话需要javac，所以这里需要以tonywell/alpine-jdk8作为基础镜像。</p>
+<h5 id="下载swarm-client-3-9-jar"><a href="#下载swarm-client-3-9-jar" class="headerlink" title="下载swarm-client-3.9.jar"></a>下载swarm-client-3.9.jar</h5><p>官方下载地址如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/</span><br></pre></td></tr></table></figure>
+<p>我这里用的版本是3.9</p>
+<h5 id="创建Dockerfile-3"><a href="#创建Dockerfile-3" class="headerlink" title="创建Dockerfile"></a>创建Dockerfile</h5><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> tonywell/alpine-jdk8</span><br><span class="line"></span><br><span class="line"><span class="keyword">MAINTAINER</span> tonywell <span class="string">"tongwei1985@gmail.com"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Jenkins Swarm Version</span></span><br><span class="line"><span class="keyword">ARG</span> SWARM_VERSION=<span class="number">3.9</span></span><br><span class="line"><span class="comment"># Container User</span></span><br><span class="line"><span class="keyword">ARG</span> CONTAINER_USER=swarmslave</span><br><span class="line"><span class="keyword">ARG</span> CONTAINER_UID=<span class="number">1000</span></span><br><span class="line"><span class="keyword">ARG</span> CONTAINER_GROUP=swarmslave</span><br><span class="line"><span class="keyword">ARG</span> CONTAINER_GID=<span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> SWARM_HOME=/opt/jenkins-swarm \</span><br><span class="line">    SWARM_JAVA_HOME=/usr/local/java \</span><br><span class="line">    SWARM_WORKDIR=/opt/jenkins</span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> swarm-client-3.9.jar <span class="variable">$&#123;SWARM_HOME&#125;</span>/swarm-client.jar</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">RUN <span class="built_in">export</span> CONTAINER_USER=swarmslave &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">export</span> CONTAINER_GROUP=swarmslave &amp;&amp; \</span></span><br><span class="line"><span class="bash">    addgroup -g <span class="variable">$CONTAINER_GID</span> swarmslave &amp;&amp; \</span></span><br><span class="line"><span class="bash">    adduser -u <span class="variable">$CONTAINER_UID</span> -G swarmslave -s /bin/bash -S <span class="variable">$CONTAINER_USER</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk upgrade --update &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk add --update \</span></span><br><span class="line"><span class="bash">    git openssh-client ttf-dejavu coreutils gzip &amp;&amp; \</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">    mkdir -p <span class="variable">$&#123;SWARM_HOME&#125;</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    mkdir -p <span class="variable">$&#123;SWARM_WORKDIR&#125;</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    chown -R <span class="variable">$&#123;CONTAINER_USER&#125;</span>:<span class="variable">$&#123;CONTAINER_GROUP&#125;</span> <span class="variable">$&#123;SWARM_HOME&#125;</span> <span class="variable">$&#123;SWARM_WORKDIR&#125;</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    chmod +x <span class="variable">$&#123;SWARM_HOME&#125;</span>/swarm-client.jar &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf /var/cache/apk/* &amp;&amp; rm -rf /var/<span class="built_in">log</span>/* &amp;&amp; rm -rf /tmp/*</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash"><span class="comment"># Entrypoint Environment Variables</span></span></span><br><span class="line"><span class="bash">ENV SWARM_VM_PARAMETERS= \</span></span><br><span class="line"><span class="bash">    SWARM_MASTER_URL= \</span></span><br><span class="line"><span class="bash">    SWARM_VM_PARAMETERS= \</span></span><br><span class="line"><span class="bash">    SWARM_JENKINS_USER= \</span></span><br><span class="line"><span class="bash">    SWARM_JENKINS_PASSWORD= \</span></span><br><span class="line"><span class="bash">    SWARM_CLIENT_EXECUTORS= \</span></span><br><span class="line"><span class="bash">    SWARM_CLIENT_LABELS= \</span></span><br><span class="line"><span class="bash">    SWARM_CLIENT_NAME=</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">USER <span class="variable">$CONTAINER_USER</span></span></span><br><span class="line"><span class="bash">WORKDIR <span class="variable">$SWARM_WORKDIR</span></span></span><br><span class="line"><span class="bash">VOLUME <span class="variable">$SWARM_WORKDIR</span></span></span><br><span class="line"><span class="bash">COPY scripts/docker-entrypoint.sh <span class="variable">$&#123;SWARM_HOME&#125;</span>/docker-entrypoint.sh</span></span><br><span class="line"><span class="bash">ENTRYPOINT [<span class="string">"/bin/tini"</span>,<span class="string">"--"</span>,<span class="string">"/opt/jenkins-swarm/docker-entrypoint.sh"</span>]</span></span><br><span class="line"><span class="bash">CMD [<span class="string">"swarm"</span>]</span></span><br></pre></td></tr></table></figure>
+<p>镜像的入口文件docker-entrypoint.sh内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> -o errexit</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$&#123;SWARM_DELAYED_START&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  sleep <span class="variable">$&#123;SWARM_DELAYED_START&#125;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$&#123;SWARM_ENV_FILE&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">source</span> <span class="variable">$&#123;SWARM_ENV_FILE&#125;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">jenkins_default_parameters=<span class="string">"-disableSslVerification"</span></span><br><span class="line"></span><br><span class="line">java_vm_parameters=<span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$&#123;SWARM_VM_PARAMETERS&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  java_vm_parameters=<span class="variable">$&#123;SWARM_VM_PARAMETERS&#125;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">jenkins_master=<span class="string">"http://jenkins:8080"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$&#123;SWARM_MASTER_URL&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  jenkins_master=<span class="variable">$&#123;SWARM_MASTER_URL&#125;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">jenkins_swarm_parameters=<span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$&#123;SWARM_CLIENT_PARAMETERS&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  jenkins_swarm_parameters=<span class="variable">$&#123;SWARM_CLIENT_PARAMETERS&#125;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">jenkins_user=<span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$&#123;SWARM_JENKINS_USER&#125;</span>"</span> ] &amp;&amp; [ -n <span class="string">"<span class="variable">$&#123;SWARM_JENKINS_PASSWORD&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  jenkins_user=<span class="string">"-username "</span><span class="variable">$&#123;SWARM_JENKINS_USER&#125;</span><span class="string">" -password "</span><span class="variable">$&#123;SWARM_JENKINS_PASSWORD&#125;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">jenkins_executors=<span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$&#123;SWARM_CLIENT_EXECUTORS&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  jenkins_executors=<span class="string">"-executors "</span><span class="variable">$&#123;SWARM_CLIENT_EXECUTORS&#125;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">swarm_node_name=<span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$&#123;SWARM_CLIENT_NAME&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  swarm_node_name=<span class="string">"-name '"</span><span class="variable">$&#123;SWARM_CLIENT_NAME&#125;</span><span class="string">"'"</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">unset</span> SWARM_JENKINS_USER</span><br><span class="line"><span class="built_in">unset</span> SWARM_JENKINS_PASSWORD</span><br><span class="line"><span class="built_in">unset</span> SWARM_MASTER_URL</span><br><span class="line"></span><br><span class="line">jenkins_workdir=<span class="string">"-fsroot "</span><span class="variable">$&#123;SWARM_WORKDIR&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$1</span>"</span> = <span class="string">'swarm'</span> ]; <span class="keyword">then</span></span><br><span class="line">  <span class="comment"># Run the Swarm-Client according to environment variables.</span></span><br><span class="line">  <span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$&#123;SWARM_CLIENT_LABELS&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">exec</span> <span class="variable">$&#123;SWARM_JAVA_HOME&#125;</span>/bin/java -Dfile.encoding=UTF-8 <span class="variable">$&#123;java_vm_parameters&#125;</span> -jar <span class="variable">$&#123;SWARM_HOME&#125;</span>/swarm-client-jar-with-dependencies.jar <span class="variable">$&#123;jenkins_default_parameters&#125;</span> -master <span class="variable">$&#123;jenkins_master&#125;</span> <span class="variable">$&#123;swarm_node_name&#125;</span> <span class="variable">$&#123;jenkins_executors&#125;</span> <span class="variable">$&#123;jenkins_user&#125;</span> <span class="variable">$&#123;jenkins_swarm_parameters&#125;</span> <span class="variable">$&#123;jenkins_workdir&#125;</span> -labels <span class="string">"<span class="variable">$&#123;SWARM_CLIENT_LABELS&#125;</span>"</span></span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="built_in">exec</span> <span class="variable">$&#123;SWARM_JAVA_HOME&#125;</span>/bin/java -Dfile.encoding=UTF-8 <span class="variable">$&#123;java_vm_parameters&#125;</span> -jar <span class="variable">$&#123;SWARM_HOME&#125;</span>/swarm-client-jar-with-dependencies.jar <span class="variable">$&#123;jenkins_default_parameters&#125;</span> -master <span class="variable">$&#123;jenkins_master&#125;</span> <span class="variable">$&#123;swarm_node_name&#125;</span> <span class="variable">$&#123;jenkins_executors&#125;</span> <span class="variable">$&#123;jenkins_user&#125;</span> <span class="variable">$&#123;jenkins_swarm_parameters&#125;</span> <span class="variable">$&#123;jenkins_workdir&#125;</span></span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">elif</span> [[ <span class="string">"<span class="variable">$1</span>"</span> == <span class="string">'-'</span>* ]]; <span class="keyword">then</span></span><br><span class="line">  <span class="comment"># Run the Swarm-Client with passed parameters.</span></span><br><span class="line">  <span class="built_in">exec</span> <span class="variable">$&#123;SWARM_JAVA_HOME&#125;</span>/bin/java <span class="variable">$JAVA_OPTS</span> -jar <span class="variable">$&#123;SWARM_HOME&#125;</span>/swarm-client-jar-with-dependencies.jar <span class="string">"<span class="variable">$@</span>"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  <span class="built_in">exec</span> <span class="string">"<span class="variable">$@</span>"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<h5 id="构建jenkins-swarm镜像"><a href="#构建jenkins-swarm镜像" class="headerlink" title="构建jenkins-swarm镜像"></a>构建jenkins-swarm镜像</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t tonywell/jenkins-swarm .</span><br></pre></td></tr></table></figure>
+<h4 id="5、制作JAVA节点镜像"><a href="#5、制作JAVA节点镜像" class="headerlink" title="5、制作JAVA节点镜像"></a>5、制作JAVA节点镜像</h4><p>因为要通过swarm-client来注册，所以需要基于jenkins-swarm镜像来执行，java目前主要是两大构建工具maven和gradle，镜像中把maven和gradle都装上，ant等古董工具就不安装以节省空间。</p>
+<h5 id="下载maven和gradle"><a href="#下载maven和gradle" class="headerlink" title="下载maven和gradle"></a>下载maven和gradle</h5><p>分别去maven和gradle下载所需版本安装包，同样可以精简删除一些无用文件。</p>
+<h5 id="制作Dockerfile"><a href="#制作Dockerfile" class="headerlink" title="制作Dockerfile"></a>制作Dockerfile</h5><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> tonywell/jenkins-swarm</span><br><span class="line"></span><br><span class="line"><span class="keyword">MAINTAINER</span> tonywell <span class="string">"tongwei1985@gmail.com"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> root</span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> maven-3.5.4.tar.gz /usr/<span class="built_in">local</span>/maven</span></span><br><span class="line"><span class="bash">ENV M2_HOME=/usr/<span class="built_in">local</span>/maven</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">ADD gradle-4.10.2.tar.gz /usr/<span class="built_in">local</span>/gradle</span></span><br><span class="line"><span class="bash">ENV GRADLE_HOME=/usr/<span class="built_in">local</span>/gradle</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">RUN <span class="built_in">cd</span> /usr/<span class="built_in">local</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    ln -s /usr/<span class="built_in">local</span>/maven/bin/mvn /usr/bin/mvn &amp;&amp; \</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">    apk upgrade --update &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk add --update libltdl &amp;&amp; \</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">    <span class="built_in">cd</span> /usr/<span class="built_in">local</span> &amp;&amp;\</span></span><br><span class="line"><span class="bash">    ln -s /usr/<span class="built_in">local</span>/gradle/bin/gradle /usr/bin/gradle</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash"><span class="comment"># Switch back to user jenkins</span></span></span><br><span class="line"><span class="bash">USER <span class="variable">$CONTAINER_UID</span></span></span><br></pre></td></tr></table></figure>
+<h5 id="构建jenkins-java8镜像"><a href="#构建jenkins-java8镜像" class="headerlink" title="构建jenkins-java8镜像"></a>构建jenkins-java8镜像</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t tonywell/jenkins-java8 .</span><br></pre></td></tr></table></figure>
+<h4 id="6、制作前端节点镜像"><a href="#6、制作前端节点镜像" class="headerlink" title="6、制作前端节点镜像"></a>6、制作前端节点镜像</h4><p>前端打包需要用到的工具主要是node和yarn，因为npm下载依赖是在太慢，cnpm总会出现一些莫问其妙的问题，yarn安装依赖很快，所以这里选择用yarn，Node的10.11.0-alpine官方镜像就是yarn，所以我这里使用官方的alpine镜像作为基础镜像，然后装上swarm-client来自动注册。</p>
+<h5 id="制作Dockerfile-1"><a href="#制作Dockerfile-1" class="headerlink" title="制作Dockerfile"></a>制作Dockerfile</h5><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> node:<span class="number">10.11</span>.<span class="number">0</span>-alpine</span><br><span class="line"></span><br><span class="line"><span class="keyword">MAINTAINER</span> tonywell <span class="string">"tongwei1985@gmail.com"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> root</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> LANG=C.UTF-<span class="number">8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Jenkins Swarm Version</span></span><br><span class="line"><span class="keyword">ARG</span> SWARM_VERSION=<span class="number">3.9</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Container User</span></span><br><span class="line"><span class="keyword">ARG</span> CONTAINER_USER=swarmslave</span><br><span class="line"><span class="keyword">ARG</span> CONTAINER_UID=<span class="number">1001</span></span><br><span class="line"><span class="keyword">ARG</span> CONTAINER_GROUP=swarmslave</span><br><span class="line"><span class="keyword">ARG</span> CONTAINER_GID=<span class="number">1001</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> SWARM_HOME=/opt/jenkins-swarm \</span><br><span class="line">    SWARM_JAVA_HOME=/usr/local/java \</span><br><span class="line">    SWARM_WORKDIR=/opt/jenkins</span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> jre8.tar.gz /usr/<span class="built_in">local</span>/java</span></span><br><span class="line"><span class="bash">ENV JAVA_HOME=/usr/<span class="built_in">local</span>/java \</span></span><br><span class="line"><span class="bash">    PATH=<span class="variable">$&#123;PATH&#125;</span>:/usr/<span class="built_in">local</span>/java/bin</span></span><br><span class="line"><span class="bash">COPY tini-static /bin/tini</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">COPY swarm-client-3.9.jar <span class="variable">$&#123;SWARM_HOME&#125;</span>/swarm-client.jar</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash"><span class="comment"># Here we install GNU libc (aka glibc) and set C.UTF-8 locale as default.</span></span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">RUN <span class="built_in">export</span> CONTAINER_USER=swarmslave &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">export</span> CONTAINER_GROUP=swarmslave &amp;&amp; \</span></span><br><span class="line"><span class="bash">    addgroup -g <span class="variable">$CONTAINER_GID</span> swarmslave &amp;&amp; \</span></span><br><span class="line"><span class="bash">    adduser -u <span class="variable">$CONTAINER_UID</span> -G swarmslave -s /bin/sh -S <span class="variable">$CONTAINER_USER</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    ALPINE_GLIBC_BASE_URL=<span class="string">"http://47.99.98.250:9090/alpine-pkg-glibc/"</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    ALPINE_GLIBC_PACKAGE_VERSION=<span class="string">"2.28-r0"</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    ALPINE_GLIBC_BASE_PACKAGE_FILENAME=<span class="string">"glibc-<span class="variable">$ALPINE_GLIBC_PACKAGE_VERSION</span>.apk"</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    ALPINE_GLIBC_BIN_PACKAGE_FILENAME=<span class="string">"glibc-bin-<span class="variable">$ALPINE_GLIBC_PACKAGE_VERSION</span>.apk"</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    ALPINE_GLIBC_I18N_PACKAGE_FILENAME=<span class="string">"glibc-i18n-<span class="variable">$ALPINE_GLIBC_PACKAGE_VERSION</span>.apk"</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">"http://mirrors.aliyun.com/alpine/v3.4/main"</span> &gt; /etc/apk/repositories \</span></span><br><span class="line"><span class="bash">    &amp;&amp; <span class="built_in">echo</span> <span class="string">"http://mirrors.aliyun.com/alpine/v3.4/community"</span> &gt;&gt; /etc/apk/repositories &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk add --no-cache --virtual=.build-dependencies wget ca-certificates tzdata \</span></span><br><span class="line"><span class="bash">    git openssh-client ttf-dejavu coreutils gzip &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> \</span></span><br><span class="line"><span class="bash">        <span class="string">"-----BEGIN PUBLIC KEY-----\</span></span></span><br><span class="line"><span class="bash">        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApZ2u1KJKUu/fW4A25y9m\</span></span><br><span class="line"><span class="bash">        y70AGEa/J3Wi5ibNVGNn1gT1r0VfgeWd0pUybS4UmcHdiNzxJPgoWQhV2SSW1JYu\</span></span><br><span class="line"><span class="bash">        tOqKZF5QSN6X937PTUpNBjUvLtTQ1ve1fp39uf/lEXPpFpOPL88LKnDBgbh7wkCp\</span></span><br><span class="line"><span class="bash">        m2KzLVGChf83MS0ShL6G9EQIAUxLm99VpgRjwqTQ/KfzGtpke1wqws4au0Ab4qPY\</span></span><br><span class="line"><span class="bash">        KXvMLSPLUp7cfulWvhmZSegr5AdhNw5KNizPqCJT8ZrGvgHypXyiFvvAH5YRtSsc\</span></span><br><span class="line"><span class="bash">        Zvo9GI2e2MaZyo9/lvb+LbLEJZKEQckqRj4P26gmASrZEPStwc+yqy1ShHLA0j6m\</span></span><br><span class="line"><span class="bash">        1QIDAQAB\</span></span><br><span class="line"><span class="bash">        -----END PUBLIC KEY-----<span class="string">" | sed 's/   */\n/g' &gt; "</span>/etc/apk/keys/sgerrand.rsa.pub<span class="string">" &amp;&amp; \</span></span></span><br><span class="line"><span class="bash">    wget \</span></span><br><span class="line"><span class="bash">        <span class="string">"<span class="variable">$ALPINE_GLIBC_BASE_URL</span>/<span class="variable">$ALPINE_GLIBC_PACKAGE_VERSION</span>/<span class="variable">$ALPINE_GLIBC_BASE_PACKAGE_FILENAME</span>"</span> \</span></span><br><span class="line"><span class="bash">        <span class="string">"<span class="variable">$ALPINE_GLIBC_BASE_URL</span>/<span class="variable">$ALPINE_GLIBC_PACKAGE_VERSION</span>/<span class="variable">$ALPINE_GLIBC_BIN_PACKAGE_FILENAME</span>"</span> \</span></span><br><span class="line"><span class="bash">        <span class="string">"<span class="variable">$ALPINE_GLIBC_BASE_URL</span>/<span class="variable">$ALPINE_GLIBC_PACKAGE_VERSION</span>/<span class="variable">$ALPINE_GLIBC_I18N_PACKAGE_FILENAME</span>"</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk add --no-cache \</span></span><br><span class="line"><span class="bash">        <span class="string">"<span class="variable">$ALPINE_GLIBC_BASE_PACKAGE_FILENAME</span>"</span> \</span></span><br><span class="line"><span class="bash">        <span class="string">"<span class="variable">$ALPINE_GLIBC_BIN_PACKAGE_FILENAME</span>"</span> \</span></span><br><span class="line"><span class="bash">        <span class="string">"<span class="variable">$ALPINE_GLIBC_I18N_PACKAGE_FILENAME</span>"</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    \</span></span><br><span class="line"><span class="bash">    rm <span class="string">"/etc/apk/keys/sgerrand.rsa.pub"</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 <span class="string">"<span class="variable">$LANG</span>"</span> || <span class="literal">true</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">"export LANG=<span class="variable">$LANG</span>"</span> &gt; /etc/profile.d/locale.sh &amp;&amp; \</span></span><br><span class="line"><span class="bash">    \</span></span><br><span class="line"><span class="bash">    apk del glibc-i18n &amp;&amp; \</span></span><br><span class="line"><span class="bash">    \</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">    rm \</span></span><br><span class="line"><span class="bash">        <span class="string">"<span class="variable">$ALPINE_GLIBC_BASE_PACKAGE_FILENAME</span>"</span> \</span></span><br><span class="line"><span class="bash">        <span class="string">"<span class="variable">$ALPINE_GLIBC_BIN_PACKAGE_FILENAME</span>"</span> \</span></span><br><span class="line"><span class="bash">        <span class="string">"<span class="variable">$ALPINE_GLIBC_I18N_PACKAGE_FILENAME</span>"</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">"Asia/Shanghai"</span> &gt; /etc/timezone &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">export</span> TINI_VERSION=0.9.0 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">export</span> TINI_SHA=fa23d1e20732501c3bb8eeeca423c89ac80ed452 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">'Calculated checksum: '</span>$(sha1sum /bin/tini) &amp;&amp; \</span></span><br><span class="line"><span class="bash">    chmod +x /bin/tini &amp;&amp; <span class="built_in">echo</span> <span class="string">"<span class="variable">$TINI_SHA</span>  /bin/tini"</span> | sha1sum -c - &amp;&amp; \</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4'</span> &gt;&gt; /etc/nsswitch.conf &amp;&amp; \</span></span><br><span class="line"><span class="bash">    mkdir -p <span class="variable">$&#123;SWARM_HOME&#125;</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    mkdir -p <span class="variable">$&#123;SWARM_WORKDIR&#125;</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    chown -R <span class="variable">$&#123;CONTAINER_USER&#125;</span>:<span class="variable">$&#123;CONTAINER_GROUP&#125;</span> <span class="variable">$&#123;SWARM_HOME&#125;</span> <span class="variable">$&#123;SWARM_WORKDIR&#125;</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    chmod +x <span class="variable">$&#123;SWARM_HOME&#125;</span>/swarm-client.jar &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf /var/cache/apk/* &amp;&amp; rm -rf /var/<span class="built_in">log</span>/* &amp;&amp; rm -rf /tmp/*</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash"><span class="comment"># Entrypoint Environment Variables</span></span></span><br><span class="line"><span class="bash">ENV SWARM_VM_PARAMETERS= \</span></span><br><span class="line"><span class="bash">    SWARM_MASTER_URL= \</span></span><br><span class="line"><span class="bash">    SWARM_VM_PARAMETERS= \</span></span><br><span class="line"><span class="bash">    SWARM_JENKINS_USER= \</span></span><br><span class="line"><span class="bash">    SWARM_JENKINS_PASSWORD= \</span></span><br><span class="line"><span class="bash">    SWARM_CLIENT_EXECUTORS= \</span></span><br><span class="line"><span class="bash">    SWARM_CLIENT_LABELS= \</span></span><br><span class="line"><span class="bash">    SWARM_CLIENT_NAME=</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">WORKDIR <span class="variable">$SWARM_WORKDIR</span></span></span><br><span class="line"><span class="bash">VOLUME <span class="variable">$SWARM_WORKDIR</span></span></span><br><span class="line"><span class="bash">COPY scripts/docker-entrypoint.sh <span class="variable">$&#123;SWARM_HOME&#125;</span>/docker-entrypoint.sh</span></span><br><span class="line"><span class="bash">ENTRYPOINT [<span class="string">"/bin/tini"</span>,<span class="string">"--"</span>,<span class="string">"/opt/jenkins-swarm/docker-entrypoint.sh"</span>]</span></span><br><span class="line"><span class="bash">CMD [<span class="string">"swarm"</span>]</span></span><br></pre></td></tr></table></figure>
+<p>镜像的入口文件和jenkins-java8镜像的一样即可。</p>
+<h5 id="构建jenkins-nodeyarn镜像"><a href="#构建jenkins-nodeyarn镜像" class="headerlink" title="构建jenkins-nodeyarn镜像"></a>构建jenkins-nodeyarn镜像</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t tonywell/jenkins-nodeyarn .</span><br></pre></td></tr></table></figure>
+<h4 id="7、制作docker-compose镜像"><a href="#7、制作docker-compose镜像" class="headerlink" title="7、制作docker-compose镜像"></a>7、制作docker-compose镜像</h4><p>jenkins当然可以通过Dockerfile来构建项目镜像，发布部署，但是我更喜欢通过docker-compose来编排。</p>
+<h5 id="制作Dockerfile-2"><a href="#制作Dockerfile-2" class="headerlink" title="制作Dockerfile"></a>制作Dockerfile</h5><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> tonywell/jenkins-swarm</span><br><span class="line"></span><br><span class="line"><span class="keyword">MAINTAINER</span> tonywell <span class="string">"tongwei1985@gmail.com"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> root</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> DOCKER_COMPOSE_VERSION=<span class="number">1.16</span>.<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apk --update add curl &amp;&amp; \</span></span><br><span class="line"><span class="bash">    curl -L https://github.com/docker/compose/releases/download/<span class="variable">$DOCKER_COMPOSE_VERSION</span>/docker-compose-`uname -s`-`uname -m` -o /usr/<span class="built_in">local</span>/bin/docker-compose \</span></span><br><span class="line"><span class="bash">    &amp;&amp; chmod +x /usr/<span class="built_in">local</span>/bin/docker-compose</span></span><br></pre></td></tr></table></figure>
+<h5 id="构建jenkins-docker-compose镜像"><a href="#构建jenkins-docker-compose镜像" class="headerlink" title="构建jenkins-docker-compose镜像"></a>构建jenkins-docker-compose镜像</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t tonywell/jenkins-docker-compose .</span><br></pre></td></tr></table></figure>
+<h4 id="8、制作tomcat镜像"><a href="#8、制作tomcat镜像" class="headerlink" title="8、制作tomcat镜像"></a>8、制作tomcat镜像</h4><p>制作tomcat镜像主要是用来部署java项目，使用前面制作的alpine-jre8作为基础镜像</p>
+<h5 id="准备tomcat"><a href="#准备tomcat" class="headerlink" title="准备tomcat"></a>准备tomcat</h5><p>下载好tomcat安装包，删除无用文件待用。</p>
+<h5 id="制作Dockerfile-3"><a href="#制作Dockerfile-3" class="headerlink" title="制作Dockerfile"></a>制作Dockerfile</h5><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> tonywell/alpine-jre8</span><br><span class="line"></span><br><span class="line"><span class="keyword">MAINTAINER</span> tonywell <span class="string">"tongwei1985@gmail.com"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> tomcat.tar.gz /opt/tomcat</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">ENV CATALINA_HOME /opt/tomcat</span></span><br><span class="line"><span class="bash">ENV PATH <span class="variable">$CATALINA_HOME</span>/bin:<span class="variable">$PATH</span></span></span><br><span class="line"><span class="bash">WORKDIR <span class="variable">$CATALINA_HOME</span></span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">RUN chmod -R -rX . &amp;&amp; \</span></span><br><span class="line"><span class="bash">    chmod 755 /opt/tomcat/bin/*.sh &amp;&amp; \</span></span><br><span class="line"><span class="bash">    chmod 777 logs work</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">EXPOSE 8080</span></span><br><span class="line"><span class="bash">CMD [<span class="string">"/opt/tomcat/bin/catalina.sh"</span>, <span class="string">"run"</span>]</span></span><br></pre></td></tr></table></figure>
+<p>这里需要注意，不能用startup.sh作为启动脚本，必须用catalina.sh作为启动脚本，原因是org.apache.catalina.startup.Bootstrap “$@” start \“$CATALINA_OUT” 2&gt;&amp;1 “&amp;” ，重定向日志之后多了&amp;符号，如果修改源码也可以，这里就用catalina.sh来启动了。</p>
+<h5 id="构建tomcat镜像"><a href="#构建tomcat镜像" class="headerlink" title="构建tomcat镜像"></a>构建tomcat镜像</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t tonywell/tomcat .</span><br></pre></td></tr></table></figure>
+<h4 id="9、制作nginx镜像"><a href="#9、制作nginx镜像" class="headerlink" title="9、制作nginx镜像"></a>9、制作nginx镜像</h4><p>nginx镜像主要用于前端项目部署和后台接口反向代理，我这里就不造轮子了，直接用官方的nginx:1.15.4-alpine镜像</p>
+<p>好了，以上集群环境的准备工作都已经做好了，下一章我们将正式搭建。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/03/k8s1-6-6集群部署-开启TLS安全认证-（四）/" rel="next" title="k8s1.6.6集群部署(开启TLS安全认证)（四）">
+                <i class="fa fa-chevron-left"></i> k8s1.6.6集群部署(开启TLS安全认证)（四）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/" rel="prev" title="Docker+jenkins打造前后端持续集成环境(2)">
+                Docker+jenkins打造前后端持续集成环境(2) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tony" />
+          <p class="site-author-name" itemprop="name">tony</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、Docker环境安装"><span class="nav-number">1.</span> <span class="nav-text">一、Docker环境安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、制作所需docker镜像"><span class="nav-number">2.</span> <span class="nav-text">二、制作所需docker镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、制作jre镜像"><span class="nav-number">2.1.</span> <span class="nav-text">1、制作jre镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#下载jre"><span class="nav-number">2.1.1.</span> <span class="nav-text">下载jre</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#精简jre"><span class="nav-number">2.1.2.</span> <span class="nav-text">精简jre</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建Dockerfile"><span class="nav-number">2.1.3.</span> <span class="nav-text">创建Dockerfile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构建jre8镜像"><span class="nav-number">2.1.4.</span> <span class="nav-text">构建jre8镜像</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、制作jdk镜像"><span class="nav-number">2.2.</span> <span class="nav-text">2、制作jdk镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#下载jdk"><span class="nav-number">2.2.1.</span> <span class="nav-text">下载jdk</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#精简jdk"><span class="nav-number">2.2.2.</span> <span class="nav-text">精简jdk</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建Dockerfile-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">创建Dockerfile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构建jdk8镜像"><span class="nav-number">2.2.4.</span> <span class="nav-text">构建jdk8镜像</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、制作jenkins镜像"><span class="nav-number">2.3.</span> <span class="nav-text">3、制作jenkins镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#下载jenkins"><span class="nav-number">2.3.1.</span> <span class="nav-text">下载jenkins</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建Dockerfile-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">创建Dockerfile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构建jenkins-master镜像"><span class="nav-number">2.3.3.</span> <span class="nav-text">构建jenkins-master镜像</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、制作jenkins-swarm镜像"><span class="nav-number">2.4.</span> <span class="nav-text">4、制作jenkins-swarm镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#下载swarm-client-3-9-jar"><span class="nav-number">2.4.1.</span> <span class="nav-text">下载swarm-client-3.9.jar</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建Dockerfile-3"><span class="nav-number">2.4.2.</span> <span class="nav-text">创建Dockerfile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构建jenkins-swarm镜像"><span class="nav-number">2.4.3.</span> <span class="nav-text">构建jenkins-swarm镜像</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5、制作JAVA节点镜像"><span class="nav-number">2.5.</span> <span class="nav-text">5、制作JAVA节点镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#下载maven和gradle"><span class="nav-number">2.5.1.</span> <span class="nav-text">下载maven和gradle</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#制作Dockerfile"><span class="nav-number">2.5.2.</span> <span class="nav-text">制作Dockerfile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构建jenkins-java8镜像"><span class="nav-number">2.5.3.</span> <span class="nav-text">构建jenkins-java8镜像</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6、制作前端节点镜像"><span class="nav-number">2.6.</span> <span class="nav-text">6、制作前端节点镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#制作Dockerfile-1"><span class="nav-number">2.6.1.</span> <span class="nav-text">制作Dockerfile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构建jenkins-nodeyarn镜像"><span class="nav-number">2.6.2.</span> <span class="nav-text">构建jenkins-nodeyarn镜像</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7、制作docker-compose镜像"><span class="nav-number">2.7.</span> <span class="nav-text">7、制作docker-compose镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#制作Dockerfile-2"><span class="nav-number">2.7.1.</span> <span class="nav-text">制作Dockerfile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构建jenkins-docker-compose镜像"><span class="nav-number">2.7.2.</span> <span class="nav-text">构建jenkins-docker-compose镜像</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8、制作tomcat镜像"><span class="nav-number">2.8.</span> <span class="nav-text">8、制作tomcat镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#准备tomcat"><span class="nav-number">2.8.1.</span> <span class="nav-text">准备tomcat</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#制作Dockerfile-3"><span class="nav-number">2.8.2.</span> <span class="nav-text">制作Dockerfile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构建tomcat镜像"><span class="nav-number">2.8.3.</span> <span class="nav-text">构建tomcat镜像</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9、制作nginx镜像"><span class="nav-number">2.9.</span> <span class="nav-text">9、制作nginx镜像</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tony</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

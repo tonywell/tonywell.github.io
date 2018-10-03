@@ -85,11 +85,12 @@
 
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="tony's blog">
+<meta property="og:title" content="tony&#39;s blog">
 <meta property="og:url" content="http://tonywell.github.io/page/3/index.html">
-<meta property="og:site_name" content="tony's blog">
+<meta property="og:site_name" content="tony&#39;s blog">
+<meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tony's blog">
+<meta name="twitter:title" content="tony&#39;s blog">
 
 
 
@@ -233,6 +234,339 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/06/07/2014-06-07-minashi-xian-jian-dan-udp-client/" itemprop="url">
+                  Mina实现简单UDP client
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-06-07T21:56:55+08:00" content="2014-06-07">
+              2014-06-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/mina/" itemprop="url" rel="index">
+                    <span itemprop="name">mina</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/mina/Nio/" itemprop="url" rel="index">
+                    <span itemprop="name">Nio</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>照旧还是先创建工作目录：mkdir minaUdpClient。<br>进入工作目录，创建build.gradle文件如下：  </p>
+<pre><code>apply plugin: &apos;java&apos;
+apply plugin: &apos;application&apos;
+
+task createJavaProject &lt;&lt;{
+  sourceSets*.java.srcDirs*.each {it.mkdirs()}
+  sourceSets*.resources.srcDirs*.each {it.mkdirs()}
+}
+
+repositories{
+  mavenCentral();
+}
+</code></pre><p>执行gradle createJavaProject初始化项目目录。目录结构如下：</p>
+<pre><code>.
+├── build
+├── build.gradle
+└── src
+    ├── main
+    │   ├── java
+    │   └── resources
+    └── test
+        ├── java
+        └── resources
+</code></pre><p> 创建MinaUdpClient.java文件，代码如下：<br></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/06/07/2014-06-07-minashi-xian-jian-dan-udp-client/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/06/06/2014-06-06-minashi-xian-jian-dan-de-udp-server/" itemprop="url">
+                  Mina实现简单的UDP server
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-06-06T15:06:29+08:00" content="2014-06-06">
+              2014-06-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/mina/" itemprop="url" rel="index">
+                    <span itemprop="name">mina</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/mina/Nio/" itemprop="url" rel="index">
+                    <span itemprop="name">Nio</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/mina/Nio/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>依旧还是先创建工作目录：mkdir minaUdpServer</p>
+<p>接着进入工作目录创建build.gradle如下：  </p>
+<pre><code>apply plugin: &apos;java&apos;
+apply plugin: &apos;appliction&apos;
+
+task createJavaProject &lt;&lt;{
+   sourceSets*.java.srcDirs*.each {it.mkdirs()}
+   sourceSets*.resources.srcDirs*.each {it.mkdirs()}
+}
+
+repositories{
+  mavenCentral();
+}
+</code></pre><p>然后执行gradle createJavaProject来初始化项目目录。执行完，目录结构如下：</p>
+<pre><code>.
+├── build
+├── build.gradle
+└── src
+    ├── main
+    │   ├── java
+    │   └── resources
+    └── test
+        ├── java
+        └── resources
+</code></pre><p>接下来开始创建MinaUdpServer.java，初始代码如下</p>
+<pre><code>public class MinaUdpServer{
+
+  public static void main(String[] args){
+     // code will go here next
+  }
+
+}
+</code></pre>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/06/06/2014-06-06-minashi-xian-jian-dan-de-udp-server/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -700,7 +1034,7 @@ repositories{
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -754,7 +1088,7 @@ repositories{
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

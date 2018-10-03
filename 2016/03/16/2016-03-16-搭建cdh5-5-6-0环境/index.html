@@ -84,43 +84,18 @@
 
 
 
-<meta name="description" content="环境
-系统：Centos 6.5   内存4G  总共3台
-Cloduera Manager：5.6.0
-CDH5: 5.6.0
-
-一、环境准备1、网络配置先分别修改三台设备的hostname：
-1vim /etc/sysconfig/network
-123.......HOSTNAME=master.......
-123........HOSTNAME=slave1........
-123...">
+<meta name="description" content="环境 系统：Centos 6.5   内存4G  总共3台 Cloduera Manager：5.6.0 CDH5: 5.6.0  一、环境准备1、网络配置先分别修改三台设备的hostname： 1vim /etc/sysconfig/network 123.......HOSTNAME=master....... 123........HOSTNAME=slave1........ 123...">
+<meta name="keywords" content="hadoop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="搭建cdh5 5.6.0环境">
 <meta property="og:url" content="http://tonywell.github.io/2016/03/16/2016-03-16-搭建cdh5-5-6-0环境/index.html">
-<meta property="og:site_name" content="tony's blog">
-<meta property="og:description" content="环境
-系统：Centos 6.5   内存4G  总共3台
-Cloduera Manager：5.6.0
-CDH5: 5.6.0
-
-一、环境准备1、网络配置先分别修改三台设备的hostname：
-1vim /etc/sysconfig/network
-123.......HOSTNAME=master.......
-123........HOSTNAME=slave1........
-123...">
+<meta property="og:site_name" content="tony&#39;s blog">
+<meta property="og:description" content="环境 系统：Centos 6.5   内存4G  总共3台 Cloduera Manager：5.6.0 CDH5: 5.6.0  一、环境准备1、网络配置先分别修改三台设备的hostname： 1vim /etc/sysconfig/network 123.......HOSTNAME=master....... 123........HOSTNAME=slave1........ 123...">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-03-16T13:57:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建cdh5 5.6.0环境">
-<meta name="twitter:description" content="环境
-系统：Centos 6.5   内存4G  总共3台
-Cloduera Manager：5.6.0
-CDH5: 5.6.0
-
-一、环境准备1、网络配置先分别修改三台设备的hostname：
-1vim /etc/sysconfig/network
-123.......HOSTNAME=master.......
-123........HOSTNAME=slave1........
-123...">
+<meta name="twitter:description" content="环境 系统：Centos 6.5   内存4G  总共3台 Cloduera Manager：5.6.0 CDH5: 5.6.0  一、环境准备1、网络配置先分别修改三台设备的hostname： 1vim /etc/sysconfig/network 123.......HOSTNAME=master....... 123........HOSTNAME=slave1........ 123...">
 
 
 
@@ -329,18 +304,18 @@ CDH5: 5.6.0
 <li>CDH5: 5.6.0</li>
 </ul>
 <h3 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h3><h4 id="1、网络配置"><a href="#1、网络配置" class="headerlink" title="1、网络配置"></a>1、网络配置</h4><p>先分别修改三台设备的hostname：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/sysconfig/network</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.......</div><div class="line">HOSTNAME=master</div><div class="line">.......</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">........</div><div class="line">HOSTNAME=slave1</div><div class="line">........</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">........</div><div class="line">HOSTNAME=slave2</div><div class="line">........</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysconfig/network</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.......</span><br><span class="line">HOSTNAME=master</span><br><span class="line">.......</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">........</span><br><span class="line">HOSTNAME=slave1</span><br><span class="line">........</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">........</span><br><span class="line">HOSTNAME=slave2</span><br><span class="line">........</span><br></pre></td></tr></table></figure>
 <p>然后通过下面命令重启网卡</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service network restart</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service network restart</span><br></pre></td></tr></table></figure>
 <p>修改/etc/hosts文件，写入ip与主机名的对应关系，三台设备都要写入，注意本机也必须写入。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">192.168.1.80   master</div><div class="line">192.168.1.81   slave1</div><div class="line">192.168.1.82   slave2</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.1.80   master</span><br><span class="line">192.168.1.81   slave1</span><br><span class="line">192.168.1.82   slave2</span><br></pre></td></tr></table></figure>
 <p>关闭防火墙，并关闭开机启动防火墙</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ service iptables stop</div><div class="line">$ chkconfig iptables off</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ service iptables stop</span><br><span class="line">$ chkconfig iptables off</span><br></pre></td></tr></table></figure>
 <p>关闭selinux：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/sysconfig/selinux</div><div class="line"></div><div class="line">SELINUX=disabled</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">SELINUX=disabled</span><br></pre></td></tr></table></figure>
 <h4 id="2、打通SSH"><a href="#2、打通SSH" class="headerlink" title="2、打通SSH"></a>2、打通SSH</h4>
       
     </div>
@@ -450,7 +425,7 @@ CDH5: 5.6.0
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -515,7 +490,7 @@ CDH5: 5.6.0
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

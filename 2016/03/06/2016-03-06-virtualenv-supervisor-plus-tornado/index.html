@@ -84,28 +84,17 @@
 
 
 
-<meta name="description" content="配置virtualenv+supervisor+tornado项目总结virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。  
-如果系统没有安装virtualenv，先安装，我是通过pip来安装的
-1pip install virtualenv
-在我的项目rmg目录下通过命令创建python2.7的虚拟环境
-12cd rmgvirtualenv -p p">
+<meta name="description" content="配置virtualenv+supervisor+tornado项目总结virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。   如果系统没有安装virtualenv，先安装，我是通过pip来安装的 1pip install virtualenv 在我的项目rmg目录下通过命令创建python2.7的虚拟环境 12cd rmgvirtualenv -p p">
 <meta property="og:type" content="article">
 <meta property="og:title" content="virtualenv_supervisor+tornado">
 <meta property="og:url" content="http://tonywell.github.io/2016/03/06/2016-03-06-virtualenv-supervisor-plus-tornado/index.html">
-<meta property="og:site_name" content="tony's blog">
-<meta property="og:description" content="配置virtualenv+supervisor+tornado项目总结virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。  
-如果系统没有安装virtualenv，先安装，我是通过pip来安装的
-1pip install virtualenv
-在我的项目rmg目录下通过命令创建python2.7的虚拟环境
-12cd rmgvirtualenv -p p">
+<meta property="og:site_name" content="tony&#39;s blog">
+<meta property="og:description" content="配置virtualenv+supervisor+tornado项目总结virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。   如果系统没有安装virtualenv，先安装，我是通过pip来安装的 1pip install virtualenv 在我的项目rmg目录下通过命令创建python2.7的虚拟环境 12cd rmgvirtualenv -p p">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-09-27T08:55:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="virtualenv_supervisor+tornado">
-<meta name="twitter:description" content="配置virtualenv+supervisor+tornado项目总结virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。  
-如果系统没有安装virtualenv，先安装，我是通过pip来安装的
-1pip install virtualenv
-在我的项目rmg目录下通过命令创建python2.7的虚拟环境
-12cd rmgvirtualenv -p p">
+<meta name="twitter:description" content="配置virtualenv+supervisor+tornado项目总结virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。   如果系统没有安装virtualenv，先安装，我是通过pip来安装的 1pip install virtualenv 在我的项目rmg目录下通过命令创建python2.7的虚拟环境 12cd rmgvirtualenv -p p">
 
 
 
@@ -310,32 +299,32 @@
       
         <h2 id="配置virtualenv-supervisor-tornado项目总结"><a href="#配置virtualenv-supervisor-tornado项目总结" class="headerlink" title="配置virtualenv+supervisor+tornado项目总结"></a>配置virtualenv+supervisor+tornado项目总结</h2><p>virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。  </p>
 <p>如果系统没有安装virtualenv，先安装，我是通过pip来安装的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install virtualenv</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install virtualenv</span><br></pre></td></tr></table></figure>
 <p>在我的项目rmg目录下通过命令创建python2.7的虚拟环境</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd rmg</div><div class="line">virtualenv -p python2.7 rmg_env</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd rmg</span><br><span class="line">virtualenv -p python2.7 rmg_env</span><br></pre></td></tr></table></figure>
 <p>激活虚拟化环境并安装配置supervisor和tornado</p>
 <p>激活虚拟化环境</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source rmg_env/bin/activate</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source rmg_env/bin/activate</span><br></pre></td></tr></table></figure>
 <p>执行完命令行前多出“(rmg_env)”,说明虚拟环境已经创建成功。</p>
 <p>接下来开始在虚拟环境中安装supervisor和tornado</p>
 <p>我是通过pip_requirements.txt配置，requirements.pip文件内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">supervisor</div><div class="line">tornado</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">supervisor</span><br><span class="line">tornado</span><br></pre></td></tr></table></figure>
 <p>接下来开始安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -r pip_requirements.txt</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r pip_requirements.txt</span><br></pre></td></tr></table></figure>
 <p>以下省略项目代码</p>
 <p>……</p>
 <a id="more"></a>
 <p>通过一下命令可以生成supervisord.conf文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo_supervisord_conf &gt; etc/supervisord.conf</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo_supervisord_conf &gt; etc/supervisord.conf</span><br></pre></td></tr></table></figure>
 <p>修改supervisord.conf文件如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">[unix_http_server]</div><div class="line">file=/tmp/supervisor.sock ; path to your socket file</div><div class="line"></div><div class="line">[supervisord]</div><div class="line">logfile=/tmp/supervisord.log ;</div><div class="line">supervisord log file logfile_maxbytes=50MB ; maximum size of logfile before rotation</div><div class="line">logfile_backups=10 ; number of backed up logfiles</div><div class="line">loglevel=warn ; info, debug, warn, trace</div><div class="line">pidfile=/tmp/supervisord.pid ; pidfile location</div><div class="line">nodaemon=false ; run supervisord as a daemon</div><div class="line">minfds=1024 ; number of startup file descriptors</div><div class="line">minprocs=200 ; number of process descriptors</div><div class="line">user=root ; default user</div><div class="line">childlogdir=/home/hawkeye/rmg/log</div><div class="line"></div><div class="line">[rpcinterface:supervisor]</div><div class="line">supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface</div><div class="line"></div><div class="line">[supervisorctl]</div><div class="line">serverurl=unix:///tmp/supervisor.sock ; use a unix:// URL for a unix socket</div><div class="line"></div><div class="line">[program:tor8009]</div><div class="line">command=python /home/hawkeye/rmg/server/server.py --port=8009 autostart=true</div><div class="line">stderr_logfile = /home/hawkeye/rmg/log/rmg-8009-stderr.log</div><div class="line">stdout_logfile = /home/hawkeye/rmg/log/rmg-8009-stdout.log</div><div class="line">loglevel=info</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">[unix_http_server]</span><br><span class="line">file=/tmp/supervisor.sock ; path to your socket file</span><br><span class="line"></span><br><span class="line">[supervisord]</span><br><span class="line">logfile=/tmp/supervisord.log ;</span><br><span class="line">supervisord log file logfile_maxbytes=50MB ; maximum size of logfile before rotation</span><br><span class="line">logfile_backups=10 ; number of backed up logfiles</span><br><span class="line">loglevel=warn ; info, debug, warn, trace</span><br><span class="line">pidfile=/tmp/supervisord.pid ; pidfile location</span><br><span class="line">nodaemon=false ; run supervisord as a daemon</span><br><span class="line">minfds=1024 ; number of startup file descriptors</span><br><span class="line">minprocs=200 ; number of process descriptors</span><br><span class="line">user=root ; default user</span><br><span class="line">childlogdir=/home/hawkeye/rmg/log</span><br><span class="line"></span><br><span class="line">[rpcinterface:supervisor]</span><br><span class="line">supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface</span><br><span class="line"></span><br><span class="line">[supervisorctl]</span><br><span class="line">serverurl=unix:///tmp/supervisor.sock ; use a unix:// URL for a unix socket</span><br><span class="line"></span><br><span class="line">[program:tor8009]</span><br><span class="line">command=python /home/hawkeye/rmg/server/server.py --port=8009 autostart=true</span><br><span class="line">stderr_logfile = /home/hawkeye/rmg/log/rmg-8009-stderr.log</span><br><span class="line">stdout_logfile = /home/hawkeye/rmg/log/rmg-8009-stdout.log</span><br><span class="line">loglevel=info</span><br></pre></td></tr></table></figure>
 <p>意思是使用supervisor维护一个进程，运行在8009端口上</p>
 <p>在rmg目录创建control文件，作为启动脚本，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"></div><div class="line">PID=&quot;/tmp/supervisord.pid&quot;</div><div class="line">CONF=&quot;etc/supervisord.conf&quot;</div><div class="line"></div><div class="line">stop() &#123;</div><div class="line">    if [ -f $PID ]; then</div><div class="line">        kill `cat -- $PID`</div><div class="line">        rm -f -- $PID</div><div class="line">        echo &quot;stopped&quot;</div><div class="line">    fi</div><div class="line">&#125;</div><div class="line"></div><div class="line">start() &#123;</div><div class="line">    echo &quot;starting&quot;</div><div class="line">    if [ ! -f $PID ]; then</div><div class="line">        source rmg_env/bin/activate</div><div class="line">        supervisord -c $CONF</div><div class="line">        echo &quot;started&quot;</div><div class="line">    fi</div><div class="line">&#125;</div><div class="line"></div><div class="line">case &quot;$1&quot; in</div><div class="line">    start)</div><div class="line">        start</div><div class="line">        ;;</div><div class="line">    stop)</div><div class="line">        stop</div><div class="line">        ;;</div><div class="line">    restart)</div><div class="line">        stop</div><div class="line">        start</div><div class="line">        ;;</div><div class="line">    *)</div><div class="line">        echo &quot;Usage: $0 &#123;start|stop|restart&#125;&quot;</div><div class="line">esac</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">PID=&quot;/tmp/supervisord.pid&quot;</span><br><span class="line">CONF=&quot;etc/supervisord.conf&quot;</span><br><span class="line"></span><br><span class="line">stop() &#123;</span><br><span class="line">    if [ -f $PID ]; then</span><br><span class="line">        kill `cat -- $PID`</span><br><span class="line">        rm -f -- $PID</span><br><span class="line">        echo &quot;stopped&quot;</span><br><span class="line">    fi</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">start() &#123;</span><br><span class="line">    echo &quot;starting&quot;</span><br><span class="line">    if [ ! -f $PID ]; then</span><br><span class="line">        source rmg_env/bin/activate</span><br><span class="line">        supervisord -c $CONF</span><br><span class="line">        echo &quot;started&quot;</span><br><span class="line">    fi</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">case &quot;$1&quot; in</span><br><span class="line">    start)</span><br><span class="line">        start</span><br><span class="line">        ;;</span><br><span class="line">    stop)</span><br><span class="line">        stop</span><br><span class="line">        ;;</span><br><span class="line">    restart)</span><br><span class="line">        stop</span><br><span class="line">        start</span><br><span class="line">        ;;</span><br><span class="line">    *)</span><br><span class="line">        echo &quot;Usage: $0 &#123;start|stop|restart&#125;&quot;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
 <p>给control文件添加执行权限</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chmod +x control</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x control</span><br></pre></td></tr></table></figure>
 <p>然后执行control就可以启动应用了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./control start</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./control start</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -439,7 +428,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -504,7 +493,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

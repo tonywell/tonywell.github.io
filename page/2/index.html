@@ -85,11 +85,12 @@
 
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="tony's blog">
+<meta property="og:title" content="tony&#39;s blog">
 <meta property="og:url" content="http://tonywell.github.io/page/2/index.html">
-<meta property="og:site_name" content="tony's blog">
+<meta property="og:site_name" content="tony&#39;s blog">
+<meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tony's blog">
+<meta name="twitter:title" content="tony&#39;s blog">
 
 
 
@@ -255,6 +256,228 @@
             
               
                 
+                <a class="post-title-link" href="/2016/11/04/centos7基于docker搭建gitlab/" itemprop="url">
+                  centos7基于docker搭建gitlab
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-04T15:58:47+08:00" content="2016-11-04">
+              2016-11-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="一、首先centos7安装docker"><a href="#一、首先centos7安装docker" class="headerlink" title="一、首先centos7安装docker"></a>一、首先centos7安装docker</h3><h4 id="1、添加docker源"><a href="#1、添加docker源" class="headerlink" title="1、添加docker源"></a>1、添加docker源</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/yum.repos.d/docker.repo</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[dockerrepo]</span><br><span class="line">name=Docker Repository</span><br><span class="line"></span><br><span class="line">baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/</span><br><span class="line"></span><br><span class="line">enabled=1</span><br><span class="line"></span><br><span class="line">gpgcheck=1</span><br><span class="line"></span><br><span class="line">gpgkey=https://yum.dockerproject.org/gpg</span><br></pre></td></tr></table></figure>
+<h4 id="2、yum安装docker"><a href="#2、yum安装docker" class="headerlink" title="2、yum安装docker"></a>2、yum安装docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum install docker-engine</span><br></pre></td></tr></table></figure>
+<h4 id="3、启动docker"><a href="#3、启动docker" class="headerlink" title="3、启动docker"></a>3、启动docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ service docker start</span><br></pre></td></tr></table></figure>
+<h3 id="二、安装docker-compose"><a href="#二、安装docker-compose" class="headerlink" title="二、安装docker-compose"></a>二、安装docker-compose</h3>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/11/04/centos7基于docker搭建gitlab/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/11/01/Docker搭建Hadoop集群（二）/" itemprop="url">
+                  Docker搭建Hadoop集群（二）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-01T11:07:02+08:00" content="2016-11-01">
+              2016-11-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Docker搭建大数据平台/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker搭建大数据平台</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="3、构建mysql容器"><a href="#3、构建mysql容器" class="headerlink" title="3、构建mysql容器"></a>3、构建mysql容器</h4><p>后面的hive元数据是基于mysql数据，所以这里先创建mysql容器</p>
+<p>通过docker-compose模版来启动mysql容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">hadoop-mysql:</span><br><span class="line">   image: tonywell/docker-mysql</span><br><span class="line">   container_name: hadoop-mysql</span><br><span class="line">   volumes:</span><br><span class="line">     - ./data:/usr/local/mysql-5.6.29/data</span><br><span class="line">   net: zoo</span><br><span class="line">   command: /usr/local/mysql-5.6.29/bin/mysqld_safe --user=mysql</span><br><span class="line">   ports:</span><br><span class="line">     - &quot;3306:3306&quot;</span><br></pre></td></tr></table></figure>
+<p>启动容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose -f docker-compose-mysql.yml up -d</span><br></pre></td></tr></table></figure>
+<p>然后就要修改密码和配置远程访问mysql了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ docker exec -it hadoop-mysql bash</span><br><span class="line">$ cd /usr/local/mysql-5.6.29/bin</span><br><span class="line">$ ./mysql -u root -p</span><br><span class="line">#默认密码为空，回车即可</span><br><span class="line">$ mysql&gt; use mysql;</span><br><span class="line">$ mysql&gt; UPDATE user SET Password=PASSWORD(&apos;新密码&apos;) where USER=&apos;root&apos;;</span><br><span class="line">$ mysql&gt; FLUSH PRIVILEGES;</span><br><span class="line">#授权远程访问</span><br><span class="line">$ mysql&gt; grant ALL PRIVILEGES ON *.* to root@&quot;%&quot; identified by &quot;root&quot; WITH GRANT OPTION;</span><br><span class="line">$ mysql&gt; FLUSH PRIVILEGES;</span><br><span class="line">#配置字符集，解决后面hive建表报错</span><br><span class="line">#FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. MetaException(message:For direct MetaStore DB connections, we don&apos;t support retries at the client level.)</span><br><span class="line">$ mysql&gt; alter database hive character set latin1;</span><br></pre></td></tr></table></figure>
+<p>ok mysql容器配置完成</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/11/01/Docker搭建Hadoop集群（二）/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/10/16/Docker搭建Hadoop集群/" itemprop="url">
                   Docker搭建Hadoop集群
                 </a>
@@ -322,10 +545,10 @@
 <li>通过dockerfile文件方式构建Hadoop的基础镜像</li>
 </ul>
 <h3 id="一、构建Hadoop基础镜像"><a href="#一、构建Hadoop基础镜像" class="headerlink" title="一、构建Hadoop基础镜像"></a>一、构建Hadoop基础镜像</h3><h4 id="1、首先构建一个centos7的基础镜像"><a href="#1、首先构建一个centos7的基础镜像" class="headerlink" title="1、首先构建一个centos7的基础镜像"></a>1、首先构建一个centos7的基础镜像</h4><p>首先创建目录,并创建Dockerfile：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir docker-centos</div><div class="line">$ cd docker-centos</div><div class="line">$ vim Docker</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">FROM centos</div><div class="line">MAINTAINER tonywell &lt;tongwei1985@gmail.com&gt;</div><div class="line"></div><div class="line"># root password</div><div class="line">RUN echo &apos;root:!23$QweR&apos; | chpasswd</div><div class="line"></div><div class="line"># 为解决Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY问题</div><div class="line">RUN rpm --import /etc/pki/rpm-gpg/RPM*</div><div class="line"></div><div class="line">RUN \</div><div class="line">    yum -y install \</div><div class="line">        openssh openssh-server openssh-clients \</div><div class="line">        sudo passwd wget &amp;&amp;\</div><div class="line">        yum clean all</div><div class="line"></div><div class="line"># 设置sshd</div><div class="line">RUN sshd-keygen</div><div class="line">RUN sed -i &quot;s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g&quot; /etc/ssh/sshd_config</div><div class="line">RUN sed -i &quot;s/UsePAM.*/UsePAM no/g&quot; /etc/ssh/sshd_config</div><div class="line"></div><div class="line">RUN mkdir /var/run/sshd</div><div class="line">EXPOSE 22</div><div class="line">CMD [&quot;/usr/sbin/sshd&quot;, &quot;-D&quot;]</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir docker-centos</span><br><span class="line">$ cd docker-centos</span><br><span class="line">$ vim Docker</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER tonywell &lt;tongwei1985@gmail.com&gt;</span><br><span class="line"></span><br><span class="line"># root password</span><br><span class="line">RUN echo &apos;root:!23$QweR&apos; | chpasswd</span><br><span class="line"></span><br><span class="line"># 为解决Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY问题</span><br><span class="line">RUN rpm --import /etc/pki/rpm-gpg/RPM*</span><br><span class="line"></span><br><span class="line">RUN \</span><br><span class="line">    yum -y install \</span><br><span class="line">        openssh openssh-server openssh-clients \</span><br><span class="line">        sudo passwd wget &amp;&amp;\</span><br><span class="line">        yum clean all</span><br><span class="line"></span><br><span class="line"># 设置sshd</span><br><span class="line">RUN sshd-keygen</span><br><span class="line">RUN sed -i &quot;s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g&quot; /etc/ssh/sshd_config</span><br><span class="line">RUN sed -i &quot;s/UsePAM.*/UsePAM no/g&quot; /etc/ssh/sshd_config</span><br><span class="line"></span><br><span class="line">RUN mkdir /var/run/sshd</span><br><span class="line">EXPOSE 22</span><br><span class="line">CMD [&quot;/usr/sbin/sshd&quot;, &quot;-D&quot;]</span><br></pre></td></tr></table></figure>
 <p>然后执行构建命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker build -t tonywell/docker-contos .   //一定不能漏了&quot;.&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t tonywell/docker-contos .   //一定不能漏了&quot;.&quot;</span><br></pre></td></tr></table></figure>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/10/16/Docker搭建Hadoop集群/#more" rel="contents">
               阅读全文 &raquo;
@@ -423,7 +646,7 @@
         
           <p>最近写了一个小程序从hbase数据库scan过滤股票数据，并根据股票ID分别写不同的文件，因为hbase是基于列的，scan出来的结果再做数据聚合操作的，java7实现起来实在太繁琐，java8发布以及很久了，但是实际项目中一直在使用java7，借此机会正好引入java8的Stream。</p>
 <h3 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h3><p>通过Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell)))把结果收集到一个Map，并将所有Map收集到一个List中。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ResultScanner rs = table.getScanner(scan);</div><div class="line">List&lt;Map&lt;String, String&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">rs.forEach((r) -&gt; &#123;</div><div class="line">      Map&lt;String, String&gt; map = r.listCells().stream().collect(Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell))));</div><div class="line">      list.add(map);</div><div class="line">     &#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ResultScanner rs = table.getScanner(scan);</span><br><span class="line">List&lt;Map&lt;String, String&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">rs.forEach((r) -&gt; &#123;</span><br><span class="line">      Map&lt;String, String&gt; map = r.listCells().stream().collect(Collectors.toMap(cell -&gt; Bytes.toString(CellUtil.cloneQualifier(cell)), cell -&gt; Bytes.toString(CellUtil.cloneValue(cell))));</span><br><span class="line">      list.add(map);</span><br><span class="line">     &#125;);</span><br></pre></td></tr></table></figure>
 <p>1）通过forEach方法接收一个 Lambda 表达式，其实就是遍历ResultScanner结果</p>
 <p>2）r.listCells将Result转成list</p>
 <p>3）调用stream将List转成流</p>
@@ -528,18 +751,18 @@
 <li>系统：centos6.5 64位 内存4G x3</li>
 </ul>
 <h3 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h3><h4 id="1、网络配置"><a href="#1、网络配置" class="headerlink" title="1、网络配置"></a>1、网络配置</h4><p>先分别修改三台设备的hostname：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/sysconfig/network</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.......</div><div class="line">HOSTNAME=master</div><div class="line">.......</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">........</div><div class="line">HOSTNAME=slave1</div><div class="line">........</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">........</div><div class="line">HOSTNAME=slave2</div><div class="line">........</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysconfig/network</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.......</span><br><span class="line">HOSTNAME=master</span><br><span class="line">.......</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">........</span><br><span class="line">HOSTNAME=slave1</span><br><span class="line">........</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">........</span><br><span class="line">HOSTNAME=slave2</span><br><span class="line">........</span><br></pre></td></tr></table></figure>
 <p>然后通过下面命令重启网卡</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service network restart</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service network restart</span><br></pre></td></tr></table></figure>
 <p>修改/etc/hosts文件，写入ip与主机名的对应关系，三台设备都要写入，注意本机也必须写入。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">192.168.1.80   master</div><div class="line">192.168.1.81   slave1</div><div class="line">192.168.1.82   slave2</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.1.80   master</span><br><span class="line">192.168.1.81   slave1</span><br><span class="line">192.168.1.82   slave2</span><br></pre></td></tr></table></figure>
 <p>关闭防火墙，并关闭开机启动防火墙</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ service iptables stop</div><div class="line">$ chkconfig iptables off</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ service iptables stop</span><br><span class="line">$ chkconfig iptables off</span><br></pre></td></tr></table></figure>
 <p>关闭selinux：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/sysconfig/selinux</div><div class="line"></div><div class="line">SELINUX=disabled</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">SELINUX=disabled</span><br></pre></td></tr></table></figure>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/03/24/2016-03-24-Hadoop2-7完全分布式模式安装/#more" rel="contents">
               阅读全文 &raquo;
@@ -898,7 +1121,7 @@ CDH5: 5.6.0
 <li>反向代理：Nginx</li>
 </ul>
 <h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>开始创建项目目录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir rmg</div><div class="line">$ cd rmg</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir rmg</span><br><span class="line">$ cd rmg</span><br></pre></td></tr></table></figure>
 <p>这里就省略了node环境的安装</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/03/08/2016-03-08-angular2-python项目实践1/#more" rel="contents">
@@ -997,18 +1220,18 @@ CDH5: 5.6.0
         
           <h2 id="配置virtualenv-supervisor-tornado项目总结"><a href="#配置virtualenv-supervisor-tornado项目总结" class="headerlink" title="配置virtualenv+supervisor+tornado项目总结"></a>配置virtualenv+supervisor+tornado项目总结</h2><p>virtualenv是python的虚拟环境工具，至于为什么要用virtaulenv就不再赘述。  </p>
 <p>如果系统没有安装virtualenv，先安装，我是通过pip来安装的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install virtualenv</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install virtualenv</span><br></pre></td></tr></table></figure>
 <p>在我的项目rmg目录下通过命令创建python2.7的虚拟环境</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd rmg</div><div class="line">virtualenv -p python2.7 rmg_env</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd rmg</span><br><span class="line">virtualenv -p python2.7 rmg_env</span><br></pre></td></tr></table></figure>
 <p>激活虚拟化环境并安装配置supervisor和tornado</p>
 <p>激活虚拟化环境</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source rmg_env/bin/activate</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source rmg_env/bin/activate</span><br></pre></td></tr></table></figure>
 <p>执行完命令行前多出“(rmg_env)”,说明虚拟环境已经创建成功。</p>
 <p>接下来开始在虚拟环境中安装supervisor和tornado</p>
 <p>我是通过pip_requirements.txt配置，requirements.pip文件内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">supervisor</div><div class="line">tornado</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">supervisor</span><br><span class="line">tornado</span><br></pre></td></tr></table></figure>
 <p>接下来开始安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -r pip_requirements.txt</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r pip_requirements.txt</span><br></pre></td></tr></table></figure>
 <p>以下省略项目代码</p>
 <p>……</p>
           <div class="post-more-link text-center">
@@ -1175,339 +1398,6 @@ CDH5: 5.6.0
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/06/07/2014-06-07-minashi-xian-jian-dan-udp-client/" itemprop="url">
-                  Mina实现简单UDP client
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-06-07T21:56:55+08:00" content="2014-06-07">
-              2014-06-07
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/mina/" itemprop="url" rel="index">
-                    <span itemprop="name">mina</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/mina/Nio/" itemprop="url" rel="index">
-                    <span itemprop="name">Nio</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>照旧还是先创建工作目录：mkdir minaUdpClient。<br>进入工作目录，创建build.gradle文件如下：  </p>
-<pre><code>apply plugin: &apos;java&apos;
-apply plugin: &apos;application&apos;
-
-task createJavaProject &lt;&lt;{
-  sourceSets*.java.srcDirs*.each {it.mkdirs()}
-  sourceSets*.resources.srcDirs*.each {it.mkdirs()}
-}
-
-repositories{
-  mavenCentral();
-}
-</code></pre><p>执行gradle createJavaProject初始化项目目录。目录结构如下：</p>
-<pre><code>.
-├── build
-├── build.gradle
-└── src
-    ├── main
-    │   ├── java
-    │   └── resources
-    └── test
-        ├── java
-        └── resources
-</code></pre><p> 创建MinaUdpClient.java文件，代码如下：<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/06/07/2014-06-07-minashi-xian-jian-dan-udp-client/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/06/06/2014-06-06-minashi-xian-jian-dan-de-udp-server/" itemprop="url">
-                  Mina实现简单的UDP server
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-06-06T15:06:29+08:00" content="2014-06-06">
-              2014-06-06
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/mina/" itemprop="url" rel="index">
-                    <span itemprop="name">mina</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/mina/Nio/" itemprop="url" rel="index">
-                    <span itemprop="name">Nio</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/mina/Nio/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>依旧还是先创建工作目录：mkdir minaUdpServer</p>
-<p>接着进入工作目录创建build.gradle如下：  </p>
-<pre><code>apply plugin: &apos;java&apos;
-apply plugin: &apos;appliction&apos;
-
-task createJavaProject &lt;&lt;{
-   sourceSets*.java.srcDirs*.each {it.mkdirs()}
-   sourceSets*.resources.srcDirs*.each {it.mkdirs()}
-}
-
-repositories{
-  mavenCentral();
-}
-</code></pre><p>然后执行gradle createJavaProject来初始化项目目录。执行完，目录结构如下：</p>
-<pre><code>.
-├── build
-├── build.gradle
-└── src
-    ├── main
-    │   ├── java
-    │   └── resources
-    └── test
-        ├── java
-        └── resources
-</code></pre><p>接下来开始创建MinaUdpServer.java，初始代码如下</p>
-<pre><code>public class MinaUdpServer{
-
-  public static void main(String[] args){
-     // code will go here next
-  }
-
-}
-</code></pre>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/06/06/2014-06-06-minashi-xian-jian-dan-de-udp-server/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1553,7 +1443,7 @@ repositories{
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1607,7 +1497,7 @@ repositories{
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
