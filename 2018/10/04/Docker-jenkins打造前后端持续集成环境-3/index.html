@@ -1,0 +1,636 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tony" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="​        上两篇文章Docker+jenkins打造前后端持续集成环境(1) 和 Docker+jenkins打造前后端持续集成环境(2)介绍了如何搭建jenkins集群环境，本文将通过一个前后端分离的项目来介绍如果通过jenkins   pipeline来构建发布项目。 ​     这两项目前端使用vue，后端是Java，好了开始吧！ 一、后端项目java项目的源码这里就不多做介绍，前面">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker+jenkins打造前后端持续集成环境(3)">
+<meta property="og:url" content="http://tonywell.github.io/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/index.html">
+<meta property="og:site_name" content="tony&#39;s blog">
+<meta property="og:description" content="​        上两篇文章Docker+jenkins打造前后端持续集成环境(1) 和 Docker+jenkins打造前后端持续集成环境(2)介绍了如何搭建jenkins集群环境，本文将通过一个前后端分离的项目来介绍如果通过jenkins   pipeline来构建发布项目。 ​     这两项目前端使用vue，后端是Java，好了开始吧！ 一、后端项目java项目的源码这里就不多做介绍，前面">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/Snip20181004_53.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/Snip20181004_51.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/Snip20181004_54.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/image-20181004103309708.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/image-20181004103527737.png">
+<meta property="og:image" content="http://tonywell.github.io/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/image-20181004103630969.png">
+<meta property="og:updated_time" content="2018-10-04T02:39:46.187Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker+jenkins打造前后端持续集成环境(3)">
+<meta name="twitter:description" content="​        上两篇文章Docker+jenkins打造前后端持续集成环境(1) 和 Docker+jenkins打造前后端持续集成环境(2)介绍了如何搭建jenkins集群环境，本文将通过一个前后端分离的项目来介绍如果通过jenkins   pipeline来构建发布项目。 ​     这两项目前端使用vue，后端是Java，好了开始吧！ 一、后端项目java项目的源码这里就不多做介绍，前面">
+<meta name="twitter:image" content="http://tonywell.github.io/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/Snip20181004_53.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://tonywell.github.io/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/"/>
+
+  <title> Docker+jenkins打造前后端持续集成环境(3) | tony's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">tony's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Docker+jenkins打造前后端持续集成环境(3)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-10-04T09:28:44+08:00" content="2018-10-04">
+              2018-10-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>​        上两篇文章<a href="/2018/10/02/Docker-jenkins打造前后端持续集成环境-1/" title="Docker+jenkins打造前后端持续集成环境(1)">Docker+jenkins打造前后端持续集成环境(1)</a> 和 <a href="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/" title="Docker+jenkins打造前后端持续集成环境(2)">Docker+jenkins打造前后端持续集成环境(2)</a>介绍了如何搭建jenkins集群环境，本文将通过一个前后端分离的项目来介绍如果通过jenkins   pipeline来构建发布项目。</p>
+<p>​     这两项目前端使用vue，后端是Java，好了开始吧！</p>
+<h3 id="一、后端项目"><a href="#一、后端项目" class="headerlink" title="一、后端项目"></a>一、后端项目</h3><p>java项目的源码这里就不多做介绍，前面我已经介绍过了，我会通过tomcat的docker镜像来运行项目，通过docker-compose来编排，那么我需要在java项目的根目录下增加docker-compose的文件。</p>
+<p>项目名称是demo，在demo的目录下新建文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> demo</span><br><span class="line">touch docker-compose.yml</span><br></pre></td></tr></table></figure>
+<p>内容如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'3'</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="comment"># Jenkins Master</span></span><br><span class="line"><span class="attr">  backend_demo:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">tonywell/tomcat</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">backend_demo</span></span><br><span class="line"><span class="attr">    hostname:</span> <span class="string">backend_demo</span></span><br><span class="line"><span class="attr">    environment:</span></span><br><span class="line"><span class="attr">      JAVA_OPTS:</span> <span class="string">"-Djava.awt.headless=true"</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">"8081:8080"</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">/home/dev/test/backend_demo/webapps:/opt/tomcat/webapps</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">/home/dev/test/backend_demo/logs:/opt/tomcat/logs</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">/home/dev/test/backend_demo/work:/opt/tomcat/work</span></span><br><span class="line"><span class="attr">    dns:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="number">8.8</span><span class="number">.8</span><span class="number">.8</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>把war包所在目录映射到tomcat容器，tomcat就可以运行我们的项目了，而且war包也就不用装入镜像。</p>
+<p>把容器的log目录和work目录映射出来</p>
+</blockquote>
+<p>然后代码push到仓库</p>
+<h3 id="二、前端项目"><a href="#二、前端项目" class="headerlink" title="二、前端项目"></a>二、前端项目</h3><p>前端代码同样这里就不做介绍了，因为前端编译后通过nginx提供服务，而nginx的配置很灵活，支持include配置文件，这样就非常方便我们在不同项目使用不同的配置文件，这里我就在前端项目的根目录下增加nginx的配置文件，比如我们前端项目名称是front-demo，那就在front-demo目录下新建项目命名的配文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> front-demo</span><br><span class="line">touch front-demo.conf</span><br></pre></td></tr></table></figure>
+<p>接下里添加配置内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">  listen 8090;</span><br><span class="line">  server_name localhost;</span><br><span class="line">  #charset koi8-r;</span><br><span class="line">  #access_log /var/log/nginx/log/host.access.log main;</span><br><span class="line">  location / &#123;</span><br><span class="line">    root /opt/jenkins/test/front-demo/dist;</span><br><span class="line">    index index.html index.htm;</span><br><span class="line">  &#125;</span><br><span class="line">  location /api &#123;</span><br><span class="line">     proxy_pass http://192.168.1.236:8081/api;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里我把方向代理后端的接口，也能够解决跨域问题</p>
+</blockquote>
+<p>实际的应用场景可能会有多个项目同时运行，那么在nginx的docker-compose的文件中需要提前做好规划，映射出端口，这里就只以这个项目为例介绍如何配置docker-compose：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'3'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr"> nginx:</span></span><br><span class="line"><span class="attr">   image:</span> <span class="attr">nginx:1.15.4-alpine</span></span><br><span class="line"><span class="attr">   container_name:</span> <span class="string">test-nginx</span></span><br><span class="line"><span class="attr">   ports:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"9090:9090"</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"8090:8090"</span></span><br><span class="line"><span class="attr">   volumes:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">/home/dev/dockerfile/nginx/config:/etc/nginx/conf.d</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">/home/dev/download:/opt/download</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">/home/dev/test:/opt/jenkins/test</span></span><br><span class="line"><span class="attr">   deploy:</span></span><br><span class="line"><span class="attr">      resources:</span></span><br><span class="line"><span class="attr">        limits:</span></span><br><span class="line"><span class="attr">          cpus:</span> <span class="string">'0.5'</span></span><br><span class="line"><span class="attr">          memory:</span> <span class="number">200</span><span class="string">M</span></span><br><span class="line"><span class="attr">        reservations:</span></span><br><span class="line"><span class="attr">          cpus:</span> <span class="string">'0.5'</span></span><br><span class="line"><span class="attr">          memory:</span> <span class="number">200</span><span class="string">M</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>把conf.d目录映射到宿主机，这个目录也会映射到jenkins节点上，这样就可以把前端项目中的nginx配置文件发布到这里，然后把项目目录映射到nginx容器中</p>
+</blockquote>
+<h3 id="三、pipeline实践"><a href="#三、pipeline实践" class="headerlink" title="三、pipeline实践"></a>三、pipeline实践</h3><h4 id="1、什么是pipeline"><a href="#1、什么是pipeline" class="headerlink" title="1、什么是pipeline"></a>1、什么是pipeline</h4><p>pipeline是jenkins的一套插件，可以通过groovy的DSL来定义jenkins的CI/CD 工作流，可以将原本多个任务或者多个节点串联起来，完成复杂的CI/CD流程，比如说像这个项目，前端和后端的编译打包所需的环境是不一样的，我们分配到不同的job节点编译打包，然后部署到不同的环境，整个项目才能正常运行。</p>
+<p><strong>Pipeline的几个基本概念：</strong>  </p>
+<ul>
+<li>Stage: 阶段，一个Pipeline可以划分为若干个Stage，每个Stage代表一组操作。注意，Stage是一个逻辑分组的概念，可以跨多个Node。</li>
+<li>Node: 节点，一个Node就是一个Jenkins节点，或者是Master，或者是Agent，是执行Step的具体运行期环境。</li>
+<li>Step: 步骤，Step是最基本的操作单元，小到创建一个目录，大到构建一个Docker镜像，由各类Jenkins Plugin提供。</li>
+</ul>
+<h4 id="2、安装pipeline插件"><a href="#2、安装pipeline插件" class="headerlink" title="2、安装pipeline插件"></a>2、安装pipeline插件</h4><p>在jenkins的 插件管理 页面安装插件，安装下面两个插件：</p>
+<p><img src="/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/Snip20181004_53.png" alt="img"></p>
+<p><img src="/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/Snip20181004_51.png" alt="img"></p>
+<p>安装完成，重启之后，新建任务，就可以看到流水线选项：</p>
+<p><img src="/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/Snip20181004_54.png" alt="img"></p>
+<p>确认收进入任务配置页面，主要配置pipeline脚本：</p>
+<p>这里有两个选项，一个直接写pipeline脚本，还可以通过SCM管理的pipelinefile，推荐这种方式，这样可以通过git来管理脚本文件，不过我这里先简单的使用pipeline脚本的方式，pipelinefile后续文章再进一步介绍</p>
+<p><img src="/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/image-20181004103309708.png" alt="img"></p>
+<p>脚本内容如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">stage(<span class="string">'build 后端'</span>) &#123;</span><br><span class="line"> node(<span class="string">'java8'</span>) &#123;</span><br><span class="line">    stage(<span class="string">'checkout'</span>) &#123;</span><br><span class="line">        git <span class="string">branch:</span> <span class="string">'dev'</span>, <span class="string">credentialsId:</span> <span class="string">'946c09f1-34f1-42fa-a730-29caf5e48445'</span>, <span class="string">url:</span> <span class="string">'ssh://git@地址/demo.git'</span></span><br><span class="line">    &#125;</span><br><span class="line">    stage(<span class="string">'编译'</span>) &#123;</span><br><span class="line">        dir(<span class="string">'./'</span>) &#123;</span><br><span class="line">            sh <span class="string">'mvn clean package -Ptest'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    stage(<span class="string">'war包发布到目标目录'</span>) &#123;</span><br><span class="line">        dir(<span class="string">'./'</span>) &#123;</span><br><span class="line">            sh <span class="string">'''if [ ! -d "/opt/jenkins/test/demo/webapps" ];then</span></span><br><span class="line"><span class="string">                     mkdir -p /opt/jenkins/test/demo/webapps</span></span><br><span class="line"><span class="string">                  else</span></span><br><span class="line"><span class="string">                     echo "文件夹已经存在"</span></span><br><span class="line"><span class="string">                  fi</span></span><br><span class="line"><span class="string">                  mv target/*.war /opt/jenkins/test/demo/webapps/ROOT.war</span></span><br><span class="line"><span class="string">                  mv docker-compose.yml /opt/jenkins/test/demo/</span></span><br><span class="line"><span class="string">               '''</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line">stage(<span class="string">'启动后台应用'</span>) &#123;</span><br><span class="line">    node(<span class="string">'docker-compose'</span>) &#123;</span><br><span class="line">        stage(<span class="string">'关闭后台'</span>) &#123;</span><br><span class="line">            sh <span class="string">'cd /opt/jenkins/test/demo &amp;&amp; docker-compose down'</span></span><br><span class="line">        &#125;</span><br><span class="line">        stage(<span class="string">'启动后台'</span>) &#123;</span><br><span class="line">            sh <span class="string">'cd /opt/jenkins/test/demo &amp;&amp; docker-compose up -d'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">stage(<span class="string">'build 前端'</span>) &#123;</span><br><span class="line"> node(<span class="string">'node-yarn'</span>) &#123;</span><br><span class="line">    stage(<span class="string">'checkout code'</span>) &#123;</span><br><span class="line">        git <span class="string">branch:</span><span class="string">'dev'</span>, <span class="string">credentialsId:</span> <span class="string">'946c09f1-34f1-42fa-a730-29caf5e48445'</span>, <span class="string">url:</span> <span class="string">'ssh://git@地址/front-demo.git'</span></span><br><span class="line">    &#125;</span><br><span class="line">    stage(<span class="string">'编译'</span>) &#123;</span><br><span class="line">        dir(<span class="string">'./'</span>) &#123;</span><br><span class="line">            sh <span class="string">'yarn install &amp;&amp; npm run build'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    stage(<span class="string">'发布到目标目录'</span>) &#123;</span><br><span class="line">        dir(<span class="string">'./'</span>) &#123;</span><br><span class="line">            sh <span class="string">'''if [ ! -d "/opt/jenkins/test/front-demo" ];then</span></span><br><span class="line"><span class="string">                     mkdir -p /opt/jenkins/test/front-demo</span></span><br><span class="line"><span class="string">                  else</span></span><br><span class="line"><span class="string">                     echo "文件夹已经存在"</span></span><br><span class="line"><span class="string">                  fi</span></span><br><span class="line"><span class="string">                  cp -r dist /opt/jenkins/test/front-demo/</span></span><br><span class="line"><span class="string">                  cp front-demo.conf /opt/jenkins/nginx/config/</span></span><br><span class="line"><span class="string">               '''</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line">stage(<span class="string">'start test env'</span>) &#123;</span><br><span class="line">    node(<span class="string">'docker-compose'</span>) &#123;</span><br><span class="line">        stage(<span class="string">'关闭web应用'</span>) &#123;</span><br><span class="line">            sh <span class="string">'cd /opt/jenkins/nginx &amp;&amp; docker-compose down'</span></span><br><span class="line">        &#125;</span><br><span class="line">        stage(<span class="string">'启动web应用'</span>) &#123;</span><br><span class="line">            sh <span class="string">'cd /opt/jenkins/nginx &amp;&amp; docker-compose up -d'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>1、node选择相应的节点来执行任务，java8节点来构建发布java后台项目，docker-compose节点启停项目，node-yarn节点来构建发布前端vue项目</p>
+<p>2、SCM的checkout可以通过流水线语法工具来生成：</p>
+<p><img src="/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/image-20181004103527737.png" alt="img"></p>
+<p><img src="/2018/10/04/Docker-jenkins打造前后端持续集成环境-3/image-20181004103630969.png" alt="img"></p>
+<p>输入对应的git地址，输入branch，选择sshkey凭证，点击生成流水线脚本，就会生成：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;git <span class="string">branch:</span> <span class="string">'dev'</span>, <span class="string">credentialsId:</span> <span class="string">'946c09f1-34f1-42fa-a730-29caf5e48445'</span>, <span class="string">url:</span> <span class="string">'ssh://git@地址/demo.git'</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>复制到pipeline脚本中使用即可。</p>
+</blockquote>
+<p>保存，点击立即构建，成功后访问<a href="http://ip:8090" target="_blank" rel="noopener">http://ip:8090</a> 就可以看到项目首页。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/02/Docker-jenkins打造前后端持续集成环境-2/" rel="next" title="Docker+jenkins打造前后端持续集成环境(2)">
+                <i class="fa fa-chevron-left"></i> Docker+jenkins打造前后端持续集成环境(2)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tony" />
+          <p class="site-author-name" itemprop="name">tony</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、后端项目"><span class="nav-number">1.</span> <span class="nav-text">一、后端项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、前端项目"><span class="nav-number">2.</span> <span class="nav-text">二、前端项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、pipeline实践"><span class="nav-number">3.</span> <span class="nav-text">三、pipeline实践</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、什么是pipeline"><span class="nav-number">3.1.</span> <span class="nav-text">1、什么是pipeline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、安装pipeline插件"><span class="nav-number">3.2.</span> <span class="nav-text">2、安装pipeline插件</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tony</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
